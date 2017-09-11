@@ -6,7 +6,7 @@
 import { message } from 'antd';
 import { hashHistory } from 'react-router';
 
-const _remote = 'http://192.168.0.91:8080';
+const _remote = 'http://120.26.128.15:8903';
 // 外网测试环境 'http://120.26.128.15:8903';
 // 冯辉测试环境 'http://192.168.0.91:8080';
 
@@ -50,6 +50,20 @@ const _remote = 'http://192.168.0.91:8080';
         }
         message.error('存在异常' + e.message)
       });
+  }
+
+  export const CommonData = (type, cb, params={}, url) => {
+    if(localStorage.getItem(type)) {
+      cb(JSON.parse(localStorage.getItem(type)));
+    } else {
+      fetchData({
+        url : '/staticData/commonData?type=' + type,
+        success : (data) => {
+          cb(data.result)
+          localStorage.setItem(type, JSON.stringify(data.result));
+        }
+      })
+    }
   }
 
 // const ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;

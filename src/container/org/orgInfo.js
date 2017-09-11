@@ -3,6 +3,7 @@ import TableGrid from 'component/tableGrid';
 import SearchSelect from 'component/searchSelect';
 import { Row, Col, Select, Form, Button, Icon } from 'antd';
 import { getLocalOption } from 'utils/common';
+import { CommonData } from 'utils/tools';
 import { Link } from 'react-router';
 import { orgType } from 'constants';
 import api from 'api';
@@ -15,7 +16,6 @@ const columns = [
     title: '操作',
     dataIndex: 'orgId',
     width: 100,
-    fixed: 'left',
     render: (value, record) => <Link to={{pathname: '/org/orgInfo/details', state: {org: record}}}>详情</Link>
   },
   {
@@ -84,7 +84,25 @@ const formItemLayout = {
 class SearchFormWrapper extends Component {
   state = {
     display: 'block',
-    orgId: null
+    orgId: null,
+    hospitalLevels: [],
+    hospitalPropertys: [],
+    hospitalTypes: []
+  }
+  componentDidMount = () => {
+     //机构性质
+     CommonData('HOSPITAL_PROPERTY', (data) => {
+     this.setState({ hospitalPropertys : data})
+    })
+    //医疗机构类型
+    CommonData('HOSPITAL_TYPE', (data) => {
+     this.setState({ hospitalTypes : data})
+    })
+    //医院等级
+    CommonData('HOSPITAL_LEVEL', (data) => {
+      this.setState({ hospitalLevels : data})
+    })
+    
   }
   handleSearch = (e) => {
     e.preventDefault();
@@ -104,6 +122,7 @@ class SearchFormWrapper extends Component {
   //重置
   handleReset = () => {
     this.props.form.resetFields();
+    this.props.reset();
   }
   render () {
     const { display } = this.state;
@@ -148,9 +167,12 @@ class SearchFormWrapper extends Component {
             <FormItem {...formItemLayout} label={`机构等级`}>
               {getFieldDecorator(`hospitalLevel`)(
                 <Select allowClear={true}>
-                  <Option value={''}>全部</Option>
-                  <Option value={'二甲'}>二甲</Option>
-                  <Option value={'三甲'}>三甲</Option>
+                <Option key={-1} value={''}>全部</Option>
+                  {
+                    this.state.hospitalLevels.map((item,index)=>{
+                      return <Option key={index} value={item.TF_CLO_CODE}>{item.TF_CLO_NAME}</Option>
+                    })
+                  }
                 </Select>
               )}
             </FormItem>
@@ -159,10 +181,13 @@ class SearchFormWrapper extends Component {
             <FormItem {...formItemLayout} label={`机构性质`}>
               {getFieldDecorator(`hospitalProperty`)(
                 <Select allowClear={true}>
-                  <Option value={''}>全部</Option>
-                  <Option value={'公立医院'}>公立医院</Option>
-                  <Option value={'非公立医院'}>非公立医院</Option>
-                </Select>
+                <Option key={-1} value={''}>全部</Option>
+                {
+                  this.state.hospitalPropertys.map((item,index)=>{
+                    return <Option key={index} value={item.TF_CLO_CODE}>{item.TF_CLO_NAME}</Option>
+                  })
+                }
+              </Select>
               )}
             </FormItem>
           </Col>
@@ -223,13 +248,17 @@ const SearchForm = Form.create()(SearchFormWrapper);
 class OrgInfo extends Component {
   submit = (postData) => {
     console.log('查询数据:', postData);
-    this.refs.remote.fetch({query: postData});
+    this.refs.remote.fetch({...postData});
+  }
+  reset = ()=>{
+    this.refs.remote.fetch({});
   }
   render () {
     return (
       <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
         <SearchForm
           submit={this.submit}
+          reset={this.reset}
         /> 
         <RemoteTable
           ref='remote'

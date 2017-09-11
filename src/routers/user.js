@@ -23,6 +23,14 @@ export default {
       }
     }, 
     {
+      path: '/user/org/add',//添加机构
+      getComponent: (nextState, cb) => {
+        require.ensure([], (require) => {
+          cb(null, require('container/user/org').default)
+        }, 'userAdd')
+      }
+    }, 
+    {
       path: '/user/userInfo/:id',//用户信息详情 新增/编辑/详情  公用页面
       getComponent: (nextState, cb) => {
         require.ensure([], (require) => {

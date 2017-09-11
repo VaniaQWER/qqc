@@ -129,7 +129,7 @@ class StepOneForm extends Component{
                 >  
                     <div className="clearfix">
                     <Upload
-                        action="//jsonplaceholder.typicode.com/posts/"
+                        action={api.UPLOADPIC}
                         listType="picture-card"
                         fileList={fileList}
                         onPreview={this.handlePreview}

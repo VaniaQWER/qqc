@@ -287,7 +287,7 @@ class OrgAdd extends Component {
       success: data => {
         if (data.status) {
           message.success('操作成功!')
-          hashHistory.push('/org/orgInfo')
+          hashHistory.push('/user/add')
         } else {
           message.error(data.msg);
         }

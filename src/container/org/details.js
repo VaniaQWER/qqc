@@ -6,8 +6,9 @@ import { Row, Col, Form, Select, Input, Button, Modal, Cascader, Breadcrumb,
    BackTop, Upload, Icon, message } from 'antd';
 import { formItemLayout } from 'constants';
 import { getLocalOption } from 'utils/common';
-import { fetchData } from 'utils/tools';
+import { fetchData,CommonData } from 'utils/tools';
 import { hashHistory, Link } from 'react-router';
+import querystring from 'querystring';
 import api from 'api';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,10 +17,15 @@ const Option = Select.Option;
  */
 class RegisterFormWrapper extends Component {
   state = {
+    disabled:true,
+    org:this.props.org,
     previewVisible: false,
     previewImage: '',
     fileList: [],
-    address: []
+    address: [],
+    hospitalLevels: [],
+    hospitalPropertys: [],
+    hospitalTypes: []
   };
   componentDidMount = () => {
     fetchData({
@@ -28,22 +34,32 @@ class RegisterFormWrapper extends Component {
       type: 'application/json',
       success: data => this.setState({address: data})
     })
+       //机构性质
+    CommonData('HOSPITAL_PROPERTY', (data) => {
+      this.setState({ hospitalPropertys : data})
+    })
+    //医疗机构类型
+    CommonData('HOSPITAL_TYPE', (data) => {
+      this.setState({ hospitalTypes : data})
+    })
+    //医院等级
+    CommonData('HOSPITAL_LEVEL', (data) => {
+      this.setState({ hospitalLevels : data})
+    })
   }
   submitHandler = (e) => {
     e.preventDefault();
     const { form, submit } = this.props;
     form.validateFieldsAndScroll((err, values) => {
-      //&& this.state.fileList.length
       if (!err ) {
-        //values.tfAccessory = this.state.fileList[0].thumbUrl;
+       // if(this.p)
+       // values.tfAccessory = this.state.fileList[0].thumbUrl;
         const address = values.address;
         values.tfProvince = address[0];
         values.tfCity = address[1];
         values.tfDistrict = address[2];
         values.orgId = this.props.org.orgId;
         submit(values);
-      } else {
-        message.error('请上传附件')
       }
     });
   }
@@ -62,10 +78,54 @@ class RegisterFormWrapper extends Component {
   }
   
   handleChange = ({ fileList }) => this.setState({ fileList })
+  handleTimeChange = (value) =>{
+    fetchData({
+      url: api.SEARCH_ORGS_LIST,
+      body:querystring.stringify({pYear:value,orgId:this.props.org.orgId}),
+      success: data => {
+        if(data.result.rows.length>0){
+          console.log(data.result.rows[0],'111')
+          this.setState({org: data.result.rows[0]})
+        }else{
+          const org = [{actualBedSum:null,
+            auditFstate:null,
+            hospitalLevel:null,
+            hospitalProperty:null,
+            hospitalTeaching:null,
+            hospitalType:null,
+            lxdh:null,
+            lxr:null,
+            orgAddress:null,
+            orgAlias:this.props.org.orgAlias,
+            orgCode:null,
+            orgId:null,
+            orgName:this.props.org.orgName,
+            orgType:null,
+            pYear:null,
+            planBedSum :null,
+            qcOrgName:null,
+            staffSum:null,
+            tfAccessory:null,
+            tfCity:null,
+            tfDistrict:null,
+            tfProvince:null}]
+          this.setState({org: org})
+        }
+       
+      }
+    })
+    this.setState({ disabled : false})
+  }
   render () {
-    const { form, org } = this.props;
-    const { previewVisible, previewImage, fileList } = this.state;
-    console.log(org);
+    const { form } = this.props;
+    const  org  = this.state.org;
+    const  fileList = org.tfAccessory ? [{
+      uid: -1,
+      name: 'xxx.png',
+      status: 'done',
+      url: api.LOADPIC +org.tfAccessory,
+    }] : [];
+    const { previewVisible, previewImage } = this.state;
     return (
       <Row style={{padding: 8}} className={'right_content'}>
         <Breadcrumb style={{marginBottom: 10, fontSize: '1.1em'}}>
@@ -83,7 +143,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请选择统计时间' }],
               initialValue: org.pYear
             })(
-              <Select>
+              <Select onChange={this.handleTimeChange}>
                 <Option value={'2015'}>2015</Option>
                 <Option value={'2016'}>2016</Option>
                 <Option value={'2017'}>2017</Option>
@@ -96,10 +156,9 @@ class RegisterFormWrapper extends Component {
             {...formItemLayout}
           >  
             {form.getFieldDecorator('orgCode', {
-              rules: [{ required: true, message: '请输入组织机构代码' }],
               initialValue: org.orgCode
             })(
-              <Input placeholder='请输入组织机构代码' disabled={true}/>
+              <Input placeholder='请输入组织机构代码' disabled={ org.orgCode ? true:false}/>
             )}
           </FormItem> 
           <FormItem
@@ -108,17 +167,17 @@ class RegisterFormWrapper extends Component {
           >  
             <div className="clearfix">
               <Upload
-                action="//jsonplaceholder.typicode.com/posts/"
+                action={api.UPLOADPIC}
                 listType="picture-card"
                 fileList={fileList}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
-                disabled={true}
+                showUploadList={{showRemoveIcon:fileList.length===1 ? false : true}}
               >
                 { fileList.length === 1 ? null :
                   <div>
                     <Icon type="plus" />
-                    <div className="ant-upload-text">Upload</div>
+                    <div className="ant-upload-text">上传</div>
                   </div>
                 }
               </Upload>
@@ -135,7 +194,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请输入机构名称' }],
               initialValue: org.orgName
             })(
-              <Input placeholder='请输入机构全称'/>
+              <Input placeholder='请输入机构全称' disabled={true}/>
             )}
           </FormItem> 
           <FormItem
@@ -144,9 +203,9 @@ class RegisterFormWrapper extends Component {
           >  
             {form.getFieldDecorator('orgAlias', {
               rules: [{ required: true, message: '请输入机构简称' }],
-              initialValue: org.orgAlias
+              initialValue:org.orgAlias
             })(
-              <Input placeholder='请输入机构简称'/>
+              <Input placeholder='请输入机构简称' disabled={true}/>
             )}
           </FormItem> 
           <FormItem
@@ -157,10 +216,13 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请选择机构性质' }],
               initialValue: org.hospitalProperty
             })(
-              <Select>
-                <Option value={'公立医院'}>公立医院</Option>
-                <Option value={'非公立医院'}>非公立医院</Option>
-              </Select>
+              <Select placeholder="请选择" disabled={!org.hospitalProperty ? false : true}>
+              {
+                this.state.hospitalPropertys.map((item,index)=>{
+                  return <Option key={index} value={item.TF_CLO_CODE}>{item.TF_CLO_NAME}</Option>
+                })
+              }
+            </Select>
             )}
           </FormItem> 
           <FormItem
@@ -171,7 +233,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请选择机构地址' }],
               initialValue: [org.tfProvince, org.tfCity, org.tfDistrict]
             })(
-              <Cascader options={this.state.address} changeOnSelect placeholder='请选择地址'/>
+              <Cascader disabled={!org.tfProvince ? false : true} options={this.state.address} changeOnSelect placeholder='请选择地址'/>
             )}
           </FormItem> 
           <FormItem
@@ -180,11 +242,14 @@ class RegisterFormWrapper extends Component {
             >  
             {form.getFieldDecorator('hospitalType', {
               rules: [{ required: true, message: '请选择医院机构类型' }],
-              initialValue: org.hospitalType
+              initialValue: org.hospitalType 
             })(
-              <Select>
-                <Option value={'综合性医院'}>综合性医院</Option>
-                <Option value={'专科医院'}>专科医院</Option>
+              <Select placeholder="请选择" disabled={!org.hospitalType ? false : true}>
+              {
+                this.state.hospitalTypes.map((item,index)=>{
+                  return <Option key={index} value={item.TF_CLO_CODE}>{item.TF_CLO_NAME}</Option>
+                })
+              }
               </Select>
             )}
           </FormItem> 
@@ -196,7 +261,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请选择医院教学类型' }],
               initialValue: org.hospitalTeaching
             })(
-              <Select>
+              <Select placeholder="请选择" disabled={!org.hospitalTeaching ? false : true}>
                 {
                   getLocalOption('hospitalTeaching')
                 }
@@ -211,10 +276,13 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请选择等级' }],
               initialValue: org.hospitalLevel
             })(
-              <Select>
-                <Option value={'三甲'}>三甲</Option>
-                <Option value={'二甲'}>二甲</Option>
-              </Select>
+              <Select placeholder="请选择" disabled={!org.hospitalLevel ? false : true}>
+              {
+                this.state.hospitalLevels.map((item,index)=>{
+                  return <Option key={index} value={item.TF_CLO_CODE}>{item.TF_CLO_NAME}</Option>
+                })
+              }
+            </Select>
             )}
           </FormItem> 
           <FormItem
@@ -225,7 +293,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请输入医院编制床位数' }],
               initialValue: org.planBedSum
             })(
-              <Input placeholder='请输入数字，例如2000'/>
+              <Input placeholder='请输入数字，例如2000' disabled={!org.planBedSum ? false : true}/>
             )}
           </FormItem> 
           <FormItem
@@ -236,7 +304,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请输入医院开放床位数' }],
               initialValue: org.actualBedSum
             })(
-              <Input placeholder='请输入数字，例如2000'/>
+              <Input placeholder='请输入数字，例如2000' disabled={!org.actualBedSum ? false : true}/>
             )}
           </FormItem> 
           <FormItem
@@ -247,7 +315,7 @@ class RegisterFormWrapper extends Component {
               rules: [{ required: true, message: '请输入职工总数' }],
               initialValue: org.staffSum
             })(
-              <Input placeholder='请输入数字，例如2000'/>
+              <Input placeholder='请输入数字，例如2000' disabled={!org.staffSum ? false : true}/>
             )}
           </FormItem> 
           <Col push={24} style={{textAlign: 'center'}}>
@@ -269,7 +337,6 @@ class RegisterFormWrapper extends Component {
 const RegisterForm = Form.create()(RegisterFormWrapper);
 class OrgAdd extends Component {
   submit = postData => {
-    console.log('提交数据:', postData);
     fetchData({
       url: api.ADD_ORG,
       body: JSON.stringify(postData),

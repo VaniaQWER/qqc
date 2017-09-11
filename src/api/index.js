@@ -3,6 +3,8 @@ export default {
   SELECT_FORMULA_LIST: `/formulaController/selectFormulaList`, //查询质量管理列表
   SELECT_SCOPE_LIST: `/deptInfoController/searchSelectScopeList`, //查询医院列表
   SELECT_FORMULA_DETAIL: `/formulaDetailController/selectFormulaDetail`,//查询指标信息详情
+  UPLOADPIC: `http://120.26.128.15:8903/ftp/post`,//查询指标信息详情
+  LOADPIC: `http://120.26.128.15:8903/ftp/`,//查询指标信息详情
   //登录
   USERLOGIN :`/login/userLogin`,//查询用户列表
   USERREGISTER :`/user/registerUserInfo`,//查询用户注册

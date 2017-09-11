@@ -29,7 +29,12 @@ class UserAddForm extends Component {
     base: true,
     previewVisible: false,
     previewImage: '',
-    fileList: [],
+    fileList:  this.props.location.state ? [{
+      uid: -1,
+      name: 'xxx.png',
+      status: 'done',
+      url: api.LOADPIC +this.props.location.state.user.tfAccessory,
+    }] : [],
     other: true,
     orgId:this.props.location.state? this.props.location.state.user.orgId : ""
   }
@@ -97,9 +102,18 @@ class UserAddForm extends Component {
       url: api.SEARCH_ORGS_LIST,
       body: querystring.stringify({orgId: value}),
       success: data => {
-        this.setState({orgId:value})
+        console.log(data.result.rows[0],'222')
+        this.setState({
+          orgId:value,
+          fileList:[{
+            uid: -1,
+            name: 'xxx.png',
+            status: 'done',
+            url: api.LOADPIC +data.result.rows[0].tfAccessory,
+          }]
+        })
         this.props.form.setFieldsValue({
-         orgCode: data.result.rows[0].orgCode
+         orgCode: data.result.rows[0].orgCode,
           })
         }
     })
@@ -133,8 +147,9 @@ class UserAddForm extends Component {
                   initialValue: state ? state.user.orgName : null
                 })(
                   state ? <Input disabled={base}/> : 
-                  <RemoteSelect url={api.SEARCH_ORGS} cb={value => this.change(value)}/>
+                  <div><RemoteSelect url={api.SEARCH_ORGS} cb={value => this.change(value)}/><Link to='/user/org/add'>+</Link></div>
                 )}
+    
               </FormItem> 
               <FormItem
                 label='组织机构代码'
@@ -153,9 +168,10 @@ class UserAddForm extends Component {
               >  
                 <div className="clearfix">
                   <Upload
-                    action="//jsonplaceholder.typicode.com/posts/"
+                   action={api.UPLOADPIC}
                     listType="picture-card"
                     fileList={fileList}
+                    showUploadList={{showRemoveIcon:fileList.length===1 ? false : true}}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                   >
