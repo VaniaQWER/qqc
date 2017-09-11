@@ -1,0 +1,15 @@
+.phxl_user_menu a {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.phxl_user_menu a:hover {
+  color: #108DE9; 
+}
+
+.phxl_user_menu li {
+  padding: 2px;
+}
+
+.phxl_user_menu .phxl_user_menu_icon{
+  margin-right: 20px;
+}
