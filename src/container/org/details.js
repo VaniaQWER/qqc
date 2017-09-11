@@ -52,8 +52,11 @@ class RegisterFormWrapper extends Component {
     const { form, submit } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err ) {
-       // if(this.p)
-       // values.tfAccessory = this.state.fileList[0].thumbUrl;
+       if(!this.props.org.tfAccessory)
+       {
+        values.tfAccessory =   this.state.fileList[0].thumbUrl;
+       }
+     
         const address = values.address;
         values.tfProvince = address[0];
         values.tfCity = address[1];
@@ -84,10 +87,9 @@ class RegisterFormWrapper extends Component {
       body:querystring.stringify({pYear:value,orgId:this.props.org.orgId}),
       success: data => {
         if(data.result.rows.length>0){
-          console.log(data.result.rows[0],'111')
           this.setState({org: data.result.rows[0]})
         }else{
-          const org = [{actualBedSum:null,
+          const org = {actualBedSum:null,
             auditFstate:null,
             hospitalLevel:null,
             hospitalProperty:null,
@@ -105,10 +107,10 @@ class RegisterFormWrapper extends Component {
             planBedSum :null,
             qcOrgName:null,
             staffSum:null,
-            tfAccessory:null,
             tfCity:null,
             tfDistrict:null,
-            tfProvince:null}]
+            tfProvince:null};
+            console.log(org,'111')
           this.setState({org: org})
         }
        
@@ -119,11 +121,11 @@ class RegisterFormWrapper extends Component {
   render () {
     const { form } = this.props;
     const  org  = this.state.org;
-    const  fileList = org.tfAccessory ? [{
+    const  fileList = this.props.org.tfAccessory ? [{
       uid: -1,
       name: 'xxx.png',
       status: 'done',
-      url: api.LOADPIC +org.tfAccessory,
+      url: api.LOADPIC +this.props.org.tfAccessory,
     }] : [];
     const { previewVisible, previewImage } = this.state;
     return (
@@ -156,9 +158,9 @@ class RegisterFormWrapper extends Component {
             {...formItemLayout}
           >  
             {form.getFieldDecorator('orgCode', {
-              initialValue: org.orgCode
+              initialValue: this.props.org.orgCode
             })(
-              <Input placeholder='请输入组织机构代码' disabled={ org.orgCode ? true:false}/>
+              <Input placeholder='请输入组织机构代码' disabled={ this.props.org.orgCode ? true:false}/>
             )}
           </FormItem> 
           <FormItem
