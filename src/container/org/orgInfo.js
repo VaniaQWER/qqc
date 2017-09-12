@@ -3,9 +3,10 @@ import TableGrid from 'component/tableGrid';
 import SearchSelect from 'component/searchSelect';
 import { Row, Col, Select, Form, Button, Icon } from 'antd';
 import { getLocalOption } from 'utils/common';
-import { CommonData } from 'utils/tools';
+import { CommonData ,fetchData} from 'utils/tools';
 import { Link } from 'react-router';
 import { orgType } from 'constants';
+import querystring from 'querystring';
 import api from 'api';
 const { RemoteSelect } = SearchSelect;
 const FormItem = Form.Item;
@@ -87,7 +88,8 @@ class SearchFormWrapper extends Component {
     orgId: null,
     hospitalLevels: [],
     hospitalPropertys: [],
-    hospitalTypes: []
+    hospitalTypes: [],
+    qcOrgData:[]
   }
   componentDidMount = () => {
      //机构性质
@@ -101,6 +103,13 @@ class SearchFormWrapper extends Component {
     //医院等级
     CommonData('HOSPITAL_LEVEL', (data) => {
       this.setState({ hospitalLevels : data})
+    })
+    fetchData({
+      url: api.SEARCH_ORGS,
+      body: querystring.stringify({orgType:3}),
+      success: (data)=>{
+        this.setState({qcOrgData: data})
+      }
     })
     
   }
@@ -137,7 +146,12 @@ class SearchFormWrapper extends Component {
             <FormItem {...formItemLayout} label={`质控管理机构`}>
               {getFieldDecorator(`qcOrgId`)(
                 <Select allowClear={true}>
-                  <Option value={'全部'}>全部</Option>
+                <Option key={-1} value={''}>全部</Option>
+                  {
+                    this.state.qcOrgData.map((item,index)=>{
+                      return <Option key={index} value={item.orgId}>{item.qcOrgName}</Option>
+                    })
+                  }
                 </Select>
               )}
             </FormItem>

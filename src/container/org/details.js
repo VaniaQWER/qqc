@@ -110,7 +110,6 @@ class RegisterFormWrapper extends Component {
             tfCity:null,
             tfDistrict:null,
             tfProvince:null};
-            console.log(org,'111')
           this.setState({org: org})
         }
        
@@ -123,9 +122,9 @@ class RegisterFormWrapper extends Component {
     const  org  = this.state.org;
     const  fileList = this.props.org.tfAccessory ? [{
       uid: -1,
-      name: 'xxx.png',
+      name: '图片.png',
       status: 'done',
-      url: api.LOADPIC +this.props.org.tfAccessory,
+      url: api.LOADPIC + this.props.org.tfAccessory,
     }] : [];
     const { previewVisible, previewImage } = this.state;
     return (

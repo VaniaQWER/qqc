@@ -31,7 +31,7 @@ class UserAddForm extends Component {
     previewImage: '',
     fileList:  this.props.location.state ? [{
       uid: -1,
-      name: 'xxx.png',
+      name: '图片.png',
       status: 'done',
       url: api.LOADPIC +this.props.location.state.user.tfAccessory,
     }] : [],
@@ -107,9 +107,9 @@ class UserAddForm extends Component {
           orgId:value,
           fileList:[{
             uid: -1,
-            name: 'xxx.png',
+            name: '图片.png',
             status: 'done',
-            url: api.LOADPIC +data.result.rows[0].tfAccessory,
+            url: api.LOADPIC + data.result.rows[0].tfAccessory,
           }]
         })
         this.props.form.setFieldsValue({

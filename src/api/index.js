@@ -7,6 +7,8 @@ export default {
   SEARCH_DEPT_LIST: `/deptInfoController/searchConstrDeptAuditList`,//查询科室信息审核列表
   SEARCH_FORMULA_DETAILS: `/formulaController/selectAllYearFornla`,//医院机构质量指标详情
   UPDATE_FORMULA_DETAILS: `/formulaDetailController/updateFormulaDetail`,//质量上报新增/暂存
+  UPLOADPIC: `http://120.26.128.15:8903/ftp/post`,//查询指标信息详情
+  LOADPIC: `http://120.26.128.15:8903/ftp/`,//查询指标信息详情
   //登录
   USERLOGIN :`/login/userLogin`,//查询用户列表
   USERREGISTER :`/user/registerUserInfo`,//查询用户注册
@@ -19,6 +21,7 @@ export default {
   
   //机构
   SEARCH_ORGS: `/orgController/findOrgs`,//查询机构
+  SEARCH_QCORGS: `/orgController/findOrgs?orgType=3`,//查询机构
   SEARCH_ORGS_LIST: `/orgController/findAllOrgList`, //查询所有机构
   ADD_ORG: `/orgController/addUpdateOrgInfo`,//新增更新机构
 
