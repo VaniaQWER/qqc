@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
-import { getLocalOption } from '../../utils/common';
+import { getLocalOption } from 'utils/common';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const formItemLayout = {
@@ -45,12 +45,12 @@ class DeptSeach extends Component {
               {...formItemLayout}
             >
               {getFieldDecorator('fstate', {
-                initialValue: ''
+                initialValue: this.props.defaultValue ? this.props.defaultValue.fstate : ''
               })(
                 <Select>
                   <Option value={''}>全部</Option>
-                  <Option value={'10'}>已审核</Option>
-                  <Option value={'20'}>待审核</Option>
+                  <Option value={'10'}>待审核</Option>
+                  <Option value={'20'}>已审核</Option>
                   <Option value={'30'}>待提交</Option>
                 </Select>
               )}
@@ -61,7 +61,9 @@ class DeptSeach extends Component {
               label='时间'
               {...formItemLayout}
             >
-              {getFieldDecorator('pYear')(
+              {getFieldDecorator('pYear', {
+                initialValue: new Date().getFullYear().toString()
+              })(
                 <Select>
                   {
                     getLocalOption('pYear')

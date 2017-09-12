@@ -26,9 +26,9 @@ const styles = {
   }
 }
 //返回百分比
-const getRange = (range) => (
-  range * 100 + '%'
-)
+// const getRange = (range) => (
+//   range * 100 + '%'
+// )
 //Card内容组件
 const CardContent = ({icon, info}) => (
   <Row style={styles.card}>
@@ -42,8 +42,8 @@ const CardContent = ({icon, info}) => (
         typeof info.range !== 'undefined'? 
         <h5>
           { info.range > 0 ? 
-            <span style={styles.up}><Icon type='arrow-up'/>{ getRange(info.range) }</span>:
-            <span style={styles.down}><Icon type='arrow-down'/> { getRange(info.range) }</span>
+            <span style={styles.up}><Icon type='arrow-up'/>{info.range}</span>:
+            <span style={styles.down}><Icon type='arrow-down'/> { info.range }</span>
           } 
           <span style={styles.card_h5}>同比上年</span>
         </h5> : <br/>

@@ -33,19 +33,49 @@ const styles = {
 class Dashboard extends Component {
   state = {
     ymd: '',//默认年份
-    orgInfo: {
-      orgSum: {
-        totalOrg: '',
-        tbTotalOrg: '',
+    orgSum: {
+      totalOrg: '',
+      tbTotalOrg: '',
+    },
+    topThreeOrg: {
+      totalLevel3: '',
+      tbTotalLevel3: ''
+    },
+    topTwoOrg: {
+      totalLevel2: '',
+      toTotalLevel2: ''
+    },
+    gender: {
+      series: [],
+      xAxis: {},
+      legend: {}
+    },
+    education: {
+      data: [
+      ],
+      name: ''
+    },
+    adverse: {
+      series: [],
+      xAxis: {
+        data: []
       },
-      topThreeOrg: {
-        totalLevel3: '',
-        tbTotalLevel3: ''
-      },
-      topTwoOrg: {
-        totalLevel2: '',
-        toTotalLevel2: ''
+      legend: {
+        data: []
       }
+    },
+    trace: {
+      series: [],
+      xAxis: {
+        data: []
+      },
+      legend: {
+        data: []
+      }
+    },
+    level: {
+      level2: {},
+      level3: {}
     }
   }
   //获取整个
@@ -56,20 +86,60 @@ class Dashboard extends Component {
       success: data => {
         if (data.status) {
           const orgInfo = data.result;
-          this.setState({ orgInfo })
+          this.setState({ ...orgInfo })
         }
       }
     })
-    // fetchData({
-    //   url: api.ORG_INFO,
-    //   body: querystring.stringify({ ymd }),
-    //   success: data => console.log(data)
-    // })
-    // fetchData({
-    //   url: api.ORG_INFO,
-    //   body: querystring.stringify({ ymd }),
-    //   success: data => console.log(data)
-    // })
+    fetchData({
+      url: api.ORG_GENDER,
+      body: querystring.stringify({ ymd }),
+      success: data => {
+        if (data.status) {
+          const gender = data.result;
+          this.setState({ gender })
+        }
+      }
+    })
+    fetchData({
+      url: api.ORG_EDUCATION,
+      body: querystring.stringify({ ymd }),
+      success: data => {
+        if (data.status) {
+          const education = data.result;
+          this.setState({ education })
+        }
+      }
+    })
+    fetchData({
+      url: api.ORG_ADVERSE,
+      body: querystring.stringify({ ymd }),
+      success: data => {
+        if (data.status) {
+          const adverse = data.result;
+          this.setState({ adverse })
+        }
+      }
+    })
+    fetchData({
+      url: api.ORG_TRACE,
+      body: querystring.stringify({ ymd }),
+      success: data => {
+        if (data.status) {
+          const trace = data.result;
+          this.setState({ trace })
+        }
+      }
+    })
+    fetchData({
+      url: api.ORG_LEVEL,
+      body: querystring.stringify({ ymd }),
+      success: data => {
+        if (data.status) {
+          const level = data.result;
+          this.setState({ level })
+        }
+      }
+    })
     this.setState({ ymd })
   }
   componentDidMount = () => {
@@ -77,7 +147,8 @@ class Dashboard extends Component {
     this.getDashboard(ymd)
   }
   render () {
-    const { ymd } = this.state;
+    const { ymd, orgSum, topThreeOrg, gender, education, adverse, trace, level,
+            topTwoOrg } = this.state;
     return (
       <Layout style={styles.dashboardMain}>
         <Row>
@@ -104,7 +175,7 @@ class Dashboard extends Component {
             <Card style={styles.card_blue}>
               <CardContent 
                 icon={{type: 'area-chart', color: '#08c'}}
-                info={{title: '机构总数', total: '1,345', range: 0.1}}
+                info={{title: '机构总数', total: orgSum.totalOrg, range: orgSum.tbTotalOrg}}
               />
             </Card>
           </Col>
@@ -112,7 +183,7 @@ class Dashboard extends Component {
             <Card style={styles.card_green}>
               <CardContent 
                 icon={{type: 'pie-chart', color: '#3dbd7d'}}
-                info={{title: '三甲机构', total: '323', range: 0.12}}
+                info={{title: '三甲机构', total: topThreeOrg.totalLevel3, range: topThreeOrg.tbTotalLevel3}}
               />
             </Card>
           </Col>
@@ -120,7 +191,7 @@ class Dashboard extends Component {
             <Card style={styles.card_red}>
               <CardContent 
                 icon={{type: 'dot-chart', color: '#f04134'}}
-                info={{title: '二甲机构', total: '1,022', range: -0.08}}
+                info={{title: '二甲机构', total: topTwoOrg.totalLevel2, range: topTwoOrg.tbTotalLevel2}}
               />
             </Card>
           </Col>
@@ -128,28 +199,32 @@ class Dashboard extends Component {
         <Row style={styles.map}>
           <Col span={22} push={1}>
             <Card title="机构分布">
-              <RegionMap/>
+              <RegionMap level2={level.level2} level3={level.level3} ymd={ymd}/>
             </Card>
           </Col>
         </Row>
         <Row style={styles.map}>
           <Col span={12} push={1}>
             <Card title="医工人数">
-              
+              <Bar series={gender.series} xAxis={gender.xAxis} legend={gender.legend}/>
             </Card>
           </Col>
           <Col span={9} push={2}>
             <Card title="医工人员学历情况">
-              
+              <Pie series={education}/>
             </Card>
            </Col>
         </Row>
         <Row style={styles.map}>
           <Col span={10} push={1}>
-            <Card title="不良事件上报率">不良事件上报率</Card>
+            <Card title="不良事件上报率">
+              <Bar series={adverse.series} xAxis={adverse.xAxis} legend={adverse.legend}/>
+            </Card>
           </Col>
           <Col span={10} push={3}>
-            <Card title="耗材追溯分析">耗材追溯分析</Card>
+            <Card title="耗材追溯分析">
+              <Bar series={trace.series} xAxis={trace.xAxis} legend={trace.legend}/>
+            </Card>
           </Col>
         </Row>
       </Layout>

@@ -22,9 +22,9 @@ const editPassword = () => {
 
 const menus = [
   <Link to='/user'><Icon type="user" className='phxl_user_menu_icon'/>用户信息</Link>,
-  <a onClick={editPassword}><Icon type="edit" className='phxl_user_menu_icon'/>修改密码</a>,
+  <Link to='/user/editPassword'><Icon type="edit" className='phxl_user_menu_icon'/>修改密码</Link>,
   <Link to='/message'><Icon type="message" className='phxl_user_menu_icon'/>我的消息</Link>,
-  <Link to='/user'><Icon type="logout" className='phxl_user_menu_icon'/>退出</Link>
+  <Link to='/login'><Icon type="logout" className='phxl_user_menu_icon'/>退出</Link>
 ]
 
 const UserMenu = () => (

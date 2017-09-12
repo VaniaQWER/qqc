@@ -3,6 +3,8 @@
  * @desc 根据
  */
 
+// import { fetchData } from 'utils/tools';
+// import api from 'api';
 export const FETCH_STARTED = 'USER/FETCH_STARTED';
 export const FETCH_SUCCESS = 'USER/FETCH_SUCCESS';
 export const FETCH_FAILURE = 'USER/FETCH_FAILURE';
@@ -127,6 +129,9 @@ const mockData = {
 //模拟 后台交互获取菜单以及用户信息
 export const fetchUser = data => ( 
   dispatch => (
+    // fetchData({
+
+    // })
     setTimeout(() => dispatch(fetchUserSuccess({...mockData})), 10)
   )  
 )  

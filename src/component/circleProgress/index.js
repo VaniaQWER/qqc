@@ -12,8 +12,8 @@ import PropTypes from 'prop-types'
  */
 const CircleProgress = ({percent, title}) => (
   <div style={{cursor: 'pointer'}}>
-    <h5 style={{color: '#108ee9'}}>{`${percent}%`}</h5>
-    <h4 style={{color: 'rgba(0, 0, 0, 0.5)'}}>{title}</h4>
+    <p style={{color: '#108ee9', fontSize: 14}}>{`${percent.toFixed(2)}%`}</p>
+    <p style={{color: 'rgba(0, 0, 0, 0.5)', fontSize: 10}}>{title}</p>
   </div>
 )
 

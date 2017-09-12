@@ -212,7 +212,7 @@ class ReportWrapperForm extends Component {
     const { form } = this.props;
     return (
       <Row style={styles.row} className='right_content'>
-        <Form onSubmit={this.handleSubmit} className="login-form">
+        <Form onSubmit={this.handleSubmit}>
           <Col span={3}>
             <h3>选择上报时间</h3>
           </Col>  

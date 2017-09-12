@@ -7,6 +7,7 @@ import { Row, Col } from 'antd';
 import SiderMenu  from 'component/sider';
 import DeptSearchForm from 'component/search'
 import CheckForm from './checkForm';
+import api from 'api';
 
 class DeptCheck extends Component {
   getSiderMenu = () => {
@@ -19,6 +20,9 @@ class DeptCheck extends Component {
       return null;
     }
   }
+  search = (values) => {
+    this.refs.table.fetch(values);
+  }
   render () {
     return (
       <Row style={{backgroundColor: '#fff'}}>
@@ -29,10 +33,10 @@ class DeptCheck extends Component {
         { this.props.children || 
           <Row style={{padding: 8, minHeight: 480}} className={'right_content'}>
             <Col span={24} style={{ marginTop: 10}}>
-              <DeptSearchForm submit={(values) => console.log('查询条件:', values)}/>
+              <DeptSearchForm submit={this.search} defaultValue={{fstate: '10'}}/>
             </Col>
             <Col span={24} style={{ marginTop: 10}}>
-              <CheckForm/>
+              <CheckForm url={api.SEARCH_DEPT_LIST} ref='table'/>
             </Col>
           </Row>
         }

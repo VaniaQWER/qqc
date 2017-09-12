@@ -7,24 +7,29 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 
-const Bar = ({ color, series, xAxis, legend}) => (
+const Bar = ({ series, xAxis, legend}) => (
   <ReactEchartsCore
     echarts={echarts} 
     option={{
+      color: ['#49a9ee', '#f46e65', '#3dbd7d', '#f7629e', '#f78e3d'],
       tooltip : {
         trigger: 'item',
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
+        formatter: "{a} <br/>{b} : {c} "
       },
       legend: {
-        data: legend.data
+        data: legend ? legend.data : []
       },
       xAxis: {
         type: 'category',
-        data: xAxis.data
+        data: xAxis ? xAxis.data : [],
+        axisLabel: {
+          interval: 0,
+          rotate: -30
+        }
       },
       yAxis: {
         type: 'value',
-        boundaryGap: [0, '100%']
+        boundaryGap: [0, '100%'],
       },
       dataZoom: [{
           start: 0,
@@ -39,7 +44,7 @@ const Bar = ({ color, series, xAxis, legend}) => (
               shadowOffsetY: 2
           }
       }],
-      series : series
+      series : series ? series : []
     }} 
     style={{height: 250}}
     className='react_for_echarts' 

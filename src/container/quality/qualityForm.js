@@ -3,7 +3,11 @@
  * @summary 动态生成
  */
 import React, { Component } from 'react';
-import { Form, Card, Input, Row, Icon, Tooltip, Button, Col } from 'antd';
+import { Form, Card, Input, Row, Icon, Tooltip, Button, Col, Select, message } from 'antd';
+import querystring from 'querystring';
+import { fetchData } from 'utils/tools';
+import { getLocalOption, getHalfYear } from 'utils/common';
+import api from 'api';
 const FormItem = Form.Item;
 const styles = {
   row: {
@@ -35,134 +39,153 @@ const formItemLayout = {
   },
 };
 
-const cardItems = [
-  {
-    title: '1.医学工程人员（医疗设备、医用耗材管理和工程技术人员）配置水平',
-    tips: '提示1',//todo
-    list: [
-      { 
-        label: '医学工程人员的数量',
-        value: '30',
-        rules: [{ required: true, message: '请输入医学工程人员的数量' }],
-        key: 'chart1',
-        readonly: true
-      },
-      { 
-        label: '床位数量',
-        rules: [{ required: true, message: '请输入床位数量' }],
-        key: 'chart2',
-        value: '6000',
-        readonly: true
-      },
-      { 
-        label: '医学工程人员配置水平',
-        rules: [{ required: true, message: '请输入医学工程人员配置水平' }],
-        value: '0.5%',
-        key: 'chart3',
-        readonly: true
-      }
-    ]
-  },   {
-    title: '2.医学工程人员业务培训率',
-    tips: '提示2',//todo
-    list: [
-      { 
-        label: '医学工程人员业务培训人次数',
-        value: '30',
-        rules: [{ required: true, message: '请输入医学工程人员业务培训人次数' }],
-        key: 'chart4',
-        readonly: true
-      },
-      { 
-        label: '医学工程人员数量',
-        rules: [{ required: true, message: '请输入床位数量' }],
-        key: 'chart5',
-        value: '6000',
-        readonly: true
-      },
-      { 
-        label: '医学工程人员配置水平',
-        rules: [{ required: true, message: '请输入医学工程人员配置水平' }],
-        value: '0.5%',
-        key: 'chart6',
-        readonly: true
-      }
-    ]
-  },  {
-    title: '3.临床科室人员医疗器械培训率',
-    tips: '提示3',//todo
-    list: [
-      { 
-        label: '临床科室参加培训人数',
-        rules: [{ required: true, message: '请输入临床科室参加培训人数' }],
-        key: 'chart7'
-      },
-      { 
-        label: '科室总人数',
-        rules: [{ required: true, message: '请输入科室总人数数' }],
-        key: 'chart8'
-      },
-      { 
-        label: '科室名称',
-        rules: [{ required: true, message: '请输入科室名称' }],
-        key: 'chart9'
-      },
-      { 
-        label: '医学工程人员配置水平',
-        rules: [{ required: true, message: '请输入医学工程人员配置水平' }],
-        key: 'chart10'
-      }
-    ]
-  }
-]
+const getTips = (tips) => {
+  let tip = [];
+  tips.map((item, index) => tip.push(<p key={index}>{item}</p>))
+  return tip;
+}
+
+const year = getHalfYear();
 
 class QualityWrapperForm extends Component {
+  state = {
+    cardItems: [],
+    pYear: year,
+  }
+  submitData = (values, type) => {
+    const refs = this.refs;
+    let postData = {};
+    for (let key in refs) {
+      if (key.includes('card')) {
+        postData[key.split('-')[1]] = [];
+      }
+    }
+    for (let key in values) {
+      const k = key.split('-')[1];
+      const old = postData[k];
+      old.push(values[key])
+    }
+    fetchData({
+      url: api.UPDATE_FORMULA_DETAILS,
+      body: {...postData, pYear: this.state.pYear, isCommit: type},
+      success: data => {
+        if (data.status) {
+          alert('成功了..我也不知道跳转到哪里!!')
+        } else {
+          message.error(data.msg)
+        }
+      },
+      type: 'application/json'
+    })
+  }
   submit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values)
+      if (!err) {
+        this.submitData(values, 1);
+      }
     });
+  }
+  save = () => {
+    const values = this.props.form.getFieldsValue();
+    this.submitData(values, 2);
+  }
+  getCardItems = (year) => {
+    fetchData({
+      url: api.SELECT_FORMULA_DETAIL,
+      body: querystring.stringify({
+        orgId: 10013,//暂时先用用
+        pYear: year || this.state.pYear,
+      }),
+      success: data => {
+        if (data.status) {
+          this.setState({
+            cardItems: data.result
+          })
+          this.countProgress();
+        }
+      }
+    })
+  }
+  getCode = (value) => {
+    this.getCardItems(value)
+    this.setState({
+      pYear: value
+    })
+  }
+  componentDidMount = () => {
+    this.getCardItems();
+  }
+  countProgress = () => {
+    const values = this.props.form.getFieldsValue();
+    let total = 0;
+    let result = 0;
+    for (let key in values) {
+      if (values[key]) {
+        result++;
+      }
+      total++;
+    }
+    const progress = (result/total).toFixed(2) * 100;
+    this.props.setProgress(progress || 0);
   }
   render () {
     const { form } = this.props;
+    const { cardItems } = this.state;
     return (
       <Row style={styles.row} className='right_content'>
-        <Form onSubmit={this.submit}>
-          {
-            cardItems.map((item, index) => (
-              <Card
-                style={{marginBottom: 5}}
-                key={index}
-                title={item.title}
-                extra={<Tooltip placement="topRight" title={<a>{item.tips}</a>}>
-                        <Icon type="question-circle" style={{fontSize: '2em'}}/>
-                      </Tooltip>}
-              >
-                {
-                  item.list.map((subItem, i) => (
-                    <FormItem
-                      key={i}
-                      {...formItemLayout}
-                      label={subItem.label}
-                    >
-                      {form.getFieldDecorator(subItem.key, {
-                        rules: subItem.rules,
-                        initialValue: subItem.value
-                      })(
-                        <Input disabled={subItem.readonly}/>
-                      )}
-                    </FormItem> 
-                  ))
-                }
-              </Card>
-            ))
-          }
-          <Col span={24} style={styles.tool}>
-            <Button type='primary' style={styles.button} htmlType='submit'>提交</Button>
-            <Button style={styles.button}>暂存</Button>
-            <Button type='danger'>重置</Button>
-          </Col>
-        </Form>
+        <Col span={24} className="ant-advanced-search-form">
+          <Select defaultValue={getHalfYear()} style={{width: 300}} placeholder='请选择年份' onChange={this.getCode}>
+            {
+              getLocalOption('yearMonth')
+            }
+          </Select>
+        </Col>
+        <Col span={24}>
+          <Form onSubmit={this.submit}>
+            {
+              !cardItems.length ? <h2 style={{color: '#e5e5e5', textAlign: 'center'}}>没有数据</h2> :
+              cardItems.map((item, index) => (
+                <Card
+                  style={{marginBottom: 5}}
+                  key={`${index}`}
+                  ref={`card-${item.indexDetailGuid}`}
+                  title={`${item.fsort}:${item.title}`}
+                  extra={<Tooltip placement="topRight" title={<div>{ getTips(item.tips) }</div>}>
+                          <Icon type="question-circle" style={{fontSize: '2em'}}/>
+                        </Tooltip>}
+                >
+                  {
+                    item.mapList.map((subItem, i) => (
+                      <FormItem
+                        key={i}
+                        {...formItemLayout}
+                        label={subItem.label}
+                      >
+                        {form.getFieldDecorator(`${subItem.key}-${item.indexDetailGuid}`, {
+                          rules: [
+                            {required: subItem.required, message: `请输入${subItem.label}`}
+                          ],
+                          initialValue: subItem.value
+                        })(
+                          <Input disabled={subItem.readonly} onBlur={this.countProgress}/>
+                        )}
+                      </FormItem> 
+                    ))
+                  }
+                </Card>
+              ))
+            }
+            {
+              cardItems.length ? 
+              <Col span={24} style={styles.tool}>
+                <Button type='primary' style={styles.button} htmlType='submit'>提交</Button>
+                <Button style={styles.button} onClick={this.save}>暂存</Button>
+                <Button type='danger' onClick={this.reset}>重置</Button>
+              </Col> : null
+            }
+          </Form>
+        </Col>
       </Row>
     )
   }

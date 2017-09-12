@@ -7,45 +7,64 @@ import { Link } from 'react-router';
 import DeptSearchForm from 'component/search';
 import CircleProgress from 'component/circleProgress';
 import LoadMore from 'component/loadMore';
+import querystring from 'querystring';
 
 class QualityInfo extends Component {
   state = {
     hospital: [],
-    loadMore: true
+    loadMore: true,
+    page: 1
   }
   componentDidMount = () => {
+    this.addHospital()
+  }
+  addHospital = (query={}, pager) => {
+    let { hospital, page, loadMore } = this.state;
+    let postData = {
+      pagesize: 20, 
+      page: pager || page, 
+      fstateType: 1,
+      pYear: new Date().getFullYear()
+    }
     fetchData({
       url: api.SELECT_FORMULA_LIST,
+      body: querystring.stringify(Object.assign({}, postData, query)),
       success: data => {
         if (data.status) {
-          const hospitalArr = data.result.rows;
-          let hospital = [];
-          hospitalArr.map(item => hospital.push(item))
-          this.setState({hospital: hospitalArr});
+          if (pager) {
+            hospital = [];
+          }
+          loadMore = (hospital.length + data.result.rows.length ) < data.result.records ? true : false; 
+          data.result.rows.map(item => hospital.push(item))
+          this.setState({hospital: hospital, page: page + 1, loadMore});
         }
       }
     })
   }
+  search = (values) => {
+    this.addHospital(values, 1)
+  }
   loadMore = () => {
-
+    this.addHospital();
   }
   render () {
     const { hospital } = this.state;
     return (
       <Row style={{padding: 8}} span={6} className={'right_content'}>
         <Col span={24} style={{ marginTop: 10}}>
-          <DeptSearchForm submit={(values) => console.log('查询条件:', values)}/>
+          <DeptSearchForm submit={this.search}/>
         </Col>
         {
-          hospital.map(item => 
-            <Col span={6} push={2} key={item.id} style={{marginTop: 10}}>
-              <Link to={{pathname: `/department/deptInfo/${item.constrDeptGuid}`, state: {deptName: item.title}}}>
+          hospital.map((item, index) => 
+            <Col span={6} push={2} key={index} style={{marginTop: 10}}>
+              <Link key={index} to={{pathname: `/quality/qualityInfo/${item.orgId}`, state: {orgName: item.orgName}}}>
                 <Progress 
+                  key={index}
                   width={150}
                   type="circle" 
-                  percent={item.schedule} 
-                  status={renderStatus.call(null, item.schedule)}
-                  format={() => <CircleProgress percent={item.schedule} title={item.orgName}/>}
+                  percent={Number(`${item.schedule * 100}`)} 
+                  status={renderStatus.call(null, Number(`${item.schedule * 100}`))}
+                  format={() => <CircleProgress percent={Number(`${item.schedule * 100}`)} title={item.orgName}/>}
                 />
               </Link>
             </Col>)

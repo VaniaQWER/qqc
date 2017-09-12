@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'antd';
 
 const LoadMore = ({ending, onClick}) => (
-  ending ? <Button type="dashed" onClick={onClick} size='large'>加载更多</Button> : <h2>我是有底限的</h2>
+  ending ? <Button type="dashed" onClick={onClick} size='large'>加载更多</Button> : <h2 style={{color: '#e5e5e5'}}>没有数据</h2>
 )
 
 LoadMore.propTypes = {
