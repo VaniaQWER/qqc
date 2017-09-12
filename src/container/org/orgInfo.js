@@ -12,72 +12,7 @@ const { RemoteSelect } = SearchSelect;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RemoteTable } = TableGrid;
-const columns = [
-  {
-    title: '操作',
-    dataIndex: 'orgId',
-    width: 100,
-    render: (value, record) => <Link to={{pathname: '/org/orgInfo/details', state: {org: record}}}>详情</Link>
-  },
-  {
-    title: '组织机构代码',
-    dataIndex: 'orgCode',
-    width: 200
-  },  {
-    title: '信息统计时间',
-    dataIndex: 'pYear',
-    width: 200
-  },  {
-    title: '机构类型',
-    dataIndex: 'orgType',
-    width: 100,
-    render: value => orgType[value]
-  },  {
-    title: '质控管理机构',
-    dataIndex: 'qcOrgName',
-    width: 200
-  },  {
-    title: '机构名称',
-    dataIndex: 'orgName',
-    width: 200
-  },  {
-    title: '机构简称',
-    dataIndex: 'orgAlias',
-    width: 100
-  },  {
-    title: '机构等级',
-    dataIndex: 'hospitalLevel',
-    width: 100
-  },  {
-    title: '机构性质',
-    dataIndex: 'hospitalProperty',
-    width: 100
-  },  {
-    title: '编制床位数',
-    dataIndex: 'planBedSum',
-    width: 150
-  },  {
-    title: '开放床位数',
-    dataIndex: 'actualBedSum',
-    width: 150
-  },  {
-    title: '职工总数',
-    dataIndex: 'staffSum',
-    width: 100
-  },  {
-    title: '机构地址',
-    dataIndex: 'orgAddress',
-    width: 200
-  },  {
-    title: '联系人',
-    dataIndex: 'lxr',
-    width: 200
-  },  {
-    title: '联系电话',
-    dataIndex: 'lxdh',
-    width: 200
-  }
-]
+
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -133,6 +68,7 @@ class SearchFormWrapper extends Component {
     this.props.form.resetFields();
     this.props.reset();
   }
+
   render () {
     const { display } = this.state;
     const { getFieldDecorator } = this.props.form; 
@@ -260,6 +196,20 @@ class SearchFormWrapper extends Component {
 }
 const SearchForm = Form.create()(SearchFormWrapper);
 class OrgInfo extends Component {
+  state ={
+    hospitalLevels: [],
+    hospitalPropertys: [],
+  }
+  componentDidMount = () => {
+    //机构性质
+    CommonData('HOSPITAL_PROPERTY', (data) => {
+    this.setState({ hospitalPropertys : data})
+   })
+   //医院等级
+   CommonData('HOSPITAL_LEVEL', (data) => {
+    this.setState({ hospitalLevels : data})
+  })
+  }
   submit = (postData) => {
     console.log('查询数据:', postData);
     this.refs.remote.fetch({...postData});
@@ -268,6 +218,88 @@ class OrgInfo extends Component {
     this.refs.remote.fetch({});
   }
   render () {
+    const columns = [
+      {
+        title: '操作',
+        dataIndex: 'orgId',
+        width: 100,
+        render: (value, record) => <Link to={{pathname: '/org/orgInfo/details', state: {org: record}}}>详情</Link>
+      },
+      {
+        title: '组织机构代码',
+        dataIndex: 'orgCode',
+        width: 200
+      },  {
+        title: '信息统计时间',
+        dataIndex: 'pYear',
+        width: 200
+      },  {
+        title: '机构类型',
+        dataIndex: 'orgType',
+        width: 100,
+        render: value => orgType[value]
+      },  {
+        title: '质控管理机构',
+        dataIndex: 'qcOrgName',
+        width: 200
+      },  {
+        title: '机构名称',
+        dataIndex: 'orgName',
+        width: 200
+      },  {
+        title: '机构简称',
+        dataIndex: 'orgAlias',
+        width: 100
+      },  {
+        title: '机构等级',
+        dataIndex: 'hospitalLevel',
+        width: 100,
+        render: (text)=>{
+          return this.state.hospitalLevels.map((item,index)=>{
+            if(item.TF_CLO_CODE === text){
+              return item.TF_CLO_NAME
+            }
+            return null;
+          })
+        }
+      },  {
+        title: '机构性质',
+        dataIndex: 'hospitalProperty',
+        width: 100,
+        render: (text)=>{
+          return this.state.hospitalPropertys.map((item,index)=>{
+            if(item.TF_CLO_CODE === text){
+              return item.TF_CLO_NAME
+            }
+            return null;
+          })
+        }
+      },  {
+        title: '编制床位数',
+        dataIndex: 'planBedSum',
+        width: 150
+      },  {
+        title: '开放床位数',
+        dataIndex: 'actualBedSum',
+        width: 150
+      },  {
+        title: '职工总数',
+        dataIndex: 'staffSum',
+        width: 100
+      },  {
+        title: '机构地址',
+        dataIndex: 'orgAddress',
+        width: 200
+      },  {
+        title: '联系人',
+        dataIndex: 'lxr',
+        width: 200
+      },  {
+        title: '联系电话',
+        dataIndex: 'lxdh',
+        width: 200
+      }
+    ]
     return (
       <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
         <SearchForm
