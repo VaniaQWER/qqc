@@ -17,7 +17,7 @@ const Option = Select.Option;
 class StepOneForm extends Component{
     state = {
         dirtyClick: false,
-        orgName: "",
+        orgName: this.props.data ?this.props.data.orgName :"",
         dataSource:[],
         previewVisible: false,
         previewImage: '',
@@ -511,9 +511,11 @@ class RegisterHosptital extends Component {
             />,
             icon: 'smile-o'
           }];
+          const bg = "zcbg" + current;
         return(
+            <div className={bg}>
             <Row>
-                <Col span={12} offset={6}>
+                <Col span={12} offset={8}>
                     <div style={{paddingTop:"14%"}}>
                         <Steps current={current}>
                         {steps.map(item => <Step key={item.title} title={item.title} icon={<Icon type={item.icon} />}/>)}
@@ -522,6 +524,7 @@ class RegisterHosptital extends Component {
                     </div>
                 </Col>
             </Row>
+            </div>
         )
     }
 }
