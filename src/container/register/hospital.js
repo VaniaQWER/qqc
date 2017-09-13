@@ -447,7 +447,7 @@ class StepThree extends Component{
 
 class StepFour extends Component{
     render(){
-        const message = "您的账号:"+ this.props.data.userNo + ";已审核通过，可正常登录使用";
+        const message = "您的账号:"+ this.props.data.userNo + ";正在审核,请耐心等待...";
         return(
            <div style={{marginTop:48,textAlign:"center"}}>
                <Alert

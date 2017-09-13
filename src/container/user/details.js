@@ -106,25 +106,25 @@ class UserAddForm extends Component {
             uid: -1,
             name: '图片.png',
             status: 'done',
-            url: api.LOADPIC + data.result.rows[0].tfAccessory,
+            url: api.LOADPIC + data[0].tfAccessory,
           }]
         })
 
-        if(data.result.rows[0].tfAccessory){
+        if(data[0].tfAccessory){
           this.setState({
             fileList:[{
               uid: -1,
               name: '图片.png',
               status: 'done',
-              url: api.LOADPIC + data.result.rows[0].tfAccessory,
+              url: api.LOADPIC + data[0].tfAccessory,
             }]
           })
         }else{
           this.setState({fileList:[]})
         }
-        if(data.result.rows[0].orgCode){
+        if(data[0].orgCode){
           this.props.form.setFieldsValue({
-            orgCode: data.result.rows[0].orgCode,
+            orgCode: data[0].orgCode,
           })
         }else{
           this.props.form.setFieldsValue({
