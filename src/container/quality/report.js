@@ -21,7 +21,7 @@ class QualityReport extends Component {
   render () {
     const { progress } = this.state;
     return (
-      <div>
+      <div style={{minHeight: 480}}  className={'right_content'}>
         <Affix offsetTop={-20}>
           <Progress 
             percent={progress} 

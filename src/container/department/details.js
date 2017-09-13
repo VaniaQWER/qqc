@@ -3,16 +3,17 @@
  * @summary 科室建设明细展示(包含数据卡, 图标, 表格)
  */
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Row, Col, Card, Icon, Popover } from 'antd';
+import { Layout, Breadcrumb, Row, Col, Card, Icon, Popover, Select, Table } from 'antd';
 import Pie from 'component/pie';
 import Bar from 'component/bar';
 import CardContent from 'component/card';
-import TableGrid from 'component/tableGrid';
 import { hashHistory, Link } from 'react-router';
+import { fetchData } from 'utils/tools';
+import { getLocalOption } from 'utils/common'
+import api from 'api';
 import querystring from 'querystring';
-const { RemoteTable } = TableGrid;
 const { Content } = Layout;
-
+const pYear = new Date().getFullYear();
 //样式
 const styles = {
   card_left: {
@@ -63,10 +64,10 @@ const columns = [{
   dataIndex: 'age'
 }, {
   title: '岗位',
-  dataIndex: 'postAge'
+  dataIndex: 'postName'
 }, {
   title: '岗位工龄',
-  dataIndex: 'age'
+  dataIndex: 'postAge'
 }, {
   title: '学历',
   dataIndex: 'highestEducation'
@@ -83,43 +84,20 @@ const columns = [{
 
 class DepartmentDetail extends Component {
   state = {
+    dataSource: [],
     pieSeries: {
-      data: [
-        { value: '9', name: '≥50岁' },
-        { value: '55', name: '40~49岁' },
-        { value: '30', name: '＜30岁' },
-        { value: '128', name: '30~39岁' },
-      ],
+      data: [],
       name: '年龄'
     },
     educationSeries: {
-      data: [
-        { value: '4', name: '博士及以上' },
-        { value: '30', name: '硕士' },
-        { value: '321', name: '本科' },
-        { value: '88', name: '专科' },
-        { value: '4', name: '高中及以下' },
-      ],
+      data: [],
       name: '学历'
     },
     majorSeries: {
-      series: [
-        { 
-          name: '专业',
-          type: 'bar',
-          data: ['3', '8', '9', '18', '31', '1', '15']
-        },
-        { 
-          name: '测试',
-          type: 'line',
-          data: ['1', '4', '8', '18', '14', '1', '3']
-        }
-      ],
-      xAxis: {
-        data: ['专业1', '专业2', '专业3', '专业4', '专业5', '专业6', '专业7']
-      },
+      series: [],
+      xAxis: {},
       legend: {
-        data: ['专业', '测试']
+        data: []
       }
     },
     bedSum: {
@@ -137,88 +115,146 @@ class DepartmentDetail extends Component {
     meetSum: {
       planMeetSum: 0,
       tbMeetSum: 0
-    }
+    },
+    pYear: pYear
   }
   componentWillMount = () => {
     //校验权限以及安全性
     const { location, routeParams } = this.props;
-    console.log(location, routeParams)
-    if (location.state && routeParams.id) {
-      fetch(`${window._uri}/deptInfoController/getDeptUserAge`,{
-        method: 'post',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: querystring.stringify({
-          constrDeptGuid: '1',
-          orgId: '10002',
-          pYear: '2016'
-        })
-      }).then(res => res.json())
-        .then(data => {
-          //console.log(data.result.data);
+    //this.getData(pYear);
+    // if (location.state && routeParams.id) {
+
+    // } else {
+    //   //参数不齐全或者没访问权限跳转至上一页
+    //   hashHistory.push({
+    //     pathname: '/department/deptInfo'
+    //   })
+    // }
+
+  }
+  getData = (value) => {
+    const { routeParams } = this.props;
+    const orgId = routeParams.id;
+    const year = value || pYear;
+    fetchData({
+      url: api.GET_DEPT_INFO,
+      body: querystring.stringify({orgId, pYear: year}),
+      success: data => {
+        if (data.status) {
           this.setState({
-            pieSeries: {
-              data: data.result.data,
-              name: '年龄'
-            }
+            bedSum: data.result.bedSum,
+            staffSum: data.result.staffSum,
+            ygSum: data.result.ygSum,
+            meetSum: data.result.meetSum
           })
-        })
-      //加载
-    } else {
-      //参数不齐全或者没访问权限跳转至上一页
-      hashHistory.push({
-        pathname: '/department/deptInfo'
-      })
-    }
+        }
+      }
+    })
+    fetchData({
+      url: api.GET_DEPT_AGE,
+      body: querystring.stringify({orgId, pYear: year}),
+      success: data => {
+        if (data.status) {
+          this.setState({
+            pieSeries: data.result
+          })
+        }
+      }
+    })
+    fetchData({
+      url: api.GET_DEPT_EDUCATION,
+      body: querystring.stringify({orgId, pYear: year}),
+      success: data => {
+        if (data.status) {
+          this.setState({
+            educationSeries: data.result
+          })
+        }
+      }
+    })
+    fetchData({
+      url: api.GET_DEPT_MAJOR,
+      body: querystring.stringify({orgId, pYear: year}),
+      success: data => {
+        if (data.status) {
+          this.setState({
+            majorSeries: data.result
+          })
+        }
+      }
+    })
+    fetchData({
+      url: api.GET_DEPT_USER_LIST,
+      body: querystring.stringify({orgId, pYear: year}),
+      success: data => {
+        if (data.status) {
+          this.setState({
+            dataSource: data.result.rows
+          })
+        }
+      }
+    })
+  }
+  search = (value) => {
+    this.getData(value);
+    this.setState({
+      pYear: value
+    })
   }
   render () {
     const { location } = this.props;
     const { bedSum, staffSum, ygSum, meetSum, pieSeries, educationSeries, majorSeries } = this.state;
     return (
-      <Content style={{ padding: '0 20px' }} className={'right_content'}>
+      <Content style={{ padding: '0 20px' }} className='right_content'>
         <Breadcrumb style={{ margin: '12px 0', fontSize: '1.1em'}}>
           <Breadcrumb.Item><Link to='/home'>首页</Link></Breadcrumb.Item>
           <Breadcrumb.Item><Link to='/department/deptInfo'>科室建设</Link></Breadcrumb.Item>
-          <Breadcrumb.Item>{ location.state.deptName }</Breadcrumb.Item>
+          <Breadcrumb.Item>{ location.state ? location.state.deptName : null }</Breadcrumb.Item>
         </Breadcrumb>
-        <Row style={{ padding: 10}}>
-          <Col span={5} push={1}>
+        <Row style={{marginTop: 4}} className="ant-advanced-search-form">
+          <Col span={24}>
+            <Select style={{width: 300}} onChange={this.search}>
+              {
+                getLocalOption('pYear')
+              }
+            </Select>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={5}>
             <Card style={styles.card_green}>
               <CardContent 
                 icon={{type: 'solution', color: '#3dbd7d'}}
-                info={{title: '机构床位数', total: bedSum.planBedSum, range: bedSum.tbPlanBedSum}}
+                info={{title: '机构床位数', total: bedSum ? bedSum.planBedSum : 0, range: bedSum ? bedSum.tbPlanBedSum : 0}}
+              />
+            </Card>
+          </Col>
+          <Col span={5} push={1}>
+            <Card style={styles.card_red}>
+              <CardContent 
+                icon={{type: 'bell', color: '#f79992'}}
+                info={{title: '机构员工总数', total: staffSum ? staffSum.planStaffSum : 0, range: staffSum ? staffSum.tbStaffSum : 0}}
               />
             </Card>
           </Col>
           <Col span={5} push={2}>
-            <Card style={styles.card_red}>
+            <Card style={styles.card_blue}>
               <CardContent 
-                icon={{type: 'bell', color: '#f79992'}}
-                info={{title: '机构员工总数', total: staffSum.planStaffSum, range: staffSum.tbStaffSum}}
+                icon={{type: 'rocket', color: '#b3acf2'}}
+                info={{title: '医工人员总数', total: ygSum ? ygSum.planYgSum : 0, range: ygSum ? ygSum.tbYgSum : 0}}
               />
             </Card>
           </Col>
           <Col span={5} push={3}>
-            <Card style={styles.card_blue}>
-              <CardContent 
-                icon={{type: 'rocket', color: '#b3acf2'}}
-                info={{title: '医工人员总数', total: ygSum.planYgSum, range: ygSum.tbYgSum}}
-              />
-            </Card>
-          </Col>
-          <Col span={5} push={4}>
             <Card style={styles.card_yellow}>
               <CardContent 
                 icon={{type: 'like', color: '#7ec2f3'}}
-                info={{title: '医工培训总数', total: meetSum.planMeetSum, range: meetSum.tbMeetSum}}
+                info={{title: '医工培训总数', total: meetSum ? meetSum.planMeetSum : 0, range: meetSum ? meetSum.tbMeetSum : 0}}
               />
             </Card>
           </Col>
         </Row>
-        <Row style={{ padding: 20}}>
+        <Row style={{ marginTop: 10}}>
           <Col span={8}>
             <Card title="医工人员年龄情况">
               <Pie series={pieSeries}/>
@@ -235,9 +271,9 @@ class DepartmentDetail extends Component {
             </Card>
           </Col>
         </Row>
-        <Row style={{ padding: 20, position: 'relative'}}>
-          <RemoteTable
-            url={''}
+        <Row style={{ marginTop: 10, position: 'relative'}}>
+          <Table
+            dataSource={this.state.dataSource}
             columns={columns}
             rowKey={'constrDeptGuid'}
           />

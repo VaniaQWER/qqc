@@ -17,9 +17,9 @@ const Option = Select.Option;
 const columns = [
   { title: '时间', dataIndex: 'pYear', width: 100},
   { title: '医院名称', dataIndex: 'fOrgName', width: 200},
-  { title: '医院等级', dataIndex: 'hospitalLevel', width: 100},
-  { title: '医院性质', dataIndex: 'hospitalType', width: 100},
-  { title: '医院床位数', dataIndex: 'numeratorValue', width: 100},
+  { title: '医院等级', dataIndex: 'hospitalLevel', width: 60},
+  { title: '医院性质', dataIndex: 'hospitalType', width: 60},
+  { title: '医院床位数', dataIndex: 'numeratorValue', width: 70},
   { title: '医学工程人员数量', dataIndex: 'denominatorValue', width: 80},
   { title: '医学工程人员配置水平', dataIndex: 'indexValue', width: 80},
   { title: '同级医院平均配置水平对比', dataIndex: 'indexValueLevel', width: 100},
@@ -38,13 +38,16 @@ class QualityDetails extends Component {
         data: []
       }
     },
-    dynamicColumns: columns
+    dataSource: [],
+    dynamicColumns: []
   }
   //时间下拉框获取公式
   getCode = (value) => {
     this.setState({
       codeValue: null,
-      pYear: value
+      pYear: value,
+      barSeries: {},
+      dataSource: []
     })
     fetchData({
       url: api.SELECT_CODE,
@@ -60,19 +63,31 @@ class QualityDetails extends Component {
   //根据公式以及年份  获取详情
   getDetails = (value) => {
     this.setState({codeValue: value});
-    const { pYear } = this.state;
+    let { pYear } = this.state;
     const orgId = this.props.routeParams.id;
     fetchData({
       url: api.SEARCH_FORMULA_DETAILS,
       body: querystring.stringify({ pYear, orgId, indexValue: value}),
       success: data => {
         if (data.status) {
+          const { titleMap, pager, series, xAxis, legend } = data.result;
+          let dynamicColumns = [];
+          for (let key in titleMap) {
+            let params = {
+              title: titleMap[key],
+              dataIndex: key,
+              width: titleMap[key].length * 12
+            }
+            dynamicColumns.push(params)
+          }
           this.setState({
             barSeries: {
-              series: data.result.series,
-              xAxis:  data.result.xAxis,
-              legend: data.result.legend  
-            }
+              series: series,
+              xAxis:  xAxis,
+              legend: legend  
+            },
+            dynamicColumns: dynamicColumns,
+            dataSource: pager.rows
           })
         }
       }
@@ -82,10 +97,10 @@ class QualityDetails extends Component {
     const { location } = this.props;
     const { barSeries, codeOption, dataSource, dynamicColumns } = this.state;
     return (
-      <Content style={{ padding: '0 20px' }} className={'right_content'}>
+      <Content style={{ padding: '0 20px', minHeight: 480 }} className={'right_content'}>
         <Breadcrumb style={{ margin: '12px 0', fontSize: '1.1em'}}>
           <Breadcrumb.Item><Link to='/home'>首页</Link></Breadcrumb.Item>
-          <Breadcrumb.Item><Link to='/quality/qualityinfo'>质量管理</Link></Breadcrumb.Item>
+          <Breadcrumb.Item><Link to='/quality/qualityInfo'>质量管理</Link></Breadcrumb.Item>
           <Breadcrumb.Item>{ location.state.orgName }</Breadcrumb.Item>
         </Breadcrumb>
         <Row style={{padding: 10}} className="ant-advanced-search-form">
@@ -117,9 +132,10 @@ class QualityDetails extends Component {
         <Row style={{padding: '4px'}}>
           <Col push={24}>
             <Table
+              scroll={{x: 2000}}
               rowKey={'RN'}
               dataSource={dataSource}
-              columns={dynamicColumns}
+              columns={columns.concat(dynamicColumns)}
             />
           </Col>
         </Row>

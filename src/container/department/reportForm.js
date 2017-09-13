@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Input, Icon, Row, Checkbox, BackTop, Button, message, DatePicker,
          Col, Card, Select, Radio } from 'antd';
+import { fetchData } from 'utils/tools';
+import api from 'api';
+import querystring from 'querystring';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -94,26 +97,48 @@ class ReportWrapperForm extends Component {
     if (deptParentName === '其他') {
       postData.deptParentName = {value: this.refs.deptParentName.refs.input.value}
     }
-    workScope.map((item, index) => (
-      item === '其他' ? workScope[index] = {value: this.refs.workScope.refs.input.value, key: item} : workScope[index] = item
-    ))
-    workOther.map((item, index) => {
-      if (item === '3') {
-        item = {value: this.refs.workOther_1.refs.input.value, key: item}
-      } 
-      if (item === '4') {
-        item = {value: this.refs.workOther_2.refs.input.value, key: item}
-      }
-      return workOther[index] = item;
-    })
+    if (workScope) {
+      workScope.map((item, index) => (
+        item === '其他' ? workScope[index] = {value: this.refs.workScope.refs.input.value, key: item} : workScope[index] = item
+      ))
+    }  
+    if (workOther) {
+      workOther.map((item, index) => {
+        if (item === '3') {
+          item = {value: this.refs.workOther_1.refs.input.value, key: item}
+        } 
+        if (item === '4') {
+          item = {value: this.refs.workOther_2.refs.input.value, key: item}
+        }
+        return workOther[index] = item;
+      })
+    }  
     postData.schedule = this.state.progress;
+    const { userListItem, meetingListItem } = this.state;
+    postData.userCount = userListItem.length;
+    postData.meetingCount = meetingListItem.length;
     return postData;
+  }
+  submit = (postData) => {
+    fetchData({
+      url: api.INSERT_CONSTR_DEPT,
+      body: JSON.parse(postData),//querystring.stringify(postData),
+      type: 'application/json',
+      success: data => {
+        if (data.status) {
+          alert('成功了...我也不知道跳转去哪里!')
+        } else {
+          message.error(data.msg);
+        }
+      }
+    })
   }
   //暂存
   save = () => {
     const postData = this.getPostData();
     postData.auditFstate = '00';
     console.log('暂存数据:', postData);
+    this.submit(postData);
   }
   //提交事件
   handleSubmit = (e) => {
@@ -123,6 +148,7 @@ class ReportWrapperForm extends Component {
         const postData = this.getPostData();
         postData.auditFstate = '10';
         console.log('提交数据:', postData);
+        this.submit(postData);
       }
     });
   }

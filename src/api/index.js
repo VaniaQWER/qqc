@@ -9,6 +9,14 @@ export default {
   UPDATE_FORMULA_DETAILS: `/formulaDetailController/updateFormulaDetail`,//质量上报新增/暂存
   UPLOADPIC: `http://120.26.128.15:8903/ftp/post`,//查询指标信息详情
   LOADPIC: `http://120.26.128.15:8903/ftp/`,//查询指标信息详情
+  INSERT_CONSTR_DEPT: `/deptInfoController/insertEditConstrDept`,//新建/编辑本机构科室上报信息
+
+  //科室
+  GET_DEPT_INFO: `/deptInfoController/getDeptInfo`,//按年度查询机构的床位数、机构员工总数、医工人员总数、医工培训总数
+  GET_DEPT_AGE: `/deptInfoController/getDeptUserAge`, //按年度查询医工人员年龄情况
+  GET_DEPT_EDUCATION: `/deptInfoController/getDeptUserEducation`,//医工人员学历情况
+  GET_DEPT_MAJOR: `/deptInfoController/getDeptUserMajor`,//医工人员专业情况
+  GET_DEPT_USER_LIST: `/deptInfoController/searchConstrDeptUserList`,//科室人员信息列表
   //登录
   USERLOGIN :`/login/userLogin`,//查询用户列表
   USERREGISTER :`/user/registerUserInfo`,//查询用户注册

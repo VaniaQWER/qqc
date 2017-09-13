@@ -67,7 +67,7 @@ class QualityWrapperForm extends Component {
     }
     fetchData({
       url: api.UPDATE_FORMULA_DETAILS,
-      body: {...postData, pYear: this.state.pYear, isCommit: type},
+      body: {...postData, isCommit: [type]},
       success: data => {
         if (data.status) {
           alert('成功了..我也不知道跳转到哪里!!')

@@ -50,7 +50,7 @@ class QualityInfo extends Component {
   render () {
     const { hospital } = this.state;
     return (
-      <Row style={{padding: 8}} span={6} className={'right_content'}>
+      <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
         <Col span={24} style={{ marginTop: 10}}>
           <DeptSearchForm submit={this.search}/>
         </Col>

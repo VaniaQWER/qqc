@@ -22,6 +22,9 @@ class StepOneForm extends Component{
         previewVisible: false,
         previewImage: '',
         fileList: this.props.data ? this.props.data.picFile :[],
+        initData:this.props.data,
+        disabled:false
+
     }
     normFile = (e) => {
         if (Array.isArray(e)) {
@@ -34,15 +37,11 @@ class StepOneForm extends Component{
         fetchData({
             url: api.SEARCH_ORGS,
             success: data => {
-                console.log(data)
                 if(data.length >0 ){
                     this.setState( {dataSource : data})
                 }
-           
             }
-          })
-
-
+        })
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -50,12 +49,10 @@ class StepOneForm extends Component{
         this.props.form.validateFields((err, values) => {
             this.setState({dirtyClick: false})
           if (!err) {
-              console.log(this.state.fileList,'filelist')
               values.auditTfAccessory = this.state.fileList[0].thumbUrl;
               values.picFile = this.state.fileList;
-            //values.auditTfAccessory = this.state.fileList[0].originFileObj;
             values.orgName = this.state.orgName;
-            console.log('partOne--postData--', values);
+            console.log('partOne--postData--1', values);
             this.props.cb(1,values);
           }
         })
@@ -84,7 +81,7 @@ class StepOneForm extends Component{
               offset: 6,
             },
         };
-        console.log(this.state.fileList,'12312321321')
+        const { initData } = this.state;
         return(
 
             <Form style={{marginTop: '16px'}} onSubmit={this.handleSubmit}>
@@ -93,17 +90,40 @@ class StepOneForm extends Component{
                 label="机构"
                 >
                 {getFieldDecorator('orgId',{
-                    initialValue:this.props.data.orgId || "",
+                    initialValue:initData.orgId || "",
                     rules: [{ required: true, message: '请选择机构!' }],
                     })(
                     <Select onSelect={(value,option)=>{
-                            console.log(option.props.children,'选中机构名称')
                             this.setState({ orgName: option.props.children})
+                            if(option.props.tfAccessory){
+                                this.setState({
+                                    fileList:[{
+                                        uid: -1,
+                                        name: '图片.png',
+                                        status: 'done',
+                                        url: api.LOADPIC + option.props.tfAccessory,
+                                    }]
+                                })
+                            }else{
+                                this.setState({fileList:[]})
+                            }
+                            if(option.props.auditOrgCode){
+                                this.props.form.setFieldsValue({
+                                    auditOrgCode: option.props.auditOrgCode,
+                                })
+                                this.setState({ disabled:true})
+                            }else{
+                                this.props.form.setFieldsValue({
+                                    auditOrgCode:"",
+                                })
+                                this.setState({ disabled:false})
+                            }
+
                         }}>
                         <Option value="" key={"-1"}>请选择</Option>
                         {
                             this.state.dataSource.map((item,index)=>{
-                              return  <Option key={index} value={item.value.toString()}>{item.text}</Option>
+                              return  <Option auditOrgCode={item.orgCode} tfAccessory={item.tfAccessory} key={index} value={item.value.toString()}>{item.text}</Option>
                             })
                         }
                     </Select>
@@ -115,11 +135,11 @@ class StepOneForm extends Component{
                 label="组织机构代码"
                 >
                 {getFieldDecorator('auditOrgCode',{
-                    initialValue:this.props.data.auditOrgCode,
+                    initialValue:initData.auditOrgCode,
                     rules: [{ required: true, message: '请输入组织机构代码号!' },
                     {max:25,message:'字符长度不能超过25'}, ],
                     })(
-                    <Input placeholder="请输入组织机构代码号"/>
+                    <Input placeholder="请输入组织机构代码号" disabled={this.state.disabled}/>
                     )
                 }
                 </FormItem>
@@ -134,6 +154,7 @@ class StepOneForm extends Component{
                         fileList={fileList}
                         onPreview={this.handlePreview}
                         onChange={this.handleChange}
+                        showUploadList={{showRemoveIcon:fileList.length===1 ? false : true}}
                     >
                         { fileList.length === 1 ? null :
                         <div>
@@ -160,6 +181,7 @@ class StepTwoForm extends Component{
     state ={
         dirtyClick: false,
         emailOptions: [],
+        secondData:"",
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -168,6 +190,7 @@ class StepTwoForm extends Component{
             this.setState({dirtyClick: false})
           if (!err) {
             console.log('partOne--postData--', values);
+            this.setState({secondData:values});
             this.props.cb(2,values);
           }
         })
@@ -223,7 +246,6 @@ class StepTwoForm extends Component{
               offset: 6,
             },
         };
-        console.log(this.props.data,'2222')
         return(
             <Form style={{marginTop: '16px'}} onSubmit={this.handleSubmit}>
             <FormItem
@@ -319,7 +341,7 @@ class StepTwoForm extends Component{
 
             <FormItem {...tailFormItemLayout}>
                 <Button type="primary" htmlType="submit" loading={this.state.dirtyClick}>下一步</Button>
-                <Button type="danger" style={{marginLeft:'16px'}} ghost onClick={this.props.cb.bind(this, 0)}>
+                <Button type="danger" style={{marginLeft:'16px'}} ghost onClick={this.props.cb.bind(this, 0, this.props.data)}>
                     <Icon type="left" />上一页
                 </Button>
            </FormItem>
@@ -450,7 +472,6 @@ class RegisterHosptital extends Component {
     
     render(){
         const { current } = this.state;
-        console.log(this.state.firstData,'firstData')
         const steps = [{
             title: '基础信息',
             content: <StepOne

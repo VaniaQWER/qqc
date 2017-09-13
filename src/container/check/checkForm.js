@@ -42,6 +42,7 @@ const columns = [
     width: 100
   }
 ]
+const pYear = new Date().getFullYear();
 class CheckForm extends Component {
   fetch = (values) => {
     this.refs.remote.fetch(values);
@@ -49,12 +50,11 @@ class CheckForm extends Component {
   render () {
     return (
       <RemoteTable
-        query={{fstate: '10'}}
+        query={{fstate: '10', pYear}}
         ref='remote'
         url={this.props.url}
         scroll={null}
         columns={columns}
-        rowKey={'constrDeptGuid'}
       />
     )
   }

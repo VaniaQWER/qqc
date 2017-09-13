@@ -22,6 +22,7 @@ class DeptInfo extends Component {
     let postData = {
       pagesize: 20, 
       page: pager || page, 
+      fstateType: 1,
       pYear: new Date().getFullYear()
     }
     fetchData({
@@ -29,6 +30,9 @@ class DeptInfo extends Component {
       body: querystring.stringify(Object.assign({}, postData, query)),
       success: data => {
         if (data.status) {
+          if (pager) {
+            hospital = [];
+          }
           loadMore = (hospital.length + data.result.rows.length ) < data.result.records ? true : false; 
           data.result.rows.map(item => hospital.push(item))
           this.setState({hospital: hospital, page: page + 1, loadMore});
@@ -52,7 +56,7 @@ class DeptInfo extends Component {
         {
           hospital.map((item, index) => 
             <Col span={6} push={2} key={index} style={{marginTop: 10}}>
-              <Link to={{pathname: `/department/deptInfo/${item.constrDeptGuid}`, state: {deptName: item.orgName}}}>
+              <Link to={{pathname: `/department/deptInfo/${item.orgId}`, state: {deptName: item.orgName}}}>
                 <Progress 
                   width={150}
                   type="circle" 
