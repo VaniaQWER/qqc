@@ -29,7 +29,7 @@ class UserAddForm extends Component {
     base: true,
     previewVisible: false,
     previewImage: '',
-    fileList:  this.props.location.state ? [{
+    fileList:  this.props.location.state && this.props.location.state.user.tfAccessory ? [{
       uid: -1,
       name: '图片.png',
       status: 'done',
@@ -81,7 +81,6 @@ class UserAddForm extends Component {
         if(this.props.location.state ){
           values.userId = this.props.location.state.user.userId;
         }
-        console.log(values,'111')
         fetchData({
           url: api.ADDUPDATEUSER,
           body: querystring.stringify(values),
@@ -102,7 +101,6 @@ class UserAddForm extends Component {
       url: api.SEARCH_ORGS_LIST,
       body: querystring.stringify({orgId: value}),
       success: data => {
-        console.log(data.result.rows[0],'222')
         this.setState({
           orgId:value,
           fileList:[{
@@ -112,9 +110,29 @@ class UserAddForm extends Component {
             url: api.LOADPIC + data.result.rows[0].tfAccessory,
           }]
         })
-        this.props.form.setFieldsValue({
-         orgCode: data.result.rows[0].orgCode,
+
+        if(data.result.rows[0].tfAccessory){
+          this.setState({
+            fileList:[{
+              uid: -1,
+              name: '图片.png',
+              status: 'done',
+              url: api.LOADPIC + data.result.rows[0].tfAccessory,
+            }]
           })
+        }else{
+          this.setState({fileList:[]})
+        }
+        if(data.result.rows[0].orgCode){
+          this.props.form.setFieldsValue({
+            orgCode: data.result.rows[0].orgCode,
+          })
+        }else{
+          this.props.form.setFieldsValue({
+            orgCode: "",
+          })
+        }
+      
         }
     })
   }
@@ -122,7 +140,6 @@ class UserAddForm extends Component {
     const { base, other, previewVisible, previewImage, fileList } = this.state;
     const { form, location } = this.props;
     const { state } = location;
-    console.log(this.props.location.state)
     return (
       <Row style={{padding: 8}} className={'right_content'}>
         {
@@ -176,10 +193,7 @@ class UserAddForm extends Component {
                     onChange={this.handleChange}
                   >
                     { fileList.length === 1 ? null :
-                      <div>
-                        <Icon type="plus" />
-                        <div className="ant-upload-text">上传</div>
-                      </div>
+                      "无图片"
                     }
                   </Upload>
                   <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
@@ -265,14 +279,18 @@ class UserAddForm extends Component {
               </FormItem>
             </Card>
           </Col>
-          <Col span={24} style={{textAlign: 'center', marginTop: 10}}>
-            <Button htmlType='submit' type='primary'>
-            {
-              (typeof state === 'undefined' || state.type === '编辑') ? '提交' : '通过'
-            }    
-            </Button>
-            <Button type='danger' onClick={() => form.resetFields()} style={{marginLeft: 20}}>重置</Button>
-          </Col>
+          
+          {
+              (typeof state === 'undefined' || state.type === '编辑') ? 
+              <Col span={24} style={{textAlign: 'center', marginTop: 10}}>
+                <Button htmlType='submit' type='primary'>提交</Button>
+                <Button type='danger' onClick={() => form.resetFields()} style={{marginLeft: 20}}>重置</Button>
+              </Col>
+               : null
+          }  
+          
+        
+        
         </Form>
       </Row>
     )

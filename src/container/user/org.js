@@ -182,7 +182,7 @@ class RegisterFormWrapper extends Component {
             {form.getFieldDecorator('address', {
               rules: [{ required: true, message: '请选择机构地址' }],
             })(
-              <Cascader options={this.state.address} changeOnSelect />
+              <Cascader options={this.state.address} changeOnSelect placeholder="请选择"/>
             )}
           </FormItem> 
           <FormItem
