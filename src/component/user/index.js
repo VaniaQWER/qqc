@@ -15,11 +15,6 @@ const styles = {
     padding: 0
   }
 }
-
-const editPassword = () => {
-
-}
-
 const menus = [
   <Link to='/user'><Icon type="user" className='phxl_user_menu_icon'/>用户信息</Link>,
   <Link to='/user/editPassword'><Icon type="edit" className='phxl_user_menu_icon'/>修改密码</Link>,

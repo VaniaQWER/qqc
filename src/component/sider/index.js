@@ -15,8 +15,6 @@ class SiderMenu extends Component {
     const { menus, current } = this.props;
     const currentArr = current.split('/');
     const selectedKey = `/${currentArr[1]}/${currentArr[2]}`;
-    console.log(selectedKey);
-    console.log(menus)
     return (
       <Menu 
         mode='inline'

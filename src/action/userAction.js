@@ -110,8 +110,13 @@ const mockData = {
       id: 'menuID6',
       icon: 'area-chart',
       text: '质控报表',
-      uri: 'check/deptCheckList',
+      uri: 'check/checkInfo',
       subMenu: [
+        {
+          id: 'menuID6_sub0',
+          text: '质控报表',
+          uri: 'check/checkInfo'
+        },
         {
           id: 'menuID6_sub1',
           text: '科室信息审核',

@@ -3,10 +3,11 @@
  * @summary 科室建设明细展示(包含数据卡, 图标, 表格)
  */
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Row, Col, Card, Icon, Popover, Select, Table } from 'antd';
+import { Layout, Breadcrumb, Row, Col, Card, Select, Table } from 'antd';
 import Pie from 'component/pie';
 import Bar from 'component/bar';
 import CardContent from 'component/card';
+import Settings from 'component/settings';
 import { hashHistory, Link } from 'react-router';
 import { fetchData } from 'utils/tools';
 import { getLocalOption } from 'utils/common'
@@ -35,23 +36,6 @@ const styles = {
     backgroundColor: '#ffe9a7'
   }
 }
-
-const ActionList =  (
-  <ul className='phxl_user_menu'>
-    <li>
-      <a><Icon type="printer" className='phxl_user_menu_icon'/>打印</a>
-    </li>
-    <li>
-      <a><Icon type='cloud-download' className='phxl_user_menu_icon'/>下载</a>
-    </li>
-    <li>
-      <a><Icon type="copy" className='phxl_user_menu_icon'/>导入</a>
-    </li>
-    <li>
-      <a><Icon type="export" className='phxl_user_menu_icon'/>导出</a>
-    </li>
-  </ul>
-)
 
 const columns = [{
   title: '姓名',
@@ -122,14 +106,14 @@ class DepartmentDetail extends Component {
     //校验权限以及安全性
     const { location, routeParams } = this.props;
     //this.getData(pYear);
-    // if (location.state && routeParams.id) {
-
-    // } else {
-    //   //参数不齐全或者没访问权限跳转至上一页
-    //   hashHistory.push({
-    //     pathname: '/department/deptInfo'
-    //   })
-    // }
+    if (location.state && routeParams.id) {
+      //todo  可能获取默认数据
+    } else {
+      //参数不齐全或者没访问权限跳转至上一页
+      hashHistory.push({
+        pathname: '/department/deptInfo'
+      })
+    }
 
   }
   getData = (value) => {
@@ -278,9 +262,7 @@ class DepartmentDetail extends Component {
             rowKey={'constrDeptGuid'}
           />
           <div style={{position: 'absolute', right: 10, bottom: 20, fontSize: 30}}>
-            <Popover placement="leftTop" content={ActionList} trigger="click">
-              <Icon type="setting" />
-            </Popover>
+            <Settings/>
           </div>
         </Row>
       </Content>

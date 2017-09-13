@@ -62,3 +62,9 @@ export const formItemLayout = {
     sm: { span: 12 },
   },
 };
+
+export const auditFstate = {
+  '10': '待审核',
+  '20': '已审核',
+  '30': '待提交'
+}

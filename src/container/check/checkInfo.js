@@ -1,15 +1,12 @@
 /**
- * @file 指标主页面
+ * @file 审核主页面
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'antd';
-import SiderMenu from 'component/sider';
-import DeptSearchForm from 'component/search';
-import CheckForm from './checkForm';
-import api from 'api';
+import SiderMenu  from 'component/sider';
 
-class QualityCheck extends Component {
+class CheckInfo extends Component {
   getSiderMenu = () => {
     const { menus } = this.props.user;
     const { pathname } = this.props.location;
@@ -20,9 +17,6 @@ class QualityCheck extends Component {
       return null;
     }
   }
-  search = (values) => {
-    this.refs.table.fetch(values);
-  }
   render () {
     return (
       <Row style={{backgroundColor: '#fff'}}>
@@ -31,13 +25,8 @@ class QualityCheck extends Component {
         </Col>
         <Col span={20}>
         { this.props.children || 
-          <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
-            <Col span={24} style={{ marginTop: 10}}>
-              <DeptSearchForm submit={this.search} defaultValue={{fstate: '10'}} type={'ymd'}/>
-            </Col>
-            <Col span={24} style={{ marginTop: 10}}>
-              <CheckForm url={api.SELECT_FORMULA_LIST} ref='table' type={'ymd'}/>
-            </Col>
+          <Row style={{padding: 8, minHeight: 480}} className={'right_content'}>
+            质控平台报表
           </Row>
         }
         </Col>
@@ -51,4 +40,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(QualityCheck);
+export default connect(mapStateToProps)(CheckInfo);

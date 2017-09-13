@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, Icon, Row, Checkbox, BackTop, Button, message, DatePicker,
+import { Form, Input, Icon, Row, Checkbox, BackTop, Button, message, DatePicker, Cascader,
          Col, Card, Select, Radio } from 'antd';
 import { fetchData } from 'utils/tools';
 import api from 'api';
-import querystring from 'querystring';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -28,6 +27,31 @@ const styles = {
     textAlign: 'center'
   }
 }
+
+const children = [
+  {value: '无', label: '无'},
+  {value: '初级', label: '初级'},
+  {value: '中级', label: '中级'},
+  {value: '高级', label: '高级'}
+]
+
+const options = [{
+  value: '工程师',
+  label: '工程师',
+  children
+}, {
+  value: '医师',
+  label: '医师',
+  children
+}, {
+  value: '技师',
+  label: '技师',
+  children
+}, {
+  value: '护师',
+  label: '护师',
+  children
+}];
 
 //一行一条样式
 const formItemLayout = {
@@ -90,30 +114,41 @@ class ReportWrapperForm extends Component {
   //返回提交数据
   getPostData = () => {
     const postData = this.props.form.getFieldsValue();
-    let { deptTypeName, deptParentName, workScope, workOther } = postData;
+    let { deptTypeName, deptParentName, workScope, workOther, logisticsType } = postData;
     if (deptTypeName === '其他') {
-      postData.deptTypeName = {value: this.refs.deptTypeName.refs.input.value}
+      postData.deptTypeNameOther = this.refs.deptTypeName.refs.input.value;
     }
     if (deptParentName === '其他') {
-      postData.deptParentName = {value: this.refs.deptParentName.refs.input.value}
+      postData.deptParentNameOther = this.refs.deptParentName.refs.input.value;
     }
     if (workScope) {
-      workScope.map((item, index) => (
-        item === '其他' ? workScope[index] = {value: this.refs.workScope.refs.input.value, key: item} : workScope[index] = item
-      ))
+      workScope.map((item, index) => {
+        if (item === '其他') {
+          postData.workScopeOther = this.refs.workScope.refs.input.value;
+        }
+        return null;
+      })
     }  
     if (workOther) {
       workOther.map((item, index) => {
         if (item === '3') {
-          item = {value: this.refs.workOther_1.refs.input.value, key: item}
+          postData.workMassName = this.refs.workOther_1.refs.input.value;
         } 
         if (item === '4') {
-          item = {value: this.refs.workOther_2.refs.input.value, key: item}
+          postData.workOtherName = this.refs.workOther_2.refs.input.value;
         }
-        return workOther[index] = item;
+        return null;
       })
     }  
-    postData.schedule = this.state.progress;
+    if (logisticsType) {
+      logisticsType.map((item, index) => {
+        if (item === '其他') {
+          postData.logisticsTypeOther = this.refs.logistics.refs.input.value;
+        } 
+        return null;
+      })
+    }  
+    postData.schedule = this.state.progress.toFixed(2);
     const { userListItem, meetingListItem } = this.state;
     postData.userCount = userListItem.length;
     postData.meetingCount = meetingListItem.length;
@@ -122,7 +157,7 @@ class ReportWrapperForm extends Component {
   submit = (postData) => {
     fetchData({
       url: api.INSERT_CONSTR_DEPT,
-      body: JSON.parse(postData),//querystring.stringify(postData),
+      body: JSON.stringify(postData),//querystring.stringify(postData),
       type: 'application/json',
       success: data => {
         if (data.status) {
@@ -277,9 +312,9 @@ class ReportWrapperForm extends Component {
                   rules: [{ required: true, message: '请选择部门级别' }],
                 })(
                   <RadioGroup onChange={this.setRadioChange.bind(this, 'deptTypeName')}>
-                    <Radio value={'处/部'}>处/部</Radio>
-                    <Radio value={'科'}>科</Radio>
-                    <Radio value={'组'}>组</Radio>
+                    <Radio value={'1'}>处/部</Radio>
+                    <Radio value={'2'}>科</Radio>
+                    <Radio value={'3'}>组</Radio>
                     <Radio value={'其他'}>其他
                       { deptInfo.deptTypeName === '其他' ? <Input ref='deptTypeName' style={{ width: 100, marginLeft: 10 }}/> : null}
                     </Radio>
@@ -294,10 +329,10 @@ class ReportWrapperForm extends Component {
                   rules: [{ required: true, message: '请选择上级管理部门' }],
                 })(
                   <RadioGroup onChange={this.setRadioChange.bind(this, 'deptParentName')}>
-                    <Radio value={'医务'}>医务</Radio>
-                    <Radio value={'后勤'}>后勤</Radio>
-                    <Radio value={'科教'}>科教</Radio>
-                    <Radio value={'独立运行'}>独立运行</Radio>
+                    <Radio value={'1'}>医务</Radio>
+                    <Radio value={'2'}>后勤</Radio>
+                    <Radio value={'3'}>科教</Radio>
+                    <Radio value={'4'}>独立运行</Radio>
                     <Radio value={'其他'}>其他
                       { deptInfo.deptParentName === '其他' ? <Input ref='deptParentName' style={{ width: 100, marginLeft: 10 }} /> : null}
                     </Radio>
@@ -313,11 +348,11 @@ class ReportWrapperForm extends Component {
                 })(
                   <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'workScope')}>
                     <Row>
-                      <Col span={6}><Checkbox value="设备">设备</Checkbox></Col>
-                      <Col span={6}><Checkbox value="耗材">耗材</Checkbox></Col>
-                      <Col span={6}><Checkbox value="药剂">药剂</Checkbox></Col>
-                      <Col span={6}><Checkbox value="办公用品">办公用品</Checkbox></Col>
-                      <Col span={6}><Checkbox value="总务">总务</Checkbox></Col>
+                      <Col span={6}><Checkbox value="1">设备</Checkbox></Col>
+                      <Col span={6}><Checkbox value="2">耗材</Checkbox></Col>
+                      <Col span={6}><Checkbox value="3">药剂</Checkbox></Col>
+                      <Col span={6}><Checkbox value="4">办公用品</Checkbox></Col>
+                      <Col span={6}><Checkbox value="5">总务</Checkbox></Col>
                       <Col span={3}><Checkbox value="其他">其他</Checkbox></Col>
                       <Col span={6}><Input ref='workScope'/></Col>
                     </Row>
@@ -448,17 +483,17 @@ class ReportWrapperForm extends Component {
                   label='医疗器械物流管理开展范围'
                   {...formItemLayout}
                 >  
-                  {form.getFieldDecorator('logisticsScopeList', {
+                  {form.getFieldDecorator('logisticsScope', {
                     rules: [{ required: true, message: '请选择医疗器械物流管理开展范围' }],
                   })(
-                    <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'logisticsScopeList')}>
+                    <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'logisticsScope')}>
                       <Row>
-                        <Col span={8}><Checkbox value="医疗设备物流">医疗设备物流</Checkbox></Col>
-                        <Col span={8}><Checkbox value="普通卫生材料物流">普通卫生材料物流</Checkbox></Col>
-                        <Col span={8}><Checkbox value="植入、介入类耗材物流">植入、介入类耗材物流</Checkbox></Col>
-                        <Col span={8}><Checkbox value="消毒供应材料物流">消毒供应材料物流</Checkbox></Col>
-                        <Col span={8}><Checkbox value="试剂物流">试剂物流</Checkbox></Col>
-                        <Col span={8}><Checkbox value="医疗废弃物物流">医疗废弃物物流</Checkbox></Col>
+                        <Col span={8}><Checkbox value="1">医疗设备物流</Checkbox></Col>
+                        <Col span={8}><Checkbox value="2">普通卫生材料物流</Checkbox></Col>
+                        <Col span={8}><Checkbox value="3">植入、介入类耗材物流</Checkbox></Col>
+                        <Col span={8}><Checkbox value="4">消毒供应材料物流</Checkbox></Col>
+                        <Col span={8}><Checkbox value="5">试剂物流</Checkbox></Col>
+                        <Col span={8}><Checkbox value="6">医疗废弃物物流</Checkbox></Col>
                       </Row>
                     </Checkbox.Group>
                   )}
@@ -469,17 +504,18 @@ class ReportWrapperForm extends Component {
                   label='卫生材料医疗器械物流管理模式'
                   {...formItemLayout}
                 >  
-                  {form.getFieldDecorator('logisticsTypeList', {
+                  {form.getFieldDecorator('logisticsType', {
                     rules: [{ required: true, message: '请选择卫生材料医疗器械物流管理模式' }],
                   })(
-                    <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'logisticsTypeList')}>
+                    <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'logisticsType')}>
                       <Row>
-                        <Col span={8}><Checkbox value="物流管理外包">物流管理外包</Checkbox></Col>
-                        <Col span={8}><Checkbox value="仓库外包">仓库外包</Checkbox></Col>
-                        <Col span={8}><Checkbox value="零库存管理">零库存管理</Checkbox></Col>
-                        <Col span={8}><Checkbox value="第三方托管">第三方托管</Checkbox></Col>
-                        <Col span={8}><Checkbox value="二级库管">二级库管</Checkbox></Col>
-                        <Col span={8}><Checkbox value="其他">其他</Checkbox></Col>
+                        <Col span={6}><Checkbox value="1">物流管理外包</Checkbox></Col>
+                        <Col span={6}><Checkbox value="2">仓库外包</Checkbox></Col>
+                        <Col span={6}><Checkbox value="3">零库存管理</Checkbox></Col>
+                        <Col span={6}><Checkbox value="4">第三方托管</Checkbox></Col>
+                        <Col span={6}><Checkbox value="5">二级库管</Checkbox></Col>
+                        <Col span={6}><Checkbox value="其他">其他</Checkbox></Col>
+                        <Col span={6}><Input ref='logistics'/></Col>
                       </Row>
                     </Checkbox.Group>
                   )}
@@ -599,17 +635,13 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
         {form.getFieldDecorator('technicalTitles-' + i, {
           rules: [{ required: true, message: '请选择职称' }],
         })(
-          <Select
+          <Cascader 
+            placeholder='请选择职称'
+            options={options} 
             onChange={value => {
               form.setFieldsValue({['technicalTitles-' + i]: value});
               getProgress();
-            }}
-          >
-            <Option value={'工程师|无'}>工程师|无</Option>
-            <Option value={'技师|初级'}>技师|初级</Option>
-            <Option value={'护师|中级'}>护师|中级</Option>
-            <Option value={'医师|高级'}>医师|高级</Option>
-          </Select>
+            }} />
         )}
       </FormItem>
     </Col>

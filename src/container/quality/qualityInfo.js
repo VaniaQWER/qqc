@@ -52,7 +52,7 @@ class QualityInfo extends Component {
     return (
       <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
         <Col span={24} style={{ marginTop: 10}}>
-          <DeptSearchForm submit={this.search}/>
+          <DeptSearchForm submit={this.search} type={'ymd'}/>
         </Col>
         {
           hospital.map((item, index) => 

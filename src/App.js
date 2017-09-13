@@ -6,6 +6,7 @@ import user from './routers/user';
 import org from './routers/org';
 import deptCheck from './routers/deptCheck';
 import qualityCheck from './routers/qualityCheck';
+import checkInfo from './routers/checkInfo';
 const routes = {
   childRoutes: [
     { path: '/' }, 
@@ -17,7 +18,7 @@ const routes = {
         }, 'home')
       },
       childRoutes: [
-        user, deparment, quality, org, deptCheck, qualityCheck
+        user, deparment, quality, org, deptCheck, qualityCheck, checkInfo
       ]
     }, 
     {

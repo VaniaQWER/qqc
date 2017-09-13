@@ -7,7 +7,7 @@ export default {
   },
   childRoutes: [
     {
-      path: '/check/deptCheckList/:id',//科室审核详情
+      path: '/check/qualityCheckList/:id',//科室审核详情
       getComponent: (nextState, cb) => {
         require.ensure([], (require) => {
           cb(null, require('container/check/qualityCheckDetail').default)

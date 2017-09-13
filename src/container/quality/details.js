@@ -2,16 +2,14 @@
  * @file 质量详情
  */
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Row, Col, Card, Icon, Select, Table } from 'antd';
+import { Layout, Breadcrumb, Row, Col, Card, Select, Table } from 'antd';
 import { Link } from 'react-router';
 import Bar from 'component/bar';
-import TableGrid from 'component/tableGrid';
+import Settings from 'component/settings';
 import { getLocalOption } from 'utils/common';
 import { fetchData } from 'utils/tools';
 import api from 'api';
 import querystring from 'querystring';
-
-const { RemoteTable } = TableGrid;
 const { Content } = Layout;
 const Option = Select.Option;
 const columns = [
@@ -95,7 +93,7 @@ class QualityDetails extends Component {
   }
   render () {
     const { location } = this.props;
-    const { barSeries, codeOption, dataSource, dynamicColumns } = this.state;
+    const { barSeries, codeOption, dataSource, dynamicColumns, pYear, codeValue } = this.state;
     return (
       <Content style={{ padding: '0 20px', minHeight: 480 }} className={'right_content'}>
         <Breadcrumb style={{ margin: '12px 0', fontSize: '1.1em'}}>
@@ -129,7 +127,7 @@ class QualityDetails extends Component {
         <Card title='医学工程人员配置水平'>
           <Bar series={barSeries.series} xAxis={barSeries.xAxis} legend={barSeries.legend}/>
         </Card>
-        <Row style={{padding: '4px'}}>
+        <Row style={{paddingTop: '4px'}}>
           <Col push={24}>
             <Table
               scroll={{x: 2000}}
@@ -137,6 +135,9 @@ class QualityDetails extends Component {
               dataSource={dataSource}
               columns={columns.concat(dynamicColumns)}
             />
+            <div style={{position: 'absolute', right: 10, bottom: 40, fontSize: 30}}>
+              <Settings exportUrl={`${api.EXPORT_FORNLA}?pYear=${pYear}&indexValue=${codeValue}`}/>
+            </div>
           </Col>
         </Row>
       </Content>  

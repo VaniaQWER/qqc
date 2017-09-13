@@ -10,6 +10,8 @@ export default {
   UPLOADPIC: `http://120.26.128.15:8903/ftp/post`,//查询指标信息详情
   LOADPIC: `http://120.26.128.15:8903/ftp/`,//查询指标信息详情
   INSERT_CONSTR_DEPT: `/deptInfoController/insertEditConstrDept`,//新建/编辑本机构科室上报信息
+  UPDATE_FORMULA: `/formulaDetailController/updateFormulaFstate`,//审核指标信息
+  EXPORT_FORNLA: `/formulaController/exporAllYearFornla`,//质量列表导出
 
   //科室
   GET_DEPT_INFO: `/deptInfoController/getDeptInfo`,//按年度查询机构的床位数、机构员工总数、医工人员总数、医工培训总数

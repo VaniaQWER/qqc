@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
-import { getLocalOption } from 'utils/common';
+import { getLocalOption, getHalfYear } from 'utils/common';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const formItemLayout = {
@@ -26,6 +26,7 @@ class DeptSeach extends Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { type } = this.props;
     return (
       <Form onSubmit={this.submitHandle} className="ant-advanced-search-form">
         <Row>
@@ -57,20 +58,37 @@ class DeptSeach extends Component {
             </FormItem>
           </Col>
           <Col span={7}>
-            <FormItem
-              label='时间'
-              {...formItemLayout}
-            >
-              {getFieldDecorator('pYear', {
-                initialValue: new Date().getFullYear().toString()
-              })(
-                <Select>
-                  {
-                    getLocalOption('pYear')
-                  }
-                </Select>
-              )}
-            </FormItem>
+              {
+                type === 'ymd' ? 
+                <FormItem
+                  label='时间'
+                  {...formItemLayout}
+                >
+                  {getFieldDecorator('pYear', {
+                    initialValue: getHalfYear()
+                  })(
+                    <Select>
+                      {
+                        getLocalOption('yearMonth')
+                      }
+                    </Select>
+                  )}
+                </FormItem> : 
+                <FormItem
+                  label='时间'
+                  {...formItemLayout}
+                >
+                  {getFieldDecorator('pYear', {
+                    initialValue: new Date().getFullYear().toString()
+                  })(
+                    <Select>
+                      {
+                        getLocalOption('pYear')
+                      }
+                    </Select>
+                  )}
+                </FormItem>
+              }
           </Col>
           <Col span={3}>
             <Button htmlType='submit'  type="primary" icon='search'>查询</Button>
