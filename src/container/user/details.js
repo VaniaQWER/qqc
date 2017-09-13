@@ -97,7 +97,7 @@ class UserAddForm extends Component {
   }
   change = (value) => {
     fetchData({
-      url: api.SEARCH_ORGS_LIST,
+      url: api.SEARCH_ORGS,
       body: querystring.stringify({orgId: value}),
       success: data => {
         this.setState({

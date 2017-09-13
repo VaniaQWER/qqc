@@ -90,7 +90,7 @@ class StepOneForm extends Component{
                 label="机构"
                 >
                 {getFieldDecorator('orgId',{
-                    initialValue:initData.orgId || "",
+                    initialValue:initData.orgId,
                     rules: [{ required: true, message: '请选择机构!' }],
                     })(
                     <Select onSelect={(value,option)=>{
@@ -119,8 +119,12 @@ class StepOneForm extends Component{
                                 this.setState({ disabled:false})
                             }
 
-                        }}>
-                        <Option value="" key={"-1"}>请选择</Option>
+                        }}
+                        showSearch
+                        allowClear={true}
+                        placeholder="请选择"
+                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
                         {
                             this.state.dataSource.map((item,index)=>{
                               return  <Option auditOrgCode={item.orgCode} tfAccessory={item.tfAccessory} key={index} value={item.value.toString()}>{item.text}</Option>
@@ -356,6 +360,7 @@ class StepThree extends Component{
         const firstData = this.props.firstData;
         const secondData = this.props.secondData;
         const postData = {...firstData,...secondData};
+        console.log(postData,'注册数据')
         fetchData({
             url: api.USERREGISTER,
             body: JSON.stringify(postData),
