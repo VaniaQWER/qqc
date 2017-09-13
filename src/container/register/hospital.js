@@ -49,11 +49,15 @@ class StepOneForm extends Component{
         this.props.form.validateFields((err, values) => {
             this.setState({dirtyClick: false})
           if (!err) {
-              values.auditTfAccessory = this.state.fileList[0].thumbUrl;
-              values.picFile = this.state.fileList;
-            values.orgName = this.state.orgName;
-            console.log('partOne--postData--1', values);
-            this.props.cb(1,values);
+                if(this.state.fileList.length === 0)
+                {
+                    return message.error("请上传附件!")
+                }
+                values.auditTfAccessory = this.state.fileList[0].thumbUrl;
+                values.picFile = this.state.fileList;
+                values.orgName = this.state.orgName;
+                console.log('partOne--postData--1', values);
+                this.props.cb(1,values);
           }
         })
     }
@@ -262,7 +266,7 @@ class StepTwoForm extends Component{
                 {type: 'email', message: '邮箱格式不正确(例如:phxl@163.com)'},
                 {max:25,message:'字符长度不能超过23'}],
             })(
-                <Select combobox
+                <Select  mode="combobox"
                 style={{ width: 200 }}
                 onChange={this.emailHandleChange}
                 filterOption={false}
