@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Form, Input, Icon, Row, Checkbox, BackTop, Button, message, DatePicker, Cascader,
          Col, Card, Select, Radio } from 'antd';
 import { fetchData } from 'utils/tools';
+import querystring from 'querystring';
+import moment from 'moment';
 import api from 'api';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -94,7 +96,9 @@ class ReportWrapperForm extends Component {
     },
     userListItem: [0, 1],
     meetingListItem: [0, 1],
-    progress: 0
+    progress: 0,
+    updateData: {},
+    constrDeptGuid: null
   }
   //计算进度
   getProgress = () => {
@@ -152,6 +156,7 @@ class ReportWrapperForm extends Component {
     const { userListItem, meetingListItem } = this.state;
     postData.userCount = userListItem.length;
     postData.meetingCount = meetingListItem.length;
+    postData.constrDeptGuid = this.state.constrDeptGuid;
     return postData;
   }
   submit = (postData) => {
@@ -268,8 +273,63 @@ class ReportWrapperForm extends Component {
       }
     }
   }
+  renderArr = (index) => {
+    let array = [];
+    for (let i=0;i<index;i++) {
+      array.push(i);
+    }
+    return array;
+  }
+  getData = (value) => {
+    fetchData({
+      url: api.SEARCH_CONSTR_DEPT,
+      body: querystring.stringify({pYear: value}),
+      success: data => {
+        this.setState({
+          updateData: data.result,
+          constrDeptGuid: data.result.constrDeptGuid,
+          meetingListItem: this.renderArr(data.result.meetingCount),
+          userListItem: this.renderArr(data.result.userCount),
+        })
+        if (data.result.deptTypeName === '其他') {
+          this.refs.deptTypeName.refs.input.value = data.result.deptTypeNameOther;
+        }
+        if (data.result.deptParentName === '其他') {
+          this.refs.deptParentName.refs.input.value = data.result.deptParentNameOther;
+        }
+        if (data.result.workScope) {
+          data.result.workScope.map((item, index) => {
+            if (item === '其他') {
+              this.refs.workScope.refs.input.value = data.result.workScopeOther; 
+            }
+            return null;
+          })
+        }  
+        if (data.result.workOther) {
+          data.result.workOther.map((item, index) => {
+            if (item === '3') {
+              this.refs.workOther_1.refs.input.value = data.result.workMassName; 
+            } 
+            if (item === '4') {
+              this.refs.workOther_2.refs.input.value = data.result.workOtherName; 
+            }
+            return null;
+          })
+        }  
+        if (data.result.logisticsType) {
+          data.result.logisticsType.map((item, index) => {
+            if (item === '其他') {
+              this.refs.logistics.refs.input.value = data.result.logisticsTypeOther;
+            } 
+            return null;
+          })
+        }  
+        this.getProgress();
+      }
+    })
+  }
   render () {
-    const { deptInfo, userListItem, meetingListItem } = this.state;
+    const { deptInfo, userListItem, meetingListItem, updateData } = this.state;
     const { form } = this.props;
     return (
       <Row style={styles.row} className='right_content'>
@@ -283,7 +343,8 @@ class ReportWrapperForm extends Component {
               })(
                 <Select style={{width: 300}} onChange={(value) => {
                   form.setFieldsValue({pYear: value});
-                  this.getProgress();
+                  //this.getProgress();
+                  this.getData(value);
                 }}>
                   <Option value={'2015'}>2015</Option>
                   <Option value={'2016'}>2016</Option>
@@ -300,6 +361,7 @@ class ReportWrapperForm extends Component {
               >
                 {form.getFieldDecorator('deptName', {
                   rules: [{ required: true, message: '请输入部门名称' }],
+                  initialValue: updateData.deptName
                 })(
                   <Input onBlur={this.getProgress}/>
                 )}
@@ -310,13 +372,16 @@ class ReportWrapperForm extends Component {
               >
                 {form.getFieldDecorator('deptTypeName', {
                   rules: [{ required: true, message: '请选择部门级别' }],
+                  initialValue: updateData.deptTypeName
                 })(
                   <RadioGroup onChange={this.setRadioChange.bind(this, 'deptTypeName')}>
                     <Radio value={'1'}>处/部</Radio>
                     <Radio value={'2'}>科</Radio>
                     <Radio value={'3'}>组</Radio>
                     <Radio value={'其他'}>其他
-                      { deptInfo.deptTypeName === '其他' ? <Input ref='deptTypeName' style={{ width: 100, marginLeft: 10 }}/> : null}
+                      { ( deptInfo.deptTypeName === '其他' || updateData.deptTypeName === '其他' ) ?  
+                        <Input ref='deptTypeName' style={{ width: 100, marginLeft: 10 }}/> : null
+                      }
                     </Radio>
                   </RadioGroup>
                 )}
@@ -327,6 +392,7 @@ class ReportWrapperForm extends Component {
               >
                 {form.getFieldDecorator('deptParentName', {
                   rules: [{ required: true, message: '请选择上级管理部门' }],
+                  initialValue: updateData.deptParentName
                 })(
                   <RadioGroup onChange={this.setRadioChange.bind(this, 'deptParentName')}>
                     <Radio value={'1'}>医务</Radio>
@@ -334,7 +400,8 @@ class ReportWrapperForm extends Component {
                     <Radio value={'3'}>科教</Radio>
                     <Radio value={'4'}>独立运行</Radio>
                     <Radio value={'其他'}>其他
-                      { deptInfo.deptParentName === '其他' ? <Input ref='deptParentName' style={{ width: 100, marginLeft: 10 }} /> : null}
+                      { ( deptInfo.deptParentName === '其他' || updateData.deptParentName === '其他' ) ? 
+                        <Input ref='deptParentName' style={{ width: 100, marginLeft: 10 }} /> : null}
                     </Radio>
                   </RadioGroup>
                 )}
@@ -345,14 +412,16 @@ class ReportWrapperForm extends Component {
               >  
                 {form.getFieldDecorator('workScope', {
                   rules: [{ required: true, message: '请选择部门业务管理范围' }],
+                  initialValue: updateData.workScope
                 })(
                   <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'workScope')}>
                     <Row>
                       <Col span={6}><Checkbox value="1">设备</Checkbox></Col>
                       <Col span={6}><Checkbox value="2">耗材</Checkbox></Col>
-                      <Col span={6}><Checkbox value="3">药剂</Checkbox></Col>
-                      <Col span={6}><Checkbox value="4">办公用品</Checkbox></Col>
-                      <Col span={6}><Checkbox value="5">总务</Checkbox></Col>
+                      <Col span={6}><Checkbox value="3">试剂</Checkbox></Col>
+                      <Col span={6}><Checkbox value="4">药品</Checkbox></Col>
+                      <Col span={6}><Checkbox value="5">办公用品</Checkbox></Col>
+                      <Col span={6}><Checkbox value="6">总务</Checkbox></Col>
                       <Col span={3}><Checkbox value="其他">其他</Checkbox></Col>
                       <Col span={6}><Input ref='workScope'/></Col>
                     </Row>
@@ -365,6 +434,7 @@ class ReportWrapperForm extends Component {
               >
                 {form.getFieldDecorator('workOther', {
                   rules: [{ required: true, message: '请选择部门承担的其它工作' }],
+                  initialValue: updateData.workOther
                 })(
                   <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'workOther')}>
                     <Row>
@@ -389,6 +459,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('equipmentSum', {
                     rules: [{ required: true, message: '请输入医疗设备总数量' }],
+                    initialValue: updateData.equipmentSum
                   })(
                     <Input addonAfter={<span>台件</span>} onBlur={this.getProgress}/>
                   )}
@@ -401,6 +472,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('equipmentValue', {
                     rules: [{ required: true, message: '请输入医疗设备总价值' }],
+                    initialValue: updateData.equipmentValue
                   })(
                     <Input addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
@@ -413,6 +485,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('abEquipmentSum', {
                     rules: [{ required: true, message: '请输入甲乙类医疗设备总数量' }],
+                    initialValue: updateData.abEquipmentSum
                   })(
                     <Input addonAfter={<span>台件</span>} onBlur={this.getProgress}/>
                   )}
@@ -425,6 +498,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('abEquipmentValue', {
                     rules: [{ required: true, message: '请输入甲乙类医疗设备总价值' }],
+                    initialValue: updateData.abEquipmentValue
                   })(
                     <Input addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
@@ -437,6 +511,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('consuSum', {
                     rules: [{ required: true, message: '请输入医用耗材（产品）总数量' }],
+                    initialValue: updateData.consuSum
                   })(
                     <Input addonAfter={<span>种</span>} onBlur={this.getProgress}/>
                   )}
@@ -449,6 +524,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('consuValue', {
                     rules: [{ required: true, message: '请输入医用耗材年度消耗总金额' }],
+                    initialValue: updateData.consuValue
                   })(
                     <Input addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
@@ -461,6 +537,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('highConsuSum', {
                     rules: [{ required: true, message: '请输入高值耗材（产品）总数量' }],
+                    initialValue: updateData.highConsuSum
                   })(
                     <Input addonAfter={<span>种</span>} onBlur={this.getProgress}/>
                   )}
@@ -473,6 +550,7 @@ class ReportWrapperForm extends Component {
                 >
                   {form.getFieldDecorator('highConsuValue', {
                     rules: [{ required: true, message: '请输入高值耗材（产品）总金额' }],
+                    initialValue: updateData.highConsuValue
                   })(
                     <Input addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
@@ -485,6 +563,7 @@ class ReportWrapperForm extends Component {
                 >  
                   {form.getFieldDecorator('logisticsScope', {
                     rules: [{ required: true, message: '请选择医疗器械物流管理开展范围' }],
+                    initialValue: updateData.logisticsScope
                   })(
                     <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'logisticsScope')}>
                       <Row>
@@ -506,6 +585,7 @@ class ReportWrapperForm extends Component {
                 >  
                   {form.getFieldDecorator('logisticsType', {
                     rules: [{ required: true, message: '请选择卫生材料医疗器械物流管理模式' }],
+                    initialValue: updateData.logisticsType
                   })(
                     <Checkbox.Group onChange={this.setCheckboxChange.bind(this, 'logisticsType')}>
                       <Row>
@@ -526,12 +606,13 @@ class ReportWrapperForm extends Component {
           <Col span={24}>
             <Card title={'医学工程部门人员情况'} style={styles.card}>
               {
-                userListItem.map(item => (
+                userListItem.map((item, index) => (
                   <AddFormItems 
                     i={item} 
+                    updateData={updateData}
                     form={form} 
                     deleteRow={this.deleteItem} 
-                    key={item}
+                    key={index}
                     getProgress={this.getProgress}
                   />
                 ))
@@ -544,15 +625,18 @@ class ReportWrapperForm extends Component {
           <Col span={24}>
             <Card title={'医学工程部门培训情况'} style={styles.card}>
               {
-                meetingListItem.map(item => (
-                  <AddFormItemsTwo 
-                    i={item} 
-                    form={form} 
-                    deleteRow={this.deleteItem} 
-                    key={item}
-                    getProgress={this.getProgress}
-                  />
-                ))
+                meetingListItem.map((item, index) => {
+                  return (
+                    <AddFormItemsTwo 
+                      updateData={updateData}
+                      i={item} 
+                      form={form} 
+                      deleteRow={this.deleteItem} 
+                      key={index}
+                      getProgress={this.getProgress}
+                    />
+                  )
+                })
               }
               <Button style={{ width: '60%', marginLeft: '20%' }} onClick={this.addItem.bind(this, 'meetingListItem')}>
                 <Icon type="plus" /> 添加更多
@@ -571,7 +655,8 @@ class ReportWrapperForm extends Component {
   }
 }
 //医学工程部门人员情况
-const AddFormItems = ({i, form, deleteRow, getProgress}) => (
+const AddFormItems = ({i, form, deleteRow, getProgress, updateData}) => {
+  return (
   <Row style={styles.row}>
     <Col span={8}>
       <FormItem
@@ -580,6 +665,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('fname-' + i, {
           rules: [{ required: true, message: '请输入姓名' }],
+          initialValue: updateData['fname-' + i]
         })(
           <Input onBlur={getProgress}/>
         )}
@@ -592,6 +678,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('gender-' + i, {
           rules: [{ required: true, message: '请选择性别' }],
+          initialValue: updateData['gender-' + i]
         })(
           <Select
             onChange={value => {
@@ -612,6 +699,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('birthChar-' + i, {
           rules: [{ required: true, message: '请选择年龄' }],
+          initialValue: updateData['birthChar-' + i]
         })(
           <Select
             onChange={value => {
@@ -634,6 +722,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('technicalTitles-' + i, {
           rules: [{ required: true, message: '请选择职称' }],
+          initialValue: updateData['technicalTitles-' + i]
         })(
           <Cascader 
             placeholder='请选择职称'
@@ -652,6 +741,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('postName-' + i, {
           rules: [{ required: true, message: '请输入岗位' }],
+          initialValue: updateData['postName-' + i]
         })(
           <Input onBlur={getProgress}/>
         )}
@@ -664,6 +754,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('postAge-' + i, {
           rules: [{ required: true, message: '请输入岗位工龄' }],
+          initialValue: updateData['postAge-' + i]
         })(
           <Input addonAfter={<span>年</span>} onBlur={getProgress}/>
         )}
@@ -676,6 +767,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('highestEducation-' + i, {
           rules: [{ required: true, message: '请选择学历' }],
+          initialValue: updateData['highestEducation-' + i]
         })(
           <Select
             onChange={value => {
@@ -699,6 +791,7 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('majorName-' + i, {
           rules: [{ required: true, message: '请选择专业' }],
+          initialValue: updateData['majorName-' + i]
         })(
           <Select
             onChange={value => {
@@ -727,10 +820,10 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       <div style={{height: 1, borderTop: '1px solid #808080'}}></div>
     </Col>
   </Row>
-)
+)}
 
 //医学工程部门培训情况
-const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
+const AddFormItemsTwo = ({i, form, deleteRow, getProgress, updateData}) => (
   <Row style={styles.row}>
     <Col span={8}>
       <FormItem
@@ -739,6 +832,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingName-' + i, {
           rules: [{ required: true, message: '请输入会议名称' }],
+          initialValue: updateData['meetingName-' + i]
         })(
           <Input onBlur={getProgress}/>
         )}
@@ -751,6 +845,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingType-' + i, {
           rules: [{ required: true, message: '请选择会议类型' }],
+          initialValue: updateData['meetingType-' + i]
         })(
           <Select
             onChange={value => {
@@ -779,6 +874,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingTime-' + i, {
           rules: [{ required: true, message: '请选择时间' }],
+          initialValue: moment(updateData['meetingTime-' + i])
         })(
           <DatePicker onChange={getProgress}/>
         )}
@@ -791,6 +887,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingAddress-' + i, {
           rules: [{ required: true, message: '请输入地点' }],
+          initialValue: updateData['meetingAddress-' + i]
         })(
           <Input onBlur={getProgress}/>
         )}
@@ -803,6 +900,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingSponsor-' + i, {
           rules: [{ required: true, message: '请输入主办方' }],
+          initialValue: updateData['meetingSponsor-' + i]
         })(
           <Input onBlur={getProgress}/>
         )}
@@ -815,6 +913,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingAllUserSum-' + i, {
           rules: [{ required: true, message: '请输入参会人数' }],
+          initialValue: updateData['meetingAllUserSum-' + i]
         })(
           <Input addonAfter={<span>人</span>} onBlur={getProgress}/>
         )}
@@ -827,6 +926,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingDeptUserSum-' + i, {
           rules: [{ required: true, message: '请输入科室参会人数' }],
+          initialValue: updateData['meetingDeptUserSum-' + i]
         })(
           <Input addonAfter={<span>人</span>} onBlur={getProgress}/>
         )}
@@ -839,6 +939,7 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('tfRemark-' + i, {
           rules: [{ required: true, message: '请输入备注' }],
+          initialValue: updateData['tfRemark-' + i]
         })(
           <Input onBlur={getProgress}/>
         )}

@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Popover, Icon } from 'antd';
-import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { userAction } from 'action';
 
 import './style.css';
 
@@ -32,11 +30,11 @@ const UserMenu = () => (
   </ul>
 )
 
-const User = (user) => {
-  const { users } = user;
+const User = (users) => {
+  const user = users.users;
   return (
       <div style={styles.avatar}>
-        <Popover content={UserMenu()} title={'用户:' + users.name} placement="bottomLeft">
+        <Popover content={UserMenu()} title={'用户:'+user.userName || '游客'} placement="bottomLeft">
           <Avatar style={{ backgroundColor: '#108ee9' }} icon="user"></Avatar>
         </Popover>
       </div>
@@ -47,13 +45,4 @@ const User = (user) => {
 User.propTypes = {
   user: PropTypes.object
 }
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onClick: (data) => {
-      dispatch(userAction.fetchUser(data));
-    }
-  }
-};
-
-export default connect(null, mapDispatchToProps)(User);
+export default User;

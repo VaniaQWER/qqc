@@ -12,7 +12,7 @@ import querystring from 'querystring';
 class QualityInfo extends Component {
   state = {
     hospital: [],
-    loadMore: true,
+    loadMore: false,
     page: 1
   }
   componentDidMount = () => {
@@ -34,6 +34,7 @@ class QualityInfo extends Component {
           if (pager) {
             hospital = [];
           }
+          console.log(hospital.length, data.result.rows.length, 'length');
           loadMore = (hospital.length + data.result.rows.length ) < data.result.records ? true : false; 
           data.result.rows.map(item => hospital.push(item))
           this.setState({hospital: hospital, page: page + 1, loadMore});

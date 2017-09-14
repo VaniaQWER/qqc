@@ -9,7 +9,6 @@ class Quality extends Component {
     const { pathname } = this.props.location;
     const _menus = menus.filter(item => pathname.split('/')[1] === item.uri.split('/')[0]);
     if (pathname && _menus[0]) {
-      console.log(pathname)
       return <SiderMenu menus={_menus[0].subMenu || []} current={pathname}/>
     } else {
       return null;

@@ -3,6 +3,7 @@ import TopMenu from 'component/topMenu';
 import User from 'component/user';
 import Logo from 'component/logo';
 import Dashboard from 'container/dashboard';
+// import { hashHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Layout, Row, Col } from 'antd';
 import { userAction } from 'action';
@@ -31,12 +32,22 @@ class Home extends Component {
   }
   //第一次加载 渲染全局数据
   componentDidMount = () => {
-    const { login } = this.props;
-    login();
+    //const { user } = this.props;
+    //const { state } = this.props.location
+    //console.log(user)
+    // if (state && state.user) {
+    //   login(state.user);
+    // } else {
+    //   message.warn('无用户信息!');
+    //   hashHistory.push({
+    //     pathname: '/login'
+    //   })
+    // }
   }
   render () {
     const { user, location } = this.props;
     const current = location.pathname;
+    console.log(user, 'home')
     return (
       <Layout>
         <Header style={
@@ -81,8 +92,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (data) => {
-      dispatch(userAction.fetchUser(data));
+    login: (user) => {
+      dispatch(userAction.fetchUser(user));
     }
   }
 };

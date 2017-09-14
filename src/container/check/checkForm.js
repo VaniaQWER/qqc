@@ -22,7 +22,12 @@ class CheckForm extends Component {
         dataIndex: 'orgId',
         width: 100,
         fixed: 'left',
-        render: (value, record) => (<Link to={{pathname: `/check/qualityCheckList/${value}`, state: {record: record}}}>详情</Link>)
+        render: (value, record) => {
+          const url = type ? `/check/qualityCheckList/${value}` :`/check/deptCheckList/${value}` ;
+          return record.auditFstate === '10' ? 
+                 <Link to={{pathname: url, state: {record: record}}}>详情</Link> :
+                 null
+        }
       },
       {
         title: '上报周期',

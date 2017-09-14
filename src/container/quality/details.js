@@ -15,13 +15,13 @@ const Option = Select.Option;
 const columns = [
   { title: '时间', dataIndex: 'pYear', width: 100},
   { title: '医院名称', dataIndex: 'fOrgName', width: 200},
-  { title: '医院等级', dataIndex: 'hospitalLevel', width: 60},
-  { title: '医院性质', dataIndex: 'hospitalType', width: 60},
+  { title: '医院等级', dataIndex: 'hospitalLevelName', width: 60},
+  { title: '医院性质', dataIndex: 'hospitalTypeName', width: 60},
   { title: '医院床位数', dataIndex: 'numeratorValue', width: 70},
   { title: '医学工程人员数量', dataIndex: 'denominatorValue', width: 80},
-  { title: '医学工程人员配置水平', dataIndex: 'indexValue', width: 80},
-  { title: '同级医院平均配置水平对比', dataIndex: 'indexValueLevel', width: 100},
-  { title: '全省医院平均配置水平对比', dataIndex: 'indexValueAll', width: 100}
+  { title: '医学工程人员配置水平', dataIndex: 'indexValue', width: 80, render: value => `${Number(value * 100).toFixed(2)}%` },
+  { title: '同级医院平均配置水平对比', dataIndex: 'indexValueLevel', width: 100, render: value => `${Number(value * 100).toFixed(2)}%`},
+  { title: '全省医院平均配置水平对比', dataIndex: 'indexValueAll', width: 100, render: value => `${Number(value * 100).toFixed(2)}%`}
 ]
 class QualityDetails extends Component {
   state = {
@@ -136,7 +136,7 @@ class QualityDetails extends Component {
               columns={columns.concat(dynamicColumns)}
             />
             <div style={{position: 'absolute', right: 10, bottom: 40, fontSize: 30}}>
-              <Settings exportUrl={`${api.EXPORT_FORNLA}?pYear=${pYear}&indexValue=${codeValue}`}/>
+              <Settings exportUrl={`http://120.26.128.15:8903/${api.EXPORT_FORNLA}?pYear=${pYear}&indexValue=${codeValue}`}/>
             </div>
           </Col>
         </Row>

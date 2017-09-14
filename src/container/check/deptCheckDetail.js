@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Input, Row, Checkbox, BackTop, Button, message, DatePicker, Cascader,
+import { Form, Input, Row, Checkbox, BackTop, Button, message, DatePicker, Cascader, Breadcrumb,
          Col, Card, Select, Radio } from 'antd';
 import { fetchData } from 'utils/tools';
+import { hashHistory, Link } from 'react-router';
+import querystring from 'querystring';
+import moment from 'moment';
 import api from 'api';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -75,16 +78,26 @@ const formItemLayoutForMore = {
 
 class DeptCheckDetailWrapper extends Component {
   state = {
-
+    pYear: '',
+    userListItem: [0, 1],
+    meetingListItem: [0, 1],
+    updateData: {},
+    constrDeptGuid: null
   }
-  //返回提交数据
-  getPostData = () => {
+  componentDidMount = () => {
+    const record = this.props.location.state.record;
+    if (record) {
+      this.getData();
+    } else {
+      hashHistory.push({
+        pathname: '/check/deptCheck'
+      })
+    }
   }
   submit = (postData) => {
     fetchData({
-      url: api.INSERT_CONSTR_DEPT,
-      body: JSON.stringify(postData),//querystring.stringify(postData),
-      type: 'application/json',
+      url: api.UPDATE_DEPT,
+      body: querystring.stringify(postData),//querystring.stringify(postData),
       success: data => {
         if (data.status) {
           alert('成功了...我也不知道跳转去哪里!')
@@ -97,27 +110,95 @@ class DeptCheckDetailWrapper extends Component {
   //提交事件
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const postData = this.getPostData();
-        postData.auditFstate = '10';
-        console.log('提交数据:', postData);
-        this.submit(postData);
+    let postData = {}, record = this.props.location.state.record;
+    postData.auditFstate = '20';
+    postData.pYear = record.pYear;
+    postData.constrDeptGuid = record.constrDeptGuid;
+    console.log('提交数据:', postData);
+    this.submit(postData);
+  }
+  renderArr = (index) => {
+    let array = [];
+    for (let i=0;i<index;i++) {
+      array.push(i);
+    }
+    return array;
+  }
+  getData = () => {
+    const record = this.props.location.state.record;
+    fetchData({
+      url: api.SEARCH_CONSTR_DEPT,
+      body: querystring.stringify({pYear: record.pYear, constrDeptGuid: record.constrDeptGuid}),
+      success: data => {
+        this.setState({
+          updateData: data.result,
+          constrDeptGuid: data.result.constrDeptGuid,
+          meetingListItem: this.renderArr(data.result.meetingCount),
+          userListItem: this.renderArr(data.result.userCount),
+        })
+        if (data.result.deptTypeName === '其他') {
+          this.refs.deptTypeName.refs.input.value = data.result.deptTypeNameOther;
+        }
+        if (data.result.deptParentName === '其他') {
+          this.refs.deptParentName.refs.input.value = data.result.deptParentNameOther;
+        }
+        if (data.result.workScope) {
+          data.result.workScope.map((item, index) => {
+            if (item === '其他') {
+              this.refs.workScope.refs.input.value = data.result.workScopeOther; 
+            }
+            return null;
+          })
+        }  
+        if (data.result.workOther) {
+          data.result.workOther.map((item, index) => {
+            if (item === '3') {
+              this.refs.workOther_1.refs.input.value = data.result.workMassName; 
+            } 
+            if (item === '4') {
+              this.refs.workOther_2.refs.input.value = data.result.workOtherName; 
+            }
+            return null;
+          })
+        }  
+        if (data.result.logisticsType) {
+          data.result.logisticsType.map((item, index) => {
+            if (item === '其他') {
+              this.refs.logistics.refs.input.value = data.result.logisticsTypeOther;
+            } 
+            return null;
+          })
+        }  
       }
-    });
+    })
   }
   render () {
-    const { deptInfo, userListItem, meetingListItem } = this.state;
+    const { userListItem, meetingListItem, updateData } = this.state;
     const { form } = this.props;
     return (
       <Row style={styles.row} className='right_content'>
+        <Breadcrumb style={{fontSize: '1.1em', marginBottom: 10}}>
+          <Breadcrumb.Item>主页</Breadcrumb.Item>
+          <Breadcrumb.Item><Link to={'/check/deptCheckList'}>科室信息</Link></Breadcrumb.Item>
+          <Breadcrumb.Item>审核</Breadcrumb.Item>
+        </Breadcrumb>
         <Form onSubmit={this.handleSubmit}>
           <Col span={3}>
             <h3>选择上报时间</h3>
           </Col>  
           <Col span={21}>
-            {form.getFieldDecorator('pYear')(
-                <Input/>
+            {form.getFieldDecorator('pYear', {
+              initialValue: updateData.pYear
+              })(
+                <Select 
+                  style={{width: 300}}
+                  disabled={true} 
+                >
+                  <Option value={'2015'}>2015</Option>
+                  <Option value={'2016'}>2016</Option>
+                  <Option value={'2017'}>2017</Option>
+                  <Option value={'2018'}>2018</Option>
+                </Select>
               )}
           </Col>
           <Col span={24} style={styles.col}>
@@ -126,21 +207,29 @@ class DeptCheckDetailWrapper extends Component {
                 {...formItemLayout}
                 label='部门名称'
               >
-                {form.getFieldDecorator('deptName')(
-                  <Input />
+                {form.getFieldDecorator('deptName', {
+                  rules: [{ required: true, message: '请输入部门名称' }],
+                  initialValue: updateData.deptName
+                })(
+                  <Input disabled={true} />
                 )}
               </FormItem>  
               <FormItem
                 label='部门级别'
                 {...formItemLayout}
               >
-                {form.getFieldDecorator('deptTypeName')(
-                  <RadioGroup>
+                {form.getFieldDecorator('deptTypeName', {
+                  rules: [{ required: true, message: '请选择部门级别' }],
+                  initialValue: updateData.deptTypeName
+                })(
+                  <RadioGroup disabled={true} >
                     <Radio value={'1'}>处/部</Radio>
                     <Radio value={'2'}>科</Radio>
                     <Radio value={'3'}>组</Radio>
                     <Radio value={'其他'}>其他
-                      { deptInfo.deptTypeName === '其他' ? <Input ref='deptTypeName' style={{ width: 100, marginLeft: 10 }}/> : null}
+                      { updateData.deptTypeName === '其他'  ?  
+                        <Input ref='deptTypeName' disabled={true}  style={{ width: 100, marginLeft: 10 }}/> : null
+                      }
                     </Radio>
                   </RadioGroup>
                 )}
@@ -149,14 +238,18 @@ class DeptCheckDetailWrapper extends Component {
                 label='上级管理部门'
                 {...formItemLayout}
               >
-                {form.getFieldDecorator('deptParentName')(
-                  <RadioGroup>
+                {form.getFieldDecorator('deptParentName', {
+                  rules: [{ required: true, message: '请选择上级管理部门' }],
+                  initialValue: updateData.deptParentName
+                })(
+                  <RadioGroup disabled={true} >
                     <Radio value={'1'}>医务</Radio>
                     <Radio value={'2'}>后勤</Radio>
                     <Radio value={'3'}>科教</Radio>
                     <Radio value={'4'}>独立运行</Radio>
                     <Radio value={'其他'}>其他
-                      { deptInfo.deptParentName === '其他' ? <Input ref='deptParentName' style={{ width: 100, marginLeft: 10 }} /> : null}
+                      { updateData.deptParentName === '其他' ? 
+                        <Input ref='deptParentName' style={{ width: 100, marginLeft: 10 }} disabled={true} /> : null}
                     </Radio>
                   </RadioGroup>
                 )}
@@ -165,16 +258,20 @@ class DeptCheckDetailWrapper extends Component {
                 label='部门业务管理范围'
                 {...formItemLayout}
               >  
-                {form.getFieldDecorator('workScope')(
-                  <Checkbox.Group>
+                {form.getFieldDecorator('workScope', {
+                  rules: [{ required: true, message: '请选择部门业务管理范围' }],
+                  initialValue: updateData.workScope
+                })(
+                  <Checkbox.Group disabled={true} >
                     <Row>
                       <Col span={6}><Checkbox value="1">设备</Checkbox></Col>
                       <Col span={6}><Checkbox value="2">耗材</Checkbox></Col>
-                      <Col span={6}><Checkbox value="3">药剂</Checkbox></Col>
-                      <Col span={6}><Checkbox value="4">办公用品</Checkbox></Col>
-                      <Col span={6}><Checkbox value="5">总务</Checkbox></Col>
+                      <Col span={6}><Checkbox value="3">试剂</Checkbox></Col>
+                      <Col span={6}><Checkbox value="4">药品</Checkbox></Col>
+                      <Col span={6}><Checkbox value="5">办公用品</Checkbox></Col>
+                      <Col span={6}><Checkbox value="6">总务</Checkbox></Col>
                       <Col span={3}><Checkbox value="其他">其他</Checkbox></Col>
-                      <Col span={6}><Input ref='workScope'/></Col>
+                      <Col span={6}><Input ref='workScope' disabled={true}/></Col>
                     </Row>
                   </Checkbox.Group>
                 )}
@@ -183,15 +280,18 @@ class DeptCheckDetailWrapper extends Component {
                 label='部门承担的其它工作'
                 {...formItemLayout}
               >
-                {form.getFieldDecorator('workOther')(
-                  <Checkbox.Group>
+                {form.getFieldDecorator('workOther', {
+                  rules: [{ required: true, message: '请选择部门承担的其它工作' }],
+                  initialValue: updateData.workOther
+                })(
+                  <Checkbox.Group disabled={true} >
                     <Row>
                       <Col><Checkbox value="1">本省、市卫生行政部门：医疗器械管理质控中心</Checkbox></Col>
                       <Col><Checkbox value="2">本省、市药监部门：医疗器械临床实验基地</Checkbox></Col>
                       <Col span={16}><Checkbox value="3">本省、市质量技术监督部门：计量与测试技术合作</Checkbox></Col>
-                      <Col span={8}><Input ref='workOther_1' placeholder='请输入'/></Col>
+                      <Col span={8}><Input ref='workOther_1' placeholder='请输入' disabled={true} /></Col>
                       <Col span={5}><Checkbox value="4">其他工作：</Checkbox></Col>
-                      <Col span={19}><Input ref='workOther_2' placeholder='请输入'/></Col>
+                      <Col span={19}><Input ref='workOther_2' placeholder='请输入' disabled={true} /></Col>
                     </Row>
                   </Checkbox.Group>
                 )}
@@ -205,8 +305,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='医疗设备总数量'
                 >
-                  {form.getFieldDecorator('equipmentSum')(
-                    <Input addonAfter={<span>台件</span>}/>
+                  {form.getFieldDecorator('equipmentSum', {
+                    rules: [{ required: true, message: '请输入医疗设备总数量' }],
+                    initialValue: updateData.equipmentSum
+                  })(
+                    <Input disabled={true} addonAfter={<span>台件</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem> 
               </Col>
@@ -215,8 +318,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='医疗设备总价值'
                 >
-                  {form.getFieldDecorator('equipmentValue')(
-                    <Input addonAfter={<span>万元</span>}/>
+                  {form.getFieldDecorator('equipmentValue', {
+                    rules: [{ required: true, message: '请输入医疗设备总价值' }],
+                    initialValue: updateData.equipmentValue
+                  })(
+                    <Input disabled={true} addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -225,8 +331,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='甲乙类医疗设备总数量'
                 >
-                  {form.getFieldDecorator('abEquipmentSum')(
-                    <Input addonAfter={<span>台件</span>}/>
+                  {form.getFieldDecorator('abEquipmentSum', {
+                    rules: [{ required: true, message: '请输入甲乙类医疗设备总数量' }],
+                    initialValue: updateData.abEquipmentSum
+                  })(
+                    <Input disabled={true} addonAfter={<span>台件</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -235,8 +344,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='甲乙类医疗设备总价值'
                 >
-                  {form.getFieldDecorator('abEquipmentValue')(
-                    <Input addonAfter={<span>万元</span>}/>
+                  {form.getFieldDecorator('abEquipmentValue', {
+                    rules: [{ required: true, message: '请输入甲乙类医疗设备总价值' }],
+                    initialValue: updateData.abEquipmentValue
+                  })(
+                    <Input disabled={true} addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -245,8 +357,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='医用耗材（产品）总数量'
                 >
-                  {form.getFieldDecorator('consuSum')(
-                    <Input addonAfter={<span>种</span>}/>
+                  {form.getFieldDecorator('consuSum', {
+                    rules: [{ required: true, message: '请输入医用耗材（产品）总数量' }],
+                    initialValue: updateData.consuSum
+                  })(
+                    <Input disabled={true} addonAfter={<span>种</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -255,8 +370,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='医用耗材年度消耗总金额'
                 >
-                  {form.getFieldDecorator('consuValue')(
-                    <Input addonAfter={<span>万元</span>}/>
+                  {form.getFieldDecorator('consuValue', {
+                    rules: [{ required: true, message: '请输入医用耗材年度消耗总金额' }],
+                    initialValue: updateData.consuValue
+                  })(
+                    <Input disabled={true} addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -265,8 +383,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='高值耗材（产品）总数量'
                 >
-                  {form.getFieldDecorator('highConsuSum')(
-                    <Input addonAfter={<span>种</span>}/>
+                  {form.getFieldDecorator('highConsuSum', {
+                    rules: [{ required: true, message: '请输入高值耗材（产品）总数量' }],
+                    initialValue: updateData.highConsuSum
+                  })(
+                    <Input disabled={true} addonAfter={<span>种</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -275,8 +396,11 @@ class DeptCheckDetailWrapper extends Component {
                   {...formItemLayoutForMore}
                   label='高值耗材（产品）总金额'
                 >
-                  {form.getFieldDecorator('highConsuValue')(
-                    <Input addonAfter={<span>万元</span>}/>
+                  {form.getFieldDecorator('highConsuValue', {
+                    rules: [{ required: true, message: '请输入高值耗材（产品）总金额' }],
+                    initialValue: updateData.highConsuValue
+                  })(
+                    <Input disabled={true} addonAfter={<span>万元</span>} onBlur={this.getProgress}/>
                   )}
                 </FormItem>
               </Col>
@@ -285,8 +409,11 @@ class DeptCheckDetailWrapper extends Component {
                   label='医疗器械物流管理开展范围'
                   {...formItemLayout}
                 >  
-                  {form.getFieldDecorator('logisticsScope')(
-                    <Checkbox.Group>
+                  {form.getFieldDecorator('logisticsScope', {
+                    rules: [{ required: true, message: '请选择医疗器械物流管理开展范围' }],
+                    initialValue: updateData.logisticsScope
+                  })(
+                    <Checkbox.Group disabled={true} >
                       <Row>
                         <Col span={8}><Checkbox value="1">医疗设备物流</Checkbox></Col>
                         <Col span={8}><Checkbox value="2">普通卫生材料物流</Checkbox></Col>
@@ -304,8 +431,11 @@ class DeptCheckDetailWrapper extends Component {
                   label='卫生材料医疗器械物流管理模式'
                   {...formItemLayout}
                 >  
-                  {form.getFieldDecorator('logisticsType')(
-                    <Checkbox.Group>
+                  {form.getFieldDecorator('logisticsType', {
+                    rules: [{ required: true, message: '请选择卫生材料医疗器械物流管理模式' }],
+                    initialValue: updateData.logisticsType
+                  })(
+                    <Checkbox.Group disabled={true} >
                       <Row>
                         <Col span={6}><Checkbox value="1">物流管理外包</Checkbox></Col>
                         <Col span={6}><Checkbox value="2">仓库外包</Checkbox></Col>
@@ -313,7 +443,7 @@ class DeptCheckDetailWrapper extends Component {
                         <Col span={6}><Checkbox value="4">第三方托管</Checkbox></Col>
                         <Col span={6}><Checkbox value="5">二级库管</Checkbox></Col>
                         <Col span={6}><Checkbox value="其他">其他</Checkbox></Col>
-                        <Col span={6}><Input ref='logistics'/></Col>
+                        <Col span={6}><Input ref='logistics' disabled={true} /></Col>
                       </Row>
                     </Checkbox.Group>
                   )}
@@ -324,11 +454,14 @@ class DeptCheckDetailWrapper extends Component {
           <Col span={24}>
             <Card title={'医学工程部门人员情况'} style={styles.card}>
               {
-                userListItem.map(item => (
+                userListItem.map((item, index) => (
                   <AddFormItems 
                     i={item} 
+                    updateData={updateData}
                     form={form} 
-                    key={item}
+                    deleteRow={this.deleteItem} 
+                    key={index}
+                    getProgress={this.getProgress}
                   />
                 ))
               }
@@ -337,19 +470,24 @@ class DeptCheckDetailWrapper extends Component {
           <Col span={24}>
             <Card title={'医学工程部门培训情况'} style={styles.card}>
               {
-                meetingListItem.map(item => (
-                  <AddFormItemsTwo 
-                    i={item} 
-                    form={form} 
-                    key={item}
-                  />
-                ))
+                meetingListItem.map((item, index) => {
+                  return (
+                    <AddFormItemsTwo 
+                      updateData={updateData}
+                      i={item} 
+                      form={form} 
+                      deleteRow={this.deleteItem} 
+                      key={index}
+                      getProgress={this.getProgress}
+                    />
+                  )
+                })
               }
             </Card>
           </Col>
           <Col span={24} style={styles.tool}>
-            <Button type='primary' style={styles.button} htmlType='submit'>通过</Button>
-            <Button type='danger' style={styles.button}>重置</Button>
+            <Button type='primary' style={styles.button} htmlType='submit'>审核</Button>
+            <Button type='danger'>取消</Button>
           </Col>
         </Form>
         <BackTop/>
@@ -358,7 +496,8 @@ class DeptCheckDetailWrapper extends Component {
   }
 }
 //医学工程部门人员情况
-const AddFormItems = ({i, form, deleteRow, getProgress}) => (
+const AddFormItems = ({i, form, deleteRow, getProgress, updateData}) => {
+  return (
   <Row style={styles.row}>
     <Col span={8}>
       <FormItem
@@ -367,8 +506,9 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('fname-' + i, {
           rules: [{ required: true, message: '请输入姓名' }],
+          initialValue: updateData['fname-' + i]
         })(
-          <Input onBlur={getProgress}/>
+          <Input disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -379,11 +519,12 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('gender-' + i, {
           rules: [{ required: true, message: '请选择性别' }],
+          initialValue: updateData['gender-' + i]
         })(
           <Select
+            disabled={true} 
             onChange={value => {
               form.setFieldsValue({['gender-' + i]: value})
-              getProgress();
             }}
           >
             <Option value={'男'}>男</Option>
@@ -399,11 +540,12 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('birthChar-' + i, {
           rules: [{ required: true, message: '请选择年龄' }],
+          initialValue: updateData['birthChar-' + i]
         })(
           <Select
+            disabled={true} 
             onChange={value => {
               form.setFieldsValue({['birthChar-' + i]: value})
-              getProgress();
             }}
           >
             <Option value={'<30'}>&lt;30</Option>
@@ -421,13 +563,14 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('technicalTitles-' + i, {
           rules: [{ required: true, message: '请选择职称' }],
+          initialValue: updateData['technicalTitles-' + i]
         })(
           <Cascader 
+            disabled={true} 
             placeholder='请选择职称'
             options={options} 
             onChange={value => {
               form.setFieldsValue({['technicalTitles-' + i]: value});
-              getProgress();
             }} />
         )}
       </FormItem>
@@ -439,8 +582,9 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('postName-' + i, {
           rules: [{ required: true, message: '请输入岗位' }],
+          initialValue: updateData['postName-' + i]
         })(
-          <Input onBlur={getProgress}/>
+          <Input disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -451,8 +595,9 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('postAge-' + i, {
           rules: [{ required: true, message: '请输入岗位工龄' }],
+          initialValue: updateData['postAge-' + i]
         })(
-          <Input addonAfter={<span>年</span>} onBlur={getProgress}/>
+          <Input addonAfter={<span>年</span>} disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -463,12 +608,10 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('highestEducation-' + i, {
           rules: [{ required: true, message: '请选择学历' }],
+          initialValue: updateData['highestEducation-' + i]
         })(
           <Select
-            onChange={value => {
-              form.setFieldsValue({['highestEducation-' + i]: value});
-              getProgress();
-            }}
+          disabled={true} 
           >
             <Option value={'博士及以上'}>博士及以上</Option>
             <Option value={'硕士'}>硕士</Option>
@@ -486,12 +629,10 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('majorName-' + i, {
           rules: [{ required: true, message: '请选择专业' }],
+          initialValue: updateData['majorName-' + i]
         })(
           <Select
-            onChange={value => {
-              form.setFieldsValue({['majorName-' + i]: value});
-              getProgress();
-            }}
+          disabled={true} 
           >
             <Option value={'生物医学工程'}>生物医学工程</Option>
             <Option value={'计算机'}>计算机</Option>
@@ -507,17 +648,11 @@ const AddFormItems = ({i, form, deleteRow, getProgress}) => (
         )}
       </FormItem>
     </Col>
-    <Col style={{textAlign: 'right'}}>
-      <Button type="dashed" style={{marginRight: 10}} onClick={deleteRow.bind(this, i, 'userListItem')}>删除该行</Button>
-    </Col>
-    <Col span={24} style={{textAlign: 'center'}}>
-      <div style={{height: 1, borderTop: '1px solid #808080'}}></div>
-    </Col>
   </Row>
-)
+)}
 
 //医学工程部门培训情况
-const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
+const AddFormItemsTwo = ({i, form, deleteRow, getProgress, updateData}) => (
   <Row style={styles.row}>
     <Col span={8}>
       <FormItem
@@ -526,8 +661,9 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingName-' + i, {
           rules: [{ required: true, message: '请输入会议名称' }],
+          initialValue: updateData['meetingName-' + i]
         })(
-          <Input onBlur={getProgress}/>
+          <Input disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -538,12 +674,10 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingType-' + i, {
           rules: [{ required: true, message: '请选择会议类型' }],
+          initialValue: updateData['meetingType-' + i]
         })(
           <Select
-            onChange={value => {
-              form.setFieldsValue({['meetingType-' + i]: value});
-              getProgress();
-            }}
+          disabled={true} 
           >
             <Option value={'年会'}>年会</Option>
             <Option value={'专业会议'}>专业会议</Option>
@@ -566,8 +700,9 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingTime-' + i, {
           rules: [{ required: true, message: '请选择时间' }],
+          initialValue: moment(updateData['meetingTime-' + i]) || null
         })(
-          <DatePicker onChange={getProgress}/>
+          <DatePicker disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -578,8 +713,9 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingAddress-' + i, {
           rules: [{ required: true, message: '请输入地点' }],
+          initialValue: updateData['meetingAddress-' + i]
         })(
-          <Input onBlur={getProgress}/>
+          <Input disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -590,8 +726,9 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingSponsor-' + i, {
           rules: [{ required: true, message: '请输入主办方' }],
+          initialValue: updateData['meetingSponsor-' + i]
         })(
-          <Input onBlur={getProgress}/>
+          <Input disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -602,8 +739,9 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingAllUserSum-' + i, {
           rules: [{ required: true, message: '请输入参会人数' }],
+          initialValue: updateData['meetingAllUserSum-' + i]
         })(
-          <Input addonAfter={<span>人</span>} onBlur={getProgress}/>
+          <Input addonAfter={<span>人</span>} disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -614,8 +752,9 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('meetingDeptUserSum-' + i, {
           rules: [{ required: true, message: '请输入科室参会人数' }],
+          initialValue: updateData['meetingDeptUserSum-' + i]
         })(
-          <Input addonAfter={<span>人</span>} onBlur={getProgress}/>
+          <Input addonAfter={<span>人</span>} disabled={true} />
         )}
       </FormItem>
     </Col>
@@ -626,16 +765,11 @@ const AddFormItemsTwo = ({i, form, deleteRow, getProgress}) => (
       >  
         {form.getFieldDecorator('tfRemark-' + i, {
           rules: [{ required: true, message: '请输入备注' }],
+          initialValue: updateData['tfRemark-' + i]
         })(
-          <Input onBlur={getProgress}/>
+          <Input disabled={true} />
         )}
       </FormItem>
-    </Col>
-    <Col style={{textAlign: 'right'}}>
-      <Button type="dashed" style={{marginRight: 10}} onClick={deleteRow.bind(this, i, 'meetingListItem')}>删除该行</Button>
-    </Col>
-    <Col span={24} style={{textAlign: 'center'}}>
-      <div style={{height: 1, borderTop: '1px solid #808080'}}></div>
     </Col>
   </Row>
 )

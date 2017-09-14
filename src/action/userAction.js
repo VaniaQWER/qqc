@@ -2,14 +2,12 @@
  * @file 获取用户权限，信息，菜单以及其相关操作
  * @desc 根据
  */
-
-// import { fetchData } from 'utils/tools';
-// import api from 'api';
 export const FETCH_STARTED = 'USER/FETCH_STARTED';
 export const FETCH_SUCCESS = 'USER/FETCH_SUCCESS';
 export const FETCH_FAILURE = 'USER/FETCH_FAILURE';
 export const REDIRECT_URI = 'USER/REDIRECT';
 export const SET_CURRENT = 'USER/SET_CURRENT';
+export const RESET = 'USER/RESET';
 
 export const fetchUserStarted = () => ({
   type: FETCH_STARTED
@@ -30,13 +28,12 @@ export const setCurrentMenu = (current) => ({
   current
 })
 
-const mockData = {
-  user: {
-    id: 1,
-    name: '萌萌的拖鞋酱',
-    role: '超级管理员'
-  }, 
-  menus: [
+export const resetInfo = () => ({
+  type: RESET
+})
+
+const menus = {
+  '09':   [
     {
       id: 'menuID1',
       icon: 'home',
@@ -128,17 +125,141 @@ const mockData = {
         }
       ]
     }
-  ]
+  ],//admin
+  '01':   [
+    {
+      id: 'menuID1',
+      icon: 'home',
+      text: '主页',
+      uri: 'home'
+    }, {
+      id: 'menuID2',
+      icon: 'pie-chart',
+      text: '科室建设',
+      uri: 'department/deptInfo',
+      subMenu: [
+        {
+          id: 'menuID2_sub1',
+          text: '科室建设',
+          uri: 'department/deptInfo'
+        }, {
+          id: 'menuID2_sub1',
+          text: '科室上报',
+          uri: 'department/deptReport'
+        }
+      ]
+    }, {
+      id: 'menuID3',
+      icon: 'inbox',
+      text: '质量管理',
+      uri: 'quality/qualityInfo',
+      subMenu: [
+        {
+          id: 'menuID3_sub1',
+          text: '质量管理',
+          uri: 'quality/qualityInfo'
+        }, {
+          id: 'menuID3_sub1',
+          text: '质量上报',
+          uri: 'quality/qualityReport'
+        }
+      ]
+    }, {
+      id: 'menuID6',
+      icon: 'area-chart',
+      text: '质控报表',
+      uri: 'check/checkInfo',
+      subMenu: [
+        {
+          id: 'menuID6_sub0',
+          text: '质控报表',
+          uri: 'check/checkInfo'
+        }
+      ]
+    }
+  ],//bjgjg
+  "03":   [
+    {
+      id: 'menuID1',
+      icon: 'home',
+      text: '主页',
+      uri: 'home'
+    }, {
+      id: 'menuID2',
+      icon: 'pie-chart',
+      text: '科室建设',
+      uri: 'department/deptInfo',
+      subMenu: [
+        {
+          id: 'menuID2_sub1',
+          text: '科室建设',
+          uri: 'department/deptInfo'
+        }
+      ]
+    }, {
+      id: 'menuID3',
+      icon: 'inbox',
+      text: '质量管理',
+      uri: 'quality/qualityInfo',
+      subMenu: [
+        {
+          id: 'menuID3_sub1',
+          text: '质量管理',
+          uri: 'quality/qualityInfo'
+        }
+      ]
+    } , {
+      id: 'menuID6',
+      icon: 'area-chart',
+      text: '质控报表',
+      uri: 'check/checkInfo',
+      subMenu: [
+        {
+          id: 'menuID6_sub0',
+          text: '质控报表',
+          uri: 'check/checkInfo'
+        },
+        {
+          id: 'menuID6_sub1',
+          text: '科室信息审核',
+          uri: 'check/deptCheckList'
+        }, {
+          id: 'menuID6_sub2',
+          text: '指标信息审核',
+          uri: 'check/qualityCheckList'
+        }
+      ]
+    }
+]//jgjg
+}
+
+const mockData = {
+  user: {
+    id: 1,
+    userName: '萌萌的拖鞋酱',
+    role: '超级管理员'
+  }, 
+  menus: [{
+    id: 'menuID1',
+    icon: 'home',
+    text: '主页',
+    uri: 'home'
+  }]
 }
 
 //模拟 后台交互获取菜单以及用户信息
-export const fetchUser = data => ( 
-  dispatch => (
-    // fetchData({
-
-    // })
-    setTimeout(() => dispatch(fetchUserSuccess({...mockData})), 10)
-  )  
+export const fetchUser = user => ( 
+  dispatch => {
+    console.log(user, 'userAction')
+    return     dispatch(fetchUserSuccess(
+      Object.assign({}, 
+        mockData, {
+          user: user,//result.result,
+          menus: menus[user.orgType]//list
+        }
+      )
+    ))
+  }
 )  
 
 export const setCurrent = current => (

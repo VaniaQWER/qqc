@@ -30,7 +30,7 @@ class NormalLoginForm extends React.Component {
               message.error(data.result.loginResult)
             } else {
               this.props.login.push({
-                pathname: 'home',
+                pathname: '/home',
                 state: { tips: data.result.loginResult }
               })
             }

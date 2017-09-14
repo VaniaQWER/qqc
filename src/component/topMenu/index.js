@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Menu, Icon } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { userAction } from 'action';
 
 //样式列表
 const styles = {
@@ -29,9 +28,6 @@ const TopMenu = ({onClick, menus, target}) => {
     <Menu
       selectedKeys={[target.split('/')[1]]}
       mode="horizontal"
-      onClick={ e => {
-        onClick({current: e.key})
-      }}
     >
       {
         menuRender(menus)
@@ -46,12 +42,5 @@ TopMenu.propTypes = {
   target: PropTypes.string.isRequired
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onClick: (data) => {
-      dispatch(userAction.fetchUser(data));
-    }
-  }
-};
 
-export default connect(null, mapDispatchToProps)(TopMenu);
+export default connect(null, null)(TopMenu);

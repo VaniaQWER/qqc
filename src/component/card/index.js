@@ -42,8 +42,8 @@ const CardContent = ({icon, info}) => (
         typeof info.range !== 'undefined'? 
         <h5>
           { info.range > 0 ? 
-            <span style={styles.up}><Icon type='arrow-up'/>{info.range}</span>:
-            <span style={styles.down}><Icon type='arrow-down'/> { info.range }</span>
+            <span style={styles.up}><Icon type='arrow-up'/>{`${info.range * 100}%`}</span>:
+            <span style={styles.down}><Icon type='arrow-down'/> {`${info.range * 100}%`}</span>
           } 
           <span style={styles.card_h5}>同比上年</span>
         </h5> : <br/>

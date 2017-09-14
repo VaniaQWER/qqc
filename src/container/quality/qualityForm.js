@@ -94,7 +94,7 @@ class QualityWrapperForm extends Component {
     fetchData({
       url: api.SELECT_FORMULA_DETAIL,
       body: querystring.stringify({
-        orgId: 10013,//暂时先用用
+        orgId: '',//暂时先用用
         pYear: year || this.state.pYear,
       }),
       success: data => {

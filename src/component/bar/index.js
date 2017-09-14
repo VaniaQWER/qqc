@@ -30,6 +30,12 @@ const Bar = ({ series, xAxis, legend}) => (
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
+        axisLabel : { 
+          formatter : value => Number(value * 100).toFixed(2) + '%'
+        }, 
+        splitLine:{ 
+          show:false 
+        },
       },
       dataZoom: [{
         start: 0,

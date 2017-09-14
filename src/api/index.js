@@ -19,9 +19,12 @@ export default {
   GET_DEPT_EDUCATION: `/deptInfoController/getDeptUserEducation`,//医工人员学历情况
   GET_DEPT_MAJOR: `/deptInfoController/getDeptUserMajor`,//医工人员专业情况
   GET_DEPT_USER_LIST: `/deptInfoController/searchConstrDeptUserList`,//科室人员信息列表
+  UPDATE_DEPT: `/deptInfoController/updateConstrDept`,//科室审核
   //登录
   USERLOGIN :`/login/userLogin`,//查询用户列表
   USERREGISTER :`/user/registerUserInfo`,//查询用户注册
+  CHECK_LOGIN: `/login/getUserInfo`,//登录校验
+
   //注册
   //用户模块
   SEARCH_USER_LIST :`/user/findAllUserList`,//查询用户列表
@@ -34,7 +37,7 @@ export default {
   SEARCH_QCORGS: `/orgController/findOrgs?orgType=3`,//查询机构
   SEARCH_ORGS_LIST: `/orgController/findAllOrgList`, //查询所有机构
   ADD_ORG: `/orgController/addUpdateOrgInfo`,//新增更新机构
-
+  SEARCH_CONSTR_DEPT: `/deptInfoController/searchConstrDept`,//查询科室上报情况
   //获取省市区级联菜单
   CITY: `/js/City.json`,
 
