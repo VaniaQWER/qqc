@@ -524,7 +524,12 @@ class RegisterHosptital extends Component {
         return(
             <div className={bg}>
             <Row>
-                <Col span={12} offset={8}>
+                <Col span={8}>
+                    <div className="back">
+                        <Link to='/login'>返回首页</Link>
+                    </div>
+                </Col>
+                <Col span={12}>
                     <div style={{paddingTop:"14%"}}>
                         <Steps current={current}>
                         {steps.map(item => <Step key={item.title} title={item.title} icon={<Icon type={item.icon} />}/>)}

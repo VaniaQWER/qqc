@@ -15,7 +15,7 @@ class Register extends Component {
             <Col span={12} offset={6}>
               <div style={{paddingTop:"10%"}}>
                 <Alert message="请选择对应的机构类型，并按需求填写相关信息，信息不正确将会导致信息审核不通过!" type="warning" showIcon />
-                <h5>请选择账户类型</h5>
+                <h5 style={{paddingTop:20,textAlign:"center",fontSize:16,color:"#108ee9"}}>请选择账户类型</h5>
                 <Row >
                   <Col span={12} style={{textAlign:'center'}}>
                   <Link  to='/hospital'>

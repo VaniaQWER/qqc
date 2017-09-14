@@ -118,7 +118,7 @@ body {
   top: 0;
   bottom: 0;
   right: 0;
-  background: url('./assets/zcbg_1.png') no-repeat;
+  background: url('./assets/zcbg_1a.png') no-repeat;
   background-size: 100% 100%;
 }
 .zcbg1{
@@ -127,7 +127,7 @@ body {
   top: 0;
   bottom: 0;
   right: 0;
-  background: url('./assets/zcbg_2.png') no-repeat;
+  background: url('./assets/zcbg_2a.png') no-repeat;
   background-size: 100% 100%;
 }
 .zcbg2{
@@ -147,5 +147,10 @@ body {
   right: 0;
   background: url('./assets/zcbg_4.png') no-repeat;
   background-size: 100% 100%;
+}
+.back{
+  position: absolute;
+  top:20px;
+  left: 20px;
 }
 
