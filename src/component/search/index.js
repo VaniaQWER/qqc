@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
-import { getLocalOption, getHalfYear } from 'utils/common';
+import { getLocalOption, getPrevHalfYear } from 'utils/common';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const formItemLayout = {
@@ -65,7 +65,7 @@ class DeptSeach extends Component {
                   {...formItemLayout}
                 >
                   {getFieldDecorator('pYear', {
-                    initialValue: getHalfYear()
+                    initialValue: getPrevHalfYear()
                   })(
                     <Select>
                       {
@@ -79,7 +79,7 @@ class DeptSeach extends Component {
                   {...formItemLayout}
                 >
                   {getFieldDecorator('pYear', {
-                    initialValue: new Date().getFullYear().toString()
+                    initialValue: (new Date().getFullYear() - 1).toString()
                   })(
                     <Select>
                       {

@@ -7,7 +7,7 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/component/legend';
-const Bar = ({ series, xAxis, legend}) => (
+const Bar = ({ series, xAxis, legend, formatter}) => (
   <ReactEchartsCore
     echarts={echarts}
     option={{
@@ -31,7 +31,9 @@ const Bar = ({ series, xAxis, legend}) => (
         type: 'value',
         boundaryGap: [0, '100%'],
         axisLabel : { 
-          formatter : value => Number(value * 100).toFixed(2) + '%'
+          formatter : value => (
+            formatter ? Number(value * 100).toFixed(2) + '%' : value
+          )
         }, 
         splitLine:{ 
           show:false 

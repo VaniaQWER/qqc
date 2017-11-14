@@ -47,7 +47,6 @@ class Home extends Component {
   render () {
     const { user, location } = this.props;
     const current = location.pathname;
-    console.log(user, 'home')
     return (
       <Layout>
         <Header style={

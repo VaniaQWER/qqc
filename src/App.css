@@ -154,3 +154,12 @@ body {
   left: 20px;
 }
 
+.not_found {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: url('./assets/404.png') no-repeat;
+  background-size: 100% 100%;
+}

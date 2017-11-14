@@ -9,21 +9,25 @@ import CircleProgress from 'component/circleProgress';
 import LoadMore from 'component/loadMore';
 import querystring from 'querystring';
 
+const year = new Date().getFullYear() - 1;
+
 class DeptInfo extends Component {
   state = {
     hospital: [],
-    loadMore: true
+    pYear: year,
+    loadMore: true,
+    page: 1
   }
   componentDidMount = () => {
     this.addHospital();
   }
   addHospital = (query={}, pager) => {
-    let { hospital, page, loadMore } = this.state;
+    let { hospital, page, loadMore, pYear } = this.state;
     let postData = {
       pagesize: 20, 
       page: pager || page, 
       fstateType: 1,
-      pYear: new Date().getFullYear()
+      pYear: pYear
     }
     fetchData({
       url: api.SELECT_SCOPE_LIST,
@@ -44,10 +48,13 @@ class DeptInfo extends Component {
     this.addHospital();
   }
   search = (values) => {
+    this.setState({
+      pYear: values.pYear
+    })
     this.addHospital(values, 1)
   }
   render () {
-    const { hospital } = this.state;
+    const { hospital, pYear } = this.state;
     return (
       <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
         <Col span={24} style={{ marginTop: 10}}>
@@ -56,7 +63,7 @@ class DeptInfo extends Component {
         {
           hospital.map((item, index) => 
             <Col span={6} push={2} key={index} style={{marginTop: 10}}>
-              <Link to={{pathname: `/department/deptInfo/${item.orgId}`, state: {deptName: item.orgName}}}>
+              <Link to={{pathname: `/department/deptInfo/${item.orgId}`, state: {deptName: item.orgName, pYear}}}>
                 <Progress 
                   width={150}
                   type="circle" 

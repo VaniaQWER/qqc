@@ -100,7 +100,7 @@ class DeptCheckDetailWrapper extends Component {
       body: querystring.stringify(postData),//querystring.stringify(postData),
       success: data => {
         if (data.status) {
-          alert('成功了...我也不知道跳转去哪里!')
+          message.success('操作成功')
         } else {
           message.error(data.msg);
         }

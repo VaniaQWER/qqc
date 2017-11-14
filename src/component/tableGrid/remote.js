@@ -8,6 +8,7 @@ class RemoteTable extends Component {
     data: [],
     pagination: {},
     loading: false,
+    searchParams: {}
   };
   handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...this.state.pagination };
@@ -15,16 +16,17 @@ class RemoteTable extends Component {
     this.setState({
       pagination: pager,
     });
-    this.fetch({
+    const postData = Object.assign({}, this.state.searchParams, {
       results: pagination.pageSize,
       page: pagination.current,
       sortField: sorter.field,
       sortOrder: sorter.order,
-      ...filters,
-    });
+      ...filters
+    })
+    this.fetch(postData);
   }
   fetch = (params = {...this.props.query}, url = this.props.url) => {
-    this.setState({ loading: true });
+    this.setState({ loading: true, searchParams: params });
     if(url){
       const body = querystring.stringify({
         pagesize: this.props.pageSize || 10,
@@ -46,7 +48,7 @@ class RemoteTable extends Component {
           this.setState({
             loading: false,
             data: data.result.rows || data.result,
-            pagination,
+            pagination
           });
         },
         error: () => (

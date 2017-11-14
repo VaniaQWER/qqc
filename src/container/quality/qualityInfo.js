@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { renderStatus } from 'utils/common';
+import { renderStatus, getPrevHalfYear } from 'utils/common';
 import api from 'api';
 import { Row, Col, Progress } from 'antd';
 import { fetchData } from 'utils/tools';
@@ -24,7 +24,9 @@ class QualityInfo extends Component {
       pagesize: 20, 
       page: pager || page, 
       fstateType: 1,
-      pYear: new Date().getFullYear()
+      pYear: getPrevHalfYear(),
+      fstate: '',
+      searchName: ''
     }
     fetchData({
       url: api.SELECT_FORMULA_LIST,
@@ -34,7 +36,6 @@ class QualityInfo extends Component {
           if (pager) {
             hospital = [];
           }
-          console.log(hospital.length, data.result.rows.length, 'length');
           loadMore = (hospital.length + data.result.rows.length ) < data.result.records ? true : false; 
           data.result.rows.map(item => hospital.push(item))
           this.setState({hospital: hospital, page: page + 1, loadMore});

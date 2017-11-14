@@ -3,7 +3,8 @@
  * @summary 科室建设明细展示(包含数据卡, 图标, 表格)
  */
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Row, Col, Card, Select, Table } from 'antd';
+import { Layout, Breadcrumb, Row, Col, Card, Select } from 'antd';
+import TableGrid from 'component/tableGrid';
 import Pie from 'component/pie';
 import Bar from 'component/bar';
 import CardContent from 'component/card';
@@ -13,6 +14,7 @@ import { fetchData } from 'utils/tools';
 import { getLocalOption } from 'utils/common'
 import api from 'api';
 import querystring from 'querystring';
+const { RemoteTable } = TableGrid;
 const { Content } = Layout;
 const pYear = new Date().getFullYear();
 //样式
@@ -102,12 +104,15 @@ class DepartmentDetail extends Component {
     },
     pYear: pYear
   }
-  componentWillMount = () => {
+  componentDidMount = () => {
     //校验权限以及安全性
     const { location, routeParams } = this.props;
     //this.getData(pYear);
     if (location.state && routeParams.id) {
       //todo  可能获取默认数据
+      const pYear = location.state.pYear;
+      this.setState({ pYear })
+      this.getData(pYear)
     } else {
       //参数不齐全或者没访问权限跳转至上一页
       hashHistory.push({
@@ -167,16 +172,8 @@ class DepartmentDetail extends Component {
         }
       }
     })
-    fetchData({
-      url: api.GET_DEPT_USER_LIST,
-      body: querystring.stringify({orgId, pYear: year}),
-      success: data => {
-        if (data.status) {
-          this.setState({
-            dataSource: data.result.rows
-          })
-        }
-      }
+    this.refs.table.fetch({
+      orgId, pYear: year
     })
   }
   search = (value) => {
@@ -187,7 +184,7 @@ class DepartmentDetail extends Component {
   }
   render () {
     const { location } = this.props;
-    const { bedSum, staffSum, ygSum, meetSum, pieSeries, educationSeries, majorSeries } = this.state;
+    const { pYear, bedSum, staffSum, ygSum, meetSum, pieSeries, educationSeries, majorSeries } = this.state;
     return (
       <Content style={{ padding: '0 20px' }} className='right_content'>
         <Breadcrumb style={{ margin: '12px 0', fontSize: '1.1em'}}>
@@ -197,7 +194,7 @@ class DepartmentDetail extends Component {
         </Breadcrumb>
         <Row style={{marginTop: 4}} className="ant-advanced-search-form">
           <Col span={24}>
-            <Select style={{width: 300}} onChange={this.search}>
+            <Select style={{width: 300}} onChange={this.search} value={pYear.toString()}>
               {
                 getLocalOption('pYear')
               }
@@ -256,10 +253,12 @@ class DepartmentDetail extends Component {
           </Col>
         </Row>
         <Row style={{ marginTop: 10, position: 'relative'}}>
-          <Table
-            dataSource={this.state.dataSource}
+          <RemoteTable
+            ref='table'
+            url={api.GET_DEPT_USER_LIST}
             columns={columns}
-            rowKey={'constrDeptGuid'}
+            rowKey={'RN'}
+            pageSize={5}
           />
           <div style={{position: 'absolute', right: 10, bottom: 20, fontSize: 30}}>
             <Settings/>

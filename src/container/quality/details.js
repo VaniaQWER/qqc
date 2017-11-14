@@ -37,7 +37,9 @@ class QualityDetails extends Component {
       }
     },
     dataSource: [],
-    dynamicColumns: []
+    dynamicColumns: [],
+    pagination: {},
+    loading: false,
   }
   //时间下拉框获取公式
   getCode = (value) => {
@@ -55,6 +57,27 @@ class QualityDetails extends Component {
         this.setState({
           codeOption: options
         })
+      }
+    })
+  }
+  setGrid = (page) => {
+    const { pYear, codeValue } = this.state;
+    const orgId = this.props.routeParams.id;
+    fetchData({
+      url: api.SEARCH_FORMULA_DETAILS,
+      body: querystring.stringify({ pYear, orgId, indexValue: codeValue, page: page.current}),
+      success: data => {
+        if (data.status) {
+          const { pager } = data.result;
+          let { pagination } = this.state;
+          pagination.total = pager.records;
+          pagination.pageSize = 5;
+          pagination.current = page.current;
+          this.setState({
+            dataSource: pager.rows,
+            pagination
+          })
+        }
       }
     })
   }
@@ -78,6 +101,10 @@ class QualityDetails extends Component {
             }
             dynamicColumns.push(params)
           }
+          let pagination = this.state.pagination;
+          pagination.total = pager.records;
+          pagination.pageSize = 5;
+          pagination.current = 1;
           this.setState({
             barSeries: {
               series: series,
@@ -85,7 +112,8 @@ class QualityDetails extends Component {
               legend: legend  
             },
             dynamicColumns: dynamicColumns,
-            dataSource: pager.rows
+            dataSource: pager.rows,
+            pagination
           })
         }
       }
@@ -93,7 +121,8 @@ class QualityDetails extends Component {
   }
   render () {
     const { location } = this.props;
-    const { barSeries, codeOption, dataSource, dynamicColumns, pYear, codeValue } = this.state;
+    const orgId = this.props.routeParams.id;
+    const { barSeries, codeOption, dataSource, dynamicColumns, pYear, codeValue, pagination } = this.state;
     return (
       <Content style={{ padding: '0 20px', minHeight: 480 }} className={'right_content'}>
         <Breadcrumb style={{ margin: '12px 0', fontSize: '1.1em'}}>
@@ -125,7 +154,7 @@ class QualityDetails extends Component {
           </Col>
         </Row>
         <Card title='医学工程人员配置水平'>
-          <Bar series={barSeries.series} xAxis={barSeries.xAxis} legend={barSeries.legend}/>
+          <Bar series={barSeries.series} xAxis={barSeries.xAxis} legend={barSeries.legend} formatter={true}/>
         </Card>
         <Row style={{paddingTop: '4px'}}>
           <Col push={24}>
@@ -134,9 +163,11 @@ class QualityDetails extends Component {
               rowKey={'RN'}
               dataSource={dataSource}
               columns={columns.concat(dynamicColumns)}
+              pagination={pagination}
+              onChange={this.setGrid}
             />
             <div style={{position: 'absolute', right: 10, bottom: 40, fontSize: 30}}>
-              <Settings exportUrl={`http://120.26.128.15:8903/${api.EXPORT_FORNLA}?pYear=${pYear}&indexValue=${codeValue}`}/>
+              <Settings exportUrl={`http://120.26.128.15:8903/${api.EXPORT_FORNLA}?pYear=${pYear}&indexValue=${codeValue}&orgId=${orgId}`}/>
             </div>
           </Col>
         </Row>

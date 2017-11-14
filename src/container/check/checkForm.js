@@ -4,18 +4,18 @@
  */
 import React, { Component } from 'react';
 import TableGrid  from 'component/tableGrid';
-import { getHalfYear } from 'utils/common';
+import { getPrevHalfYear } from 'utils/common';
 import { auditFstate } from 'constants';
 import { Link } from 'react-router';
 const { RemoteTable } = TableGrid;
-const pYear = new Date().getFullYear();
+const pYear = new Date().getFullYear() - 1;
 class CheckForm extends Component {
   fetch = (values) => {
     this.refs.remote.fetch(values);
   }
   render () {
     const { type } = this.props;
-    const year = type ? getHalfYear() : pYear;
+    const year = type ? getPrevHalfYear() : pYear;
     const columns = [
       {
         title: '操作',

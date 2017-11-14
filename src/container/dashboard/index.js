@@ -5,7 +5,7 @@ import Pie from 'component/pie';
 import Bar from 'component/bar';
 import CardContent from 'component/card';
 import { fetchData } from 'utils/tools';
-import { getHalfYear } from 'utils/common';
+import { getPrevHalfYear } from 'utils/common';
 import api from 'api';
 import querystring from 'querystring';
 
@@ -143,7 +143,7 @@ class Dashboard extends Component {
     this.setState({ ymd })
   }
   componentDidMount = () => {
-    const ymd = getHalfYear();
+    const ymd = getPrevHalfYear();
     this.getDashboard(ymd)
   }
   render () {
@@ -218,12 +218,12 @@ class Dashboard extends Component {
         <Row style={styles.map}>
           <Col span={10} push={1}>
             <Card title="不良事件上报率">
-              <Bar series={adverse.series} xAxis={adverse.xAxis} legend={adverse.legend}/>
+              <Bar series={adverse.series} xAxis={adverse.xAxis} legend={adverse.legend} formatter={true}/>
             </Card>
           </Col>
           <Col span={10} push={3}>
             <Card title="耗材追溯分析">
-              <Bar series={trace.series} xAxis={trace.xAxis} legend={trace.legend}/>
+              <Bar series={trace.series} xAxis={trace.xAxis} legend={trace.legend} formatter={true}/>
             </Card>
           </Col>
         </Row>

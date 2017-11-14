@@ -42,3 +42,10 @@ export const getHalfYear = () => {
   const mount = nowDate.getMonth();
   return mount > 5 ? `${year}2` : `${year}1`;
 }
+
+export const getPrevHalfYear = () => {
+  const nowDate = new Date();
+  const year = nowDate.getFullYear();
+  const mount = nowDate.getMonth();
+  return mount > 5 ? `${year-1}2` : `${year-1}1`;
+}

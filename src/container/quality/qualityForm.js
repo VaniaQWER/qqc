@@ -70,7 +70,7 @@ class QualityWrapperForm extends Component {
       body: {...postData, isCommit: [type]},
       success: data => {
         if (data.status) {
-          alert('成功了..我也不知道跳转到哪里!!')
+          message.success('操作成功')
         } else {
           message.error(data.msg)
         }
@@ -103,6 +103,12 @@ class QualityWrapperForm extends Component {
             cardItems: data.result
           })
           this.countProgress();
+        } else {
+          message.warning(data.msg);
+          this.setState({
+            cardItems: []
+          })
+          this.props.setProgress(0);
         }
       }
     })
