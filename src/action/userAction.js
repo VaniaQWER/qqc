@@ -250,7 +250,8 @@ const mockData = {
 //模拟 后台交互获取菜单以及用户信息
 export const fetchUser = user => ( 
   dispatch => {
-    console.log(user, 'userAction')
+    console.log(user.orgType)
+    console.log(menus[user.orgType], 'userAction')
     return     dispatch(fetchUserSuccess(
       Object.assign({}, 
         mockData, {

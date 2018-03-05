@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ReportForm from 'container/department/reportForm';
-import { Progress, Affix} from 'antd';
+import ReportOtherForm from 'container/department/reportOtherForm';
+import { Progress, Affix } from 'antd';
 /**
  * @file 科室上报
  * @summary 有数据时为修改, 无数据时为新增
@@ -34,7 +34,7 @@ class Report extends Component {
             format={percent => <h3 style={styles.h3}>{`${percent}%`}</h3>}
           />
         </Affix>
-        <ReportForm setProgress={progress => this.setState({progress: progress})}/>
+        <ReportOtherForm setProgress={progress => this.setState({progress: progress})}/>
       </div>
     )
   }
