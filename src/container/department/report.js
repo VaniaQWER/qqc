@@ -31,7 +31,7 @@ class Report extends Component {
             percent={progress} 
             style={styles.progress} 
             strokeWidth={15}
-            format={percent => <h3 style={styles.h3}>{`${percent}%`}</h3>}
+            showInfo={false}
           />
         </Affix>
         <ReportOtherForm setProgress={progress => this.setState({progress: progress})}/>

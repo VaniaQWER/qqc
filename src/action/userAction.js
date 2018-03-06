@@ -159,9 +159,13 @@ const menus = {
           text: '质量管理',
           uri: 'quality/qualityInfo'
         }, {
-          id: 'menuID3_sub1',
+          id: 'menuID3_sub2',
           text: '质量上报',
           uri: 'quality/qualityReport'
+        },  {
+          id: 'menuID3_sub3',
+          text: '使用上报',
+          uri: 'quality/useReport'
         }
       ]
     }, {

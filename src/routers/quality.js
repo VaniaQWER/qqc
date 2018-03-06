@@ -29,6 +29,14 @@ export default {
           cb(null, require('container/quality/report').default)
         })
       }
-    }
+    },
+    {
+      path: '/quality/useReport',// 使用上报
+      getComponent: (nextState, cb) => {
+        require.ensure([], (require) => {
+          cb(null, require('container/quality/useReport').default)
+        })
+      }
+    },
   ]
 }

@@ -17,7 +17,7 @@ const styles = {
     backgroundColor: '#ffffff'
   },
   content: {
-    padding: '20px 40px',
+    padding: '10px',
     minHeight: 600
   },
   footer: {
