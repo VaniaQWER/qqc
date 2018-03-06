@@ -2,7 +2,7 @@
  * @file 新增用户
  */
 import React, { Component } from 'react';
-import { Card, Row, Col, Form, Input, Upload, Modal, Breadcrumb, Button,message,Cascader } from 'antd';
+import { Card, Row, Col, Form, Input, Upload, Modal, Breadcrumb, Button,message,Cascader,Select } from 'antd';
 import { Link ,hashHistory} from 'react-router';
 import SearchSelect from 'component/searchSelect';
 import api from 'api';
@@ -10,6 +10,7 @@ import { fetchData } from 'utils/tools';
 import querystring from 'querystring';
 
 const { RemoteSelect } = SearchSelect;
+const Option = Select.Option;
 const FormItem = Form.Item;
 //一行一条样式
 const formItemLayout = {
@@ -27,6 +28,7 @@ class UserAddForm extends Component {
   state = {
     base: true,
     address:[],
+    emailOptions: [],
     previewVisible: false,
     previewImage: '',
     fileList:  this.props.location.state && this.props.location.state.user.tfAccessory ? [{
@@ -106,6 +108,22 @@ class UserAddForm extends Component {
         })
       }
     });
+  }
+    //验证邮箱
+    emailAutoCompeleteCheck = (value) => {
+      let emailOptions;
+      if (!value || value.indexOf('@') >= 0) {
+        emailOptions = [];
+      } else {
+        emailOptions = ['gmail.com', '163.com', 'qq.com'].map((domain) => {
+          const email = `${value}@${domain}`;
+          return <Option key={email}>{email}</Option>;
+        });
+      }
+      return emailOptions;
+  }
+  emailHandleChange = (value) => {
+    this.setState({ emailOptions: this.emailAutoCompeleteCheck(value) });
   }
   change = (value) => {
     fetchData({
@@ -282,9 +300,18 @@ class UserAddForm extends Component {
                 {...formItemLayout}
               >  
                 {form.getFieldDecorator('email', {
-                  initialValue: state ? state.user.email : null
+                  initialValue: state ? state.user.email : null,
+                  rules: [{type: 'email', message: '邮箱格式不正确(例如:phxl@163.com)'},
+                  {max:25,message:'字符长度不能超过25'}],
                 })(
-                  <Input disabled={other}/>
+                  <Select disabled={other} mode="combobox"
+                  style={{ width: '100%' }}
+                  onChange={this.emailHandleChange}
+                  filterOption={false}
+                  placeholder="请输入邮箱"
+                  >
+                  {this.state.emailOptions}
+                  </Select>
                 )}
               </FormItem>
               <FormItem

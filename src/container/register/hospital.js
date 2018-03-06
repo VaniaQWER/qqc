@@ -280,7 +280,7 @@ class StepTwoForm extends Component{
                         initialValue:this.props.data !=="" ?this.props.data.userNo :"",
                         rules: [{ required: true, message: '请输入邮箱作为登录账号!' },
                         {type: 'email', message: '邮箱格式不正确(例如:phxl@163.com)'},
-                        {max:25,message:'字符长度不能超过23'}],
+                        {max:25,message:'字符长度不能超过25'}],
                     })(
                         <Select  mode="combobox"
                         style={{ width: '100%' }}

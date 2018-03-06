@@ -21,7 +21,12 @@ class RegisterFormWrapper extends Component {
     org:this.props.org,
     previewVisible: false,
     previewImage: '',
-    fileList: [],
+    fileList: this.props.org.tfAccessory ? [{
+      uid: -1,
+      name: '图片.png',
+      status: 'done',
+      url: api.LOADPIC + this.props.org.tfAccessory,
+    }] : [],
     address: [],
     hospitalLevels: [],
     hospitalPropertys: [],
@@ -51,7 +56,10 @@ class RegisterFormWrapper extends Component {
     e.preventDefault();
     const { form, submit } = this.props;
     form.validateFieldsAndScroll((err, values) => {
+      console.log(this.props.org.tfAccessory,'111')
       if (!err ) {
+        console.log(values,'values')
+      
        if(!this.props.org.tfAccessory)
        {
         values.tfAccessory =   this.state.fileList[0].thumbUrl;
@@ -93,7 +101,6 @@ class RegisterFormWrapper extends Component {
             auditFstate:null,
             hospitalLevel:null,
             hospitalProperty:null,
-            hospitalTeaching:null,
             hospitalType:null,
             lxdh:null,
             lxr:null,
@@ -122,13 +129,9 @@ class RegisterFormWrapper extends Component {
   render () {
     const { form } = this.props;
     const  org  = this.state.org;
-    const  fileList = this.props.org.tfAccessory ? [{
-      uid: -1,
-      name: '图片.png',
-      status: 'done',
-      url: api.LOADPIC + this.props.org.tfAccessory,
-    }] : [];
+    const  fileList = this.state.fileList;
     const { previewVisible, previewImage } = this.state;
+    console.log(fileList,'1111')
     return (
       <Row style={{padding: 8}} className={'right_content'}>
         <Breadcrumb style={{marginBottom: 10, fontSize: '1.1em'}}>
@@ -185,8 +188,8 @@ class RegisterFormWrapper extends Component {
                 }
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-              </Modal>
+              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
             </div>
           </FormItem> 
           <FormItem
@@ -256,21 +259,6 @@ class RegisterFormWrapper extends Component {
               </Select>
             )}
           </FormItem> 
-          {/* <FormItem
-            label='医院教学类型'
-            {...formItemLayout}
-          >  
-            {form.getFieldDecorator('hospitalTeaching', {
-              rules: [{ required: true, message: '请选择医院教学类型' }],
-              initialValue: org.hospitalTeaching
-            })(
-              <Select placeholder="请选择" disabled={!org.hospitalTeaching ? false : true}>
-                {
-                  getLocalOption('hospitalTeaching')
-                }
-              </Select>
-            )}
-          </FormItem>  */}
           <FormItem
             label='医院等级'
             {...formItemLayout}

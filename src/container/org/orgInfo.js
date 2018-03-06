@@ -236,7 +236,7 @@ class OrgInfo extends Component {
       },  {
         title: '机构类型',
         dataIndex: 'orgType',
-        width: 100,
+        width: 120,
         render: value => orgType[value]
       },  {
         title: '质控管理机构',
@@ -249,11 +249,11 @@ class OrgInfo extends Component {
       },  {
         title: '机构简称',
         dataIndex: 'orgAlias',
-        width: 100
+        width: 140
       },  {
         title: '机构等级',
         dataIndex: 'hospitalLevel',
-        width: 100,
+        width: 120,
         render: (text)=>{
           return this.state.hospitalLevels.map((item,index)=>{
             if(item.TF_CLO_CODE === text){
@@ -265,7 +265,7 @@ class OrgInfo extends Component {
       },  {
         title: '机构性质',
         dataIndex: 'hospitalProperty',
-        width: 100,
+        width: 120,
         render: (text)=>{
           return this.state.hospitalPropertys.map((item,index)=>{
             if(item.TF_CLO_CODE === text){
