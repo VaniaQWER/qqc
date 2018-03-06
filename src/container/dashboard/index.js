@@ -152,7 +152,7 @@ class Dashboard extends Component {
     return (
       <Layout style={styles.dashboardMain}>
         <Row>
-          <Col span={24} push={1}>
+          <Col span={23} push={1}>
             <Select 
               style={{width: 400}} 
               placeholder='请选择年份' 

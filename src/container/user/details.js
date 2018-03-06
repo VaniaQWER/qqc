@@ -291,9 +291,9 @@ class UserAddForm extends Component {
                 label='科室'
                 {...formItemLayout}
               >  
-                {form.getFieldDecorator('a', {
+                {form.getFieldDecorator('deptName', {
                   rules: [{ required: true, message: '请输入科室' }],
-                  initialValue: state ? state.user.a : null
+                  initialValue: state ? state.user.deptName : null
                 })(
                   <Input disabled={other}/>
                 )}
@@ -302,9 +302,9 @@ class UserAddForm extends Component {
                 label='职务'
                 {...formItemLayout}
               >  
-                {form.getFieldDecorator('b', {
+                {form.getFieldDecorator('postName', {
                   rules: [{ required: true, message: '请输入职务' }],
-                  initialValue: state ? state.user.b : null
+                  initialValue: state ? state.user.postName : null
                 })(
                   <Input disabled={other}/>
                 )}

@@ -58,7 +58,7 @@ class QualityInfo extends Component {
         </Col>
         {
           hospital.map((item, index) => 
-            <Col span={6} push={2} key={index} style={{marginTop: 10}}>
+            <Col span={6}  key={index} style={{marginTop: 10,textAlign:'center'}}>
               <Link key={index} to={{pathname: `/quality/qualityInfo/${item.orgId}`, state: {orgName: item.orgName}}}>
                 <Progress 
                   key={index}

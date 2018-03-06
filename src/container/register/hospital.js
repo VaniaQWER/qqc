@@ -207,6 +207,10 @@ class StepTwoForm extends Component{
         this.props.form.validateFields((err, values) => {
             this.setState({dirtyClick: false})
           if (!err) {
+            const address = values.address;
+            values.tfProvince = address[0];
+            values.tfCity = address[1];
+            values.tfDistrict = address[2];
             console.log('partOne--postData--', values);
             this.setState({secondData:values});
             this.props.cb(2,values);
@@ -323,9 +327,9 @@ class StepTwoForm extends Component{
                         label='科室'
                         {...formItemLayout}
                     >  
-                        {getFieldDecorator('a', {
+                        {getFieldDecorator('deptName', {
                         rules: [{ required: true, message: '请输入科室' }],
-                        initialValue:this.props.data !=="" ?this.props.data.a :"",
+                        initialValue:this.props.data !=="" ?this.props.data.deptName :"",
                         })(
                         <Input  placeholder="请输入科室"/>
                         )}
@@ -334,9 +338,9 @@ class StepTwoForm extends Component{
                         label='职务'
                         {...formItemLayout}
                     >  
-                        {getFieldDecorator('b', {
+                        {getFieldDecorator('postName', {
                         rules: [{ required: true, message: '请输入职务' }],
-                        initialValue:this.props.data !=="" ?this.props.data.b :"",
+                        initialValue:this.props.data !=="" ?this.props.data.postName :"",
                         })(
                         <Input placeholder="请输入职务"/>
                         )}
@@ -384,7 +388,7 @@ class StepTwoForm extends Component{
                         label="所在地"
                     >
                     {getFieldDecorator('address', {
-                        initialValue: ['湖北', '武汉', '江汉区'],
+                        initialValue: this.props.data !=="" ?  [this.props.data.tfProvince, this.props.data.tfCity, this.props.data.tfDistrict] : null,
                         rules: [{ type: 'array' },{ required: true, message: '请选择省市区!' }],
                         })(
                         <Cascader  options={this.state.address} changeOnSelect placeholder='请选择'/>
