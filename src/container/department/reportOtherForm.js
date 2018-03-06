@@ -75,7 +75,7 @@ class ReportOtherForm extends PureComponent {
         >
           {form.getFieldDecorator('fname-' + i, {
             rules: [{ required: true, message: '请输入姓名' }],
-            //initialValue: updateData.deptName
+            // initialValue: data[`${fname}-i`]
           })(
             <Input onBlur={this.getProgress}/>
           )}
@@ -87,8 +87,8 @@ class ReportOtherForm extends PureComponent {
           label='性别'
         >
           {form.getFieldDecorator('gender-' + i, {
-            // rules: [{ required: true, message: '请输入性别' }],
-            //initialValue: updateData.deptName
+            rules: [{ required: true, message: '请输入性别' }],
+            // initialValue: data[`${gender}-i`]
           })(
             <Select style={{width:'100%'}} onChange={value => {
               form.setFieldsValue({['gender-' + i]: value})
@@ -106,7 +106,7 @@ class ReportOtherForm extends PureComponent {
           label='出生年月'
         >
           {form.getFieldDecorator('birthday-' + i, {
-            // rules: [{ required: true, message: '请输入出生年月' }],
+            rules: [{ required: true, message: '请输入出生年月' }],
             //initialValue: updateData.deptName
           })(
             <DatePicker format="YYYY-MM" onChange={(value) => {
@@ -122,7 +122,7 @@ class ReportOtherForm extends PureComponent {
           label='政治面貌'
         >
           {form.getFieldDecorator('politicalStatus-' + i, {
-            // rules: [{ required: true, message: '请输入政治面貌' }],
+            rules: [{ required: true, message: '请输入政治面貌' }],
             //initialValue: updateData.deptName
           })(
             <Input onBlur={this.getProgress}/>
@@ -135,7 +135,7 @@ class ReportOtherForm extends PureComponent {
           label='入职（本部门）年月'
         >
           {form.getFieldDecorator('entryDate-' + i, {
-            // rules: [{ required: true, message: '请输入入职（本部门）年月' }],
+            rules: [{ required: true, message: '请输入入职（本部门）年月' }],
             //initialValue: updateData.deptName
           })(
             <MonthPicker
@@ -154,7 +154,7 @@ class ReportOtherForm extends PureComponent {
           label='学历'
         >
           {form.getFieldDecorator('highestEducation-' + i, {
-            // rules: [{ required: true, message: '学历' }],
+            rules: [{ required: true, message: '学历' }],
             //initialValue: updateData.deptName
           })(
             <Select style={{width:'100%'}} onChange={(value) => {
@@ -176,7 +176,7 @@ class ReportOtherForm extends PureComponent {
           label='最高学历毕业院校'
         >
           {form.getFieldDecorator('highestEducationSchool-' + i, {
-            // rules: [{ required: true, message: '学历' }],
+            rules: [{ required: true, message: '学历' }],
             //initialValue: updateData.deptName
           })(
             <Input onBlur={this.getProgress}/>
@@ -189,7 +189,7 @@ class ReportOtherForm extends PureComponent {
           label='职称'
         >
           {form.getFieldDecorator('technicalTitlesB-' + i, {
-            // rules: [{ required: true, message: '职称' }],
+            rules: [{ required: true, message: '职称' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup onChange={(value) => {
@@ -211,7 +211,7 @@ class ReportOtherForm extends PureComponent {
           label='职称获取途径(可多选)'
         >
           {form.getFieldDecorator('technicalSource-' + i, {
-            // rules: [{ required: true, message: '职称获取途径' }],
+            rules: [{ required: true, message: '职称获取途径' }],
             //initialValue: updateData.deptName
           })(
             <Checkbox.Group onChange={(value) => {
@@ -240,7 +240,7 @@ class ReportOtherForm extends PureComponent {
           label='医院是否认可和聘任以上职称'
         >
           {form.getFieldDecorator('approvalFlag-' + i, {
-            // rules: [{ required: true, message: '医院是否认可和聘任以上职称' }],
+            rules: [{ required: true, message: '医院是否认可和聘任以上职称' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup onChange={(value) => {
@@ -259,7 +259,7 @@ class ReportOtherForm extends PureComponent {
           label='专业背景(可多选)'
         >
           {form.getFieldDecorator('majorName-' + i, {
-            // rules: [{ required: true, message: '专业背景' }],
+            rules: [{ required: true, message: '专业背景' }],
             //initialValue: updateData.deptName
           })(
             <Checkbox.Group onChange={(value) => {
@@ -288,7 +288,7 @@ class ReportOtherForm extends PureComponent {
           label='岗位类型(可多选)'
         >
           {form.getFieldDecorator('postType-' + i, {
-            // rules: [{ required: true, message: '岗位类型' }],
+            rules: [{ required: true, message: '岗位类型' }],
             //initialValue: updateData.deptName
           })(
             <Checkbox.Group onChange={(value) => {
@@ -341,7 +341,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={3}>
         <FormItem {...formItemLayout} label='部门医学工程业务管理范围(可多选)'>
           {form.getFieldDecorator('workScope-'+i, {
-            // rules: [{ required: true, message: '请选择部门医学工程业务管理范围' }],
+            rules: [{ required: true, message: '请选择部门医学工程业务管理范围' }],
             //initialValue: updateData.deptName
           })(
             <Checkbox.Group onChange={(value) => {
@@ -372,7 +372,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={4}>
         <FormItem {...formItemLayout} label='部门行政级别'>
           {form.getFieldDecorator('deptTypeName-'+i, {
-            // rules: [{ required: true, message: '部门行政级别' }],
+            rules: [{ required: true, message: '部门行政级别' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
@@ -389,7 +389,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={5}>
         <FormItem {...formItemLayout} label='部门职工总人数' style={{display: 'flex'}}>
           {form.getFieldDecorator('deptTotalStaff-'+i, {
-            // rules: [{ required: true, message: '部门职工总人数' }],
+            rules: [{ required: true, message: '部门职工总人数' }],
             //initialValue: updateData.deptName
           })(
             <Input style={{width: 100}} onBlur={this.getProgress}/>
@@ -400,7 +400,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={6}>
         <FormItem {...formItemLayout} label='部门占地面积'>
           {form.getFieldDecorator('deptAcreage-'+i, {
-            // rules: [{ required: true, message: '部门占地面积' }],
+            rules: [{ required: true, message: '部门占地面积' }],
             //initialValue: updateData.deptName
           })(
             <Input style={{width: 150}} addonAfter={<span>平方米</span>} onBlur={this.getProgress}/>
@@ -410,7 +410,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={7}>
         <FormItem {...formItemLayout} label='部门归属'>
           {form.getFieldDecorator('deptBelong-'+i, {
-            // rules: [{ required: true, message: '部门归属' }],
+            rules: [{ required: true, message: '部门归属' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
@@ -422,7 +422,7 @@ class ReportOtherForm extends PureComponent {
               <Radio value={'3'}>行政</Radio>
               <Radio value={'其他'}>其他 
               {form.getFieldDecorator('deptBelongOther-'+i, {
-                // rules: [{ required: true, message: '部门归属' }],
+                rules: [{ required: true, message: '部门归属' }],
                 //initialValue: updateData.deptName
               })(
                 <Input style={{ width: 100, marginLeft: 10 }}/>
@@ -435,7 +435,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={8}>
         <FormItem {...formItemLayout} label='负责人姓名'>
           {form.getFieldDecorator('leaderName-'+i, {
-            // rules: [{ required: true, message: '负责人姓名' }],
+            rules: [{ required: true, message: '负责人姓名' }],
             //initialValue: updateData.deptName
           })(
             <Input onBlur={this.getProgress}/>
@@ -445,7 +445,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={9}>
         <FormItem {...formItemLayout} label='负责人职称'>
           {form.getFieldDecorator('leaderPost-'+i, {
-            // rules: [{ required: true, message: '负责人职称' }],
+            rules: [{ required: true, message: '负责人职称' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
@@ -463,7 +463,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={99}>
         <FormItem {...formItemLayout} label='负责人学位'>
           {form.getFieldDecorator('leaderDegree-'+i, {
-            // rules: [{ required: true, message: '负责人职称' }],
+            rules: [{ required: true, message: '负责人职称' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
@@ -482,7 +482,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={88}>
         <FormItem {...formItemLayout} label='负责人专业'>
           {form.getFieldDecorator('leaderMajor-'+i, {
-            // rules: [{ required: true, message: '负责人专业' }],
+            rules: [{ required: true, message: '负责人专业' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
@@ -506,7 +506,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={10}>
         <FormItem {...formItemLayout} label='负责人年龄'>
           {form.getFieldDecorator('leaderAge-'+i, {
-            // rules: [{ required: true, message: '负责人年龄' }],
+            rules: [{ required: true, message: '负责人年龄' }],
             //initialValue: updateData.deptName
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
@@ -524,7 +524,7 @@ class ReportOtherForm extends PureComponent {
       <Col span={24} key={11}>
         <FormItem {...formItemLayout} label='负责人在本部门任职年限'>
           {form.getFieldDecorator('leaderAgeLimit-'+i, {
-            // rules: [{ required: true, message: '负责人在本部门任职年限' }],
+            rules: [{ required: true, message: '负责人在本部门任职年限' }],
             //initialValue: updateData.deptName
           })(
             <Input style={{width: 100}} addonAfter={<span>年</span>} onBlur={this.getProgress}/>
@@ -592,18 +592,50 @@ class ReportOtherForm extends PureComponent {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      //if (!err) {
+      if (!err) {
         console.log('Received values of form: ', values);
-      //}
+      }
     });
   }
+  componentWillMount = () => {
+    const data = []
+    this.setState({
+      data
+    })
+  }
+  
   render() {
     const { itemOneList, itemTwoList } = this.state;
+    const { form } = this.props;
     return (
       <Form onSubmit={this.handleSubmit}>
         <BackTop />
         <Row style={styles.row} className='right_content'>
-          <Card title="医学工程部门基本情况">
+          <Card>
+            <Col span={24}>
+              是否建立独立、且业务完善的医学工程部门？
+            </Col>
+            <Col span={24}>
+              说明：建立的医学工程部门包括以下业务：1、设备购置 2、耗材采购 3、耗材物流管理  4、设备维修维护  5、医疗器械质量安全管理。
+            </Col>
+            <Col span={24}>
+              <FormItem>
+                {form.getFieldDecorator('buildFlag', {
+                  rules: [{ required: true, message: '请选择, 不能为空' }],
+                  //initialValue: updateData.deptName
+                })(
+                  <RadioGroup onChange={(value) => {
+                    form.setFieldsValue({buildFlag: value})
+                    this.getProgress();
+                  }}>
+                    <Radio value={'01'}>有</Radio>
+                    <Radio value={'00'}>无</Radio>
+                  </RadioGroup>
+                )}
+              </FormItem> 
+            </Col>
+          </Card>  
+          <Card title="医学工程部门基本情况" style={{marginTop: 20}}>
             { itemOneList.map(item => (
                 this.createItems(item)
               )) 
@@ -623,16 +655,11 @@ class ReportOtherForm extends PureComponent {
           </Card>   
         </Row>
         <Row>
-          <Col style={{textAlign: 'center', marginBottom: 10}}>
-            <Button 
-              type='danger'
-              style={{marginRight: 20}}
-            >
-              <Icon type="delete" /> 重置
-            </Button>  
+          <Col style={{textAlign: 'center', marginBottom: 10}}> 
             <Button 
               htmlType='submit'
               type='primary'
+              style={{width: 300}}
             >
               <Icon type="save" /> 保存
             </Button>
