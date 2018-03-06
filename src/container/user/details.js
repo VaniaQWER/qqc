@@ -2,7 +2,7 @@
  * @file 新增用户
  */
 import React, { Component } from 'react';
-import { Card, Row, Col, Form, Input, Upload, Modal, Breadcrumb, Button,message } from 'antd';
+import { Card, Row, Col, Form, Input, Upload, Modal, Breadcrumb, Button,message,Cascader } from 'antd';
 import { Link ,hashHistory} from 'react-router';
 import SearchSelect from 'component/searchSelect';
 import api from 'api';
@@ -26,6 +26,7 @@ const formItemLayout = {
 class UserAddForm extends Component {
   state = {
     base: true,
+    address:[],
     previewVisible: false,
     previewImage: '',
     fileList:  this.props.location.state && this.props.location.state.user.tfAccessory ? [{
@@ -38,6 +39,13 @@ class UserAddForm extends Component {
     orgId:this.props.location.state? this.props.location.state.user.orgId : ""
   }
   componentDidMount = () => {
+    fetchData({
+      url: api.CITY,
+      method: 'get',
+      type: 'application/json',
+      success: data => this.setState({address: data})
+    })
+
     const { location } = this.props;
     if (typeof location.state === 'undefined') {
       this.setState({
@@ -80,6 +88,10 @@ class UserAddForm extends Component {
         if(this.props.location.state ){
           values.userId = this.props.location.state.user.userId;
         }
+        const address = values.address;
+        values.tfProvince = address[0];
+        values.tfCity = address[1];
+        values.tfDistrict = address[2];
         fetchData({
           url: api.ADDUPDATEUSER,
           body: querystring.stringify(values),
@@ -244,11 +256,11 @@ class UserAddForm extends Component {
 
               }
               <FormItem
-                label='联系人'
+                label='姓名'
                 {...formItemLayout}
               >  
                 {form.getFieldDecorator('userName', {
-                  rules: [{ required: true, message: '请输入联系人' }],
+                  rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: state ? state.user.userName : null
                 })(
                   <Input disabled={other}/>
@@ -263,6 +275,49 @@ class UserAddForm extends Component {
                   initialValue: state ? state.user.mobilePhone : null
                 })(
                   <Input disabled={other}/>
+                )}
+              </FormItem>
+              <FormItem
+                label='邮箱'
+                {...formItemLayout}
+              >  
+                {form.getFieldDecorator('email', {
+                  initialValue: state ? state.user.email : null
+                })(
+                  <Input disabled={other}/>
+                )}
+              </FormItem>
+              <FormItem
+                label='科室'
+                {...formItemLayout}
+              >  
+                {form.getFieldDecorator('a', {
+                  rules: [{ required: true, message: '请输入科室' }],
+                  initialValue: state ? state.user.a : null
+                })(
+                  <Input disabled={other}/>
+                )}
+              </FormItem>
+              <FormItem
+                label='职务'
+                {...formItemLayout}
+              >  
+                {form.getFieldDecorator('b', {
+                  rules: [{ required: true, message: '请输入职务' }],
+                  initialValue: state ? state.user.b : null
+                })(
+                  <Input disabled={other}/>
+                )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label="省市区"
+              >
+              {form.getFieldDecorator('address', {
+                  initialValue: state ? [state.user.tfProvince, state.user.tfCity, state.user.tfDistrict] : null,
+                  rules: [{ type: 'array' },{ required: true, message: '请选择省市区!' }],
+                })(
+                  <Cascader  options={this.state.address} changeOnSelect placeholder='请选择'/>
                 )}
               </FormItem>
               <FormItem

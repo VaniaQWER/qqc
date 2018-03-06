@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Select, Input, Button, Modal, Cascader, Breadcrumb,
    BackTop, Upload, Icon, message } from 'antd';
 import { formItemLayout } from 'constants';
-import { getLocalOption } from 'utils/common';
+// import { getLocalOption } from 'utils/common';
 import { fetchData,CommonData } from 'utils/tools';
 import { hashHistory, Link } from 'react-router';
 import querystring from 'querystring';
@@ -107,6 +107,8 @@ class RegisterFormWrapper extends Component {
             planBedSum :null,
             qcOrgName:null,
             staffSum:null,
+            healthTechnician:null,
+            administrator:null,
             tfCity:null,
             tfDistrict:null,
             tfProvince:null};
@@ -254,7 +256,7 @@ class RegisterFormWrapper extends Component {
               </Select>
             )}
           </FormItem> 
-          <FormItem
+          {/* <FormItem
             label='医院教学类型'
             {...formItemLayout}
           >  
@@ -268,7 +270,7 @@ class RegisterFormWrapper extends Component {
                 }
               </Select>
             )}
-          </FormItem> 
+          </FormItem>  */}
           <FormItem
             label='医院等级'
             {...formItemLayout}
@@ -317,6 +319,28 @@ class RegisterFormWrapper extends Component {
               initialValue: org.staffSum
             })(
               <Input placeholder='请输入数字，例如2000' disabled={!org.staffSum ? false : true}/>
+            )}
+          </FormItem> 
+          <FormItem
+            label='卫生技术人员'
+            {...formItemLayout}
+          >  
+            {form.getFieldDecorator('healthTechnician', {
+              rules: [{ required: true, message: '请输入卫生技术人员' }],
+              initialValue: org.healthTechnician
+            })(
+              <Input placeholder='请输入数字，例如2000' disabled={!org.healthTechnician ? false : true}/>
+            )}
+          </FormItem> 
+          <FormItem
+            label='管理人员'
+            {...formItemLayout}
+          >  
+            {form.getFieldDecorator('administrator', {
+              rules: [{ required: true, message: '请输入管理人员' }],
+              initialValue: org.administrator
+            })(
+              <Input placeholder='请输入数字，例如2000' disabled={!org.administrator ? false : true}/>
             )}
           </FormItem> 
           <Col push={24} style={{textAlign: 'center'}}>

@@ -4,7 +4,7 @@
  * @author Vania
  */
 import React, { Component } from 'react';
-import { Steps, Icon,Row,Col,Button,Form,Select ,Input,Alert,message,Upload,Modal} from 'antd';
+import { Steps, Icon,Row,Col,Button,Form,Select ,Input,Alert,message,Upload,Modal,Cascader} from 'antd';
 import { Link } from 'react-router';
 import { fetchData } from 'utils/tools';
 import api from 'api';
@@ -86,6 +86,7 @@ class StepOneForm extends Component{
             },
         };
         const { initData } = this.state;
+       
         return(
 
             <Form style={{marginTop: '16px'}} onSubmit={this.handleSubmit}>
@@ -187,9 +188,18 @@ const StepOne = Form.create()(StepOneForm);
 
 class StepTwoForm extends Component{
     state ={
+        address:[],
         dirtyClick: false,
         emailOptions: [],
         secondData:"",
+    }
+    componentDidMount = () => {
+        fetchData({
+            url: api.CITY,
+            method: 'get',
+            type: 'application/json',
+            success: data => this.setState({address: data})
+        })
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -256,97 +266,145 @@ class StepTwoForm extends Component{
         };
         return(
             <Form style={{marginTop: '16px'}} onSubmit={this.handleSubmit}>
-            <FormItem
-            {...formItemLayout}
-            label="账号"
-            >
-            {getFieldDecorator('userNo',{
-                initialValue:this.props.data !=="" ?this.props.data.userNo :"",
-                rules: [{ required: true, message: '请输入邮箱作为登录账号!' },
-                {type: 'email', message: '邮箱格式不正确(例如:phxl@163.com)'},
-                {max:25,message:'字符长度不能超过23'}],
-            })(
-                <Select  mode="combobox"
-                style={{ width: 200 }}
-                onChange={this.emailHandleChange}
-                filterOption={false}
-                placeholder="请输入邮箱作为登录账号"
-                >
-                {this.state.emailOptions}
-                </Select>
-            )
-            }
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="密码"
-            >
-            {getFieldDecorator('pwd',{
-                initialValue:this.props.data !=="" ?this.props.data.pwd :"",
-                rules: [
-                    {required: true, message: '输入账户密码'},
-                    {max:50,message:'字符长度不能超过50'}, 
-                    {validator: this.checkConfirm}],
-            })(
-                <Input placeholder="请输入账户密码"/>
-                )
-            }
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="确认密码"
-            >
-            {getFieldDecorator('confirmPwd',{
-                initialValue:this.props.data !=="" ?this.props.data.confirmPwd :"",
-                rules: [
-                    {required: true, message: '请确认账户密码!' }, 
-                    {max:50,message:'字符长度不能超过50'}, 
-                    {validator: this.checkPassword}],
-            })(
-                <Input placeholder="请确认账户密码"/>
-                )
-            }
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="用户名"
-            >
-            {getFieldDecorator('userName',{
-                initialValue:this.props.data !=="" ?this.props.data.userName :"",
-                rules: [{ required: true, message: '请输入相关业务联系人姓名!' },
-                {max:25,message:'字符长度不能超过25'}, ],
-            })(
-                <Input placeholder="请输入相关业务联系人姓名"/>
-                )
-            }
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="联系电话"
-            >
-            {getFieldDecorator('mobilePhone',{
-                initialValue:this.props.data !=="" ?this.props.data.mobilePhone :"",
-                rules: [{ required: true, message: '请输入联系电话!' },
-                {max:15,message:'字符长度不能超过15'}, ],
-            })(
-                <Input placeholder="请输入联系电话"/>
-                )
-            }
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="地址"
-            >
-            {getFieldDecorator('userAddress',{
-                initialValue:this.props.data !=="" ?this.props.data.userAddress :"",
-                rules: [{ required: true, message: '请输入联系地址!' },
-                {max:100,message:'字符长度不能超过100'}, ],
-            })(
-                <Input placeholder="请输入联系地址"/>
-                )
-            }
-            </FormItem>
-
+            <Row>
+                <Col span={12}>
+                <FormItem
+                    {...formItemLayout}
+                    label="账号"
+                    >
+                    {getFieldDecorator('userNo',{
+                        initialValue:this.props.data !=="" ?this.props.data.userNo :"",
+                        rules: [{ required: true, message: '请输入邮箱作为登录账号!' },
+                        {type: 'email', message: '邮箱格式不正确(例如:phxl@163.com)'},
+                        {max:25,message:'字符长度不能超过23'}],
+                    })(
+                        <Select  mode="combobox"
+                        style={{ width: '100%' }}
+                        onChange={this.emailHandleChange}
+                        filterOption={false}
+                        placeholder="请输入邮箱作为登录账号"
+                        >
+                        {this.state.emailOptions}
+                        </Select>
+                    )
+                    }
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="密码"
+                    >
+                    {getFieldDecorator('pwd',{
+                        initialValue:this.props.data !=="" ?this.props.data.pwd :"",
+                        rules: [
+                            {required: true, message: '输入账户密码'},
+                            {max:50,message:'字符长度不能超过50'}, 
+                            {validator: this.checkConfirm}],
+                    })(
+                        <Input placeholder="请输入账户密码"/>
+                        )
+                    }
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="确认密码"
+                    >
+                    {getFieldDecorator('confirmPwd',{
+                        initialValue:this.props.data !=="" ?this.props.data.confirmPwd :"",
+                        rules: [
+                            {required: true, message: '请确认账户密码!' }, 
+                            {max:50,message:'字符长度不能超过50'}, 
+                            {validator: this.checkPassword}],
+                    })(
+                        <Input placeholder="请确认账户密码"/>
+                        )
+                    }
+                    </FormItem>
+                    <FormItem
+                        label='科室'
+                        {...formItemLayout}
+                    >  
+                        {getFieldDecorator('a', {
+                        rules: [{ required: true, message: '请输入科室' }],
+                        initialValue:this.props.data !=="" ?this.props.data.a :"",
+                        })(
+                        <Input  placeholder="请输入科室"/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        label='职务'
+                        {...formItemLayout}
+                    >  
+                        {getFieldDecorator('b', {
+                        rules: [{ required: true, message: '请输入职务' }],
+                        initialValue:this.props.data !=="" ?this.props.data.b :"",
+                        })(
+                        <Input placeholder="请输入职务"/>
+                        )}
+                    </FormItem>
+                </Col>
+                <Col span={12}>
+                <FormItem
+                    {...formItemLayout}
+                    label="姓名"
+                    >
+                    {getFieldDecorator('userName',{
+                        initialValue:this.props.data !=="" ?this.props.data.userName :"",
+                        rules: [{ required: true, message: '请输入相关业务联系人姓名!' },
+                        {max:25,message:'字符长度不能超过25'}, ],
+                    })(
+                        <Input placeholder="请输入相关业务联系人姓名"/>
+                        )
+                    }
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="联系电话"
+                    >
+                    {getFieldDecorator('mobilePhone',{
+                        initialValue:this.props.data !=="" ?this.props.data.mobilePhone :"",
+                        rules: [{ required: true, message: '请输入联系电话!' },
+                        {max:15,message:'字符长度不能超过15'}, ],
+                    })(
+                        <Input placeholder="请输入联系电话"/>
+                        )
+                    }
+                    </FormItem>
+                    <FormItem
+                        label='邮箱'
+                        {...formItemLayout}
+                    >  
+                        {getFieldDecorator('email', {
+                        initialValue:this.props.data !=="" ?this.props.data.email :"",
+                        })(
+                        <Input placeholder="请输入邮箱"/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="所在地"
+                    >
+                    {getFieldDecorator('address', {
+                        initialValue: ['湖北', '武汉', '江汉区'],
+                        rules: [{ type: 'array' },{ required: true, message: '请选择省市区!' }],
+                        })(
+                        <Cascader  options={this.state.address} changeOnSelect placeholder='请选择'/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="地址"
+                    >
+                    {getFieldDecorator('userAddress',{
+                        initialValue:this.props.data !=="" ?this.props.data.userAddress :"",
+                        rules: [{ required: true, message: '请输入联系地址!' },
+                        {max:100,message:'字符长度不能超过100'}, ],
+                    })(
+                        <Input placeholder="请输入联系地址"/>
+                        )
+                    }
+                    </FormItem>
+                </Col>
+            </Row>
             <FormItem {...tailFormItemLayout}>
                 <Button type="primary" htmlType="submit" loading={this.state.dirtyClick}>下一步</Button>
                 <Button type="danger" style={{marginLeft:'16px'}} ghost onClick={this.props.cb.bind(this, 0, this.props.data)}>

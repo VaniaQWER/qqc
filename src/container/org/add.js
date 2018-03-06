@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Select, Input, Button, Modal, Cascader,
    BackTop, Upload, Icon, message } from 'antd';
 import { formItemLayout } from 'constants';
-import { getLocalOption } from 'utils/common';
+// import { getLocalOption } from 'utils/common';
 import { fetchData,CommonData } from 'utils/tools';
 import { hashHistory } from 'react-router';
 import api from 'api';
@@ -201,7 +201,7 @@ class RegisterFormWrapper extends Component {
               </Select>
             )}
           </FormItem> 
-          <FormItem
+          {/* <FormItem
             label='医院教学类型'
             {...formItemLayout}
           >  
@@ -214,7 +214,7 @@ class RegisterFormWrapper extends Component {
                 }
               </Select>
             )}
-          </FormItem> 
+          </FormItem>  */}
           <FormItem
             label='医院等级'
             {...formItemLayout}
@@ -257,6 +257,26 @@ class RegisterFormWrapper extends Component {
           >  
             {form.getFieldDecorator('staffSum', {
               rules: [{ required: true, message: '请输入职工总数' }],
+            })(
+              <Input placeholder='请输入数字，例如2000'/>
+            )}
+          </FormItem> 
+          <FormItem
+            label='卫生技术人员'
+            {...formItemLayout}
+          >  
+            {form.getFieldDecorator('healthTechnician', {
+              rules: [{ required: true, message: '请输入卫生技术人员' }],
+            })(
+              <Input placeholder='请输入数字，例如2000'/>
+            )}
+          </FormItem> 
+          <FormItem
+            label='管理人员'
+            {...formItemLayout}
+          >  
+            {form.getFieldDecorator('administrator', {
+              rules: [{ required: true, message: '请输入管理人员' }],
             })(
               <Input placeholder='请输入数字，例如2000'/>
             )}

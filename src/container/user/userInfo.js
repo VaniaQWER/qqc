@@ -64,8 +64,8 @@ class UserInfo extends Component {
             }
             <span className="ant-divider" />
             <Link to={{pathname: `/user/userInfo/${userId}`, state: {type: '编辑', user}}}>编辑</Link>
-            <span className="ant-divider" />
-            <Link to={{pathname: `/user/userInfo/${userId}`, state: {type: '详情', user}}}>详情</Link>
+            {/* <span className="ant-divider" />
+            <Link to={{pathname: `/user/userInfo/${userId}`, state: {type: '详情', user}}}>详情</Link> */}
           </span>
         ),
         fixed: 'left',
@@ -74,7 +74,7 @@ class UserInfo extends Component {
         title: '账号',
         dataIndex: 'userNo',  
       },  {
-        title: '联系人',
+        title: '姓名',
         dataIndex: 'userName'
       },  {
         title: '联系电话',
@@ -97,7 +97,7 @@ class UserInfo extends Component {
       <Row style={{padding: 8, minHeight: 480}} span={6} className={'right_content'}>
         <Col span={24} className="ant-advanced-search-form">
           <Search
-            placeholder="账号/联系人/机构名"
+            placeholder="账号/姓名/机构名"
             style={{ width: 200 }}
             onSearch={value => this.refs.table.fetch({searchName: value})}
           />
