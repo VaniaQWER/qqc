@@ -1,38 +1,32 @@
 import React, { Component } from 'react';
 import ReportOtherForm from 'container/department/reportOtherForm';
-import { Progress, Affix } from 'antd';
+import { Affix } from 'antd';
 /**
  * @file 科室上报
  * @summary 有数据时为修改, 无数据时为新增
  */
 
-const styles = {
-  progress: {
-    padding: 20
-  },
-  h3: {
-    color: 'rgb(16, 142, 233)'
-  },
-  row: {
-    padding: 20
-  }
-}
+// const styles = {
+//   progress: {
+//     padding: 20
+//   },
+//   h3: {
+//     color: 'rgb(16, 142, 233)'
+//   },
+//   row: {
+//     padding: 20
+//   }
+// }
  
 class Report extends Component {
   state = {
     progress: 0
   }
   render () {
-    const { progress } = this.state;
+    // const { progress } = this.state;
     return (
       <div>
         <Affix offsetTop={-20}>
-          <Progress 
-            percent={progress} 
-            style={styles.progress} 
-            strokeWidth={15}
-            showInfo={false}
-          />
         </Affix>
         <ReportOtherForm setProgress={progress => this.setState({progress: progress})}/>
       </div>

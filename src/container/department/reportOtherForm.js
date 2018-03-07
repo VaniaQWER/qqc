@@ -3,7 +3,9 @@ import { Card, Form, Input, Row, Col,
   message, Select, DatePicker, BackTop,
   Checkbox, Radio, Button, Icon, Divider } from 'antd';
 import moment from 'moment';
+import api from 'api';
 import 'moment/locale/zh-cn';
+import { fetchData } from 'utils/tools';
 moment.locale('zh-cn');
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -77,7 +79,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '请输入姓名' }],
             // initialValue: data[`${fname}-i`]
           })(
-            <Input onBlur={this.getProgress}/>
+            <Input/>
           )}
         </FormItem> 
       </Col>, 
@@ -92,7 +94,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <Select style={{width:'100%'}} onChange={value => {
               form.setFieldsValue({['gender-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Option value={'男'}>男</Option>
               <Option value={'女'}>女</Option>
@@ -109,9 +111,9 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '请输入出生年月' }],
             //initialValue: updateData.deptName
           })(
-            <DatePicker format="YYYY-MM" onChange={(value) => {
-              form.setFieldsValue({['birthday-' + i]: value})
-              this.getProgress();
+            <DatePicker format="YYYY-MM" onChange={(value, val) => {
+              form.setFieldsValue({['birthday-' + i]: val})
+              //this.getProgress();
             }}/>
           )}
         </FormItem> 
@@ -125,7 +127,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '请输入政治面貌' }],
             //initialValue: updateData.deptName
           })(
-            <Input onBlur={this.getProgress}/>
+            <Input/>
           )}
         </FormItem> 
       </Col>,
@@ -136,12 +138,11 @@ class ReportOtherForm extends PureComponent {
         >
           {form.getFieldDecorator('entryDate-' + i, {
             rules: [{ required: true, message: '请输入入职（本部门）年月' }],
-            //initialValue: updateData.deptName
           })(
             <MonthPicker
-              onChange={(value) => {
-                form.setFieldsValue({['entryDate-' + i]: value})
-                this.getProgress();
+              onChange={(value, val) => {
+                form.setFieldsValue({['entryDate-' + i]: val})
+                //this.getProgress();
               }}
               format="YYYY-MM"
             />
@@ -159,13 +160,13 @@ class ReportOtherForm extends PureComponent {
           })(
             <Select style={{width:'100%'}} onChange={(value) => {
               form.setFieldsValue({['highestEducation-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
-              <Option value={'01'}>博士及以上</Option>
+              <Option value={'01'}>博士</Option>
               <Option value={'02'}>硕士</Option>
               <Option value={'03'}>本科</Option>
               <Option value={'04'}>大专</Option>
-              <Option value={'05'}>高中及以下</Option>
+              <Option value={'05'}>大专以下</Option>
             </Select>
           )}
         </FormItem> 
@@ -179,7 +180,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '学历' }],
             //initialValue: updateData.deptName
           })(
-            <Input onBlur={this.getProgress}/>
+            <Input/>
           )}
         </FormItem> 
       </Col>,
@@ -194,7 +195,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup onChange={(value) => {
               form.setFieldsValue({['technicalTitlesB-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'1'}>正高</Radio>
               <Radio value={'2'}>副高</Radio>
@@ -216,17 +217,17 @@ class ReportOtherForm extends PureComponent {
           })(
             <Checkbox.Group onChange={(value) => {
               form.setFieldsValue({['technicalSource-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Col span={8}><Checkbox value={'1'}>医院</Checkbox></Col>
               <Col span={8}><Checkbox value={'2'}>大学</Checkbox></Col>
               <Col span={8}><Checkbox value={'3'}>药监局</Checkbox></Col>
               <Col span={8}><Checkbox value={'4'}>卫计委</Checkbox></Col>
-              <Col span={4}><Checkbox value={'其他'}>其他</Checkbox></Col>
+              <Col span={4}><Checkbox value={'5'}>其他</Checkbox></Col>
               <Col span={6}>
                 {form.getFieldDecorator('technicalSourceOther-' + i, {
                   // rules: [{ required: true, message: '职称获取途径' }],
-                  //initialValue: updateData.deptName
+                  // initialValue: updateData.deptName
                   })(<Input placeholder='请输入'/>
                 )}
               </Col>
@@ -245,7 +246,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup onChange={(value) => {
               form.setFieldsValue({['approvalFlag-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'01'}>是</Radio>
               <Radio value={'02'}>否</Radio>
@@ -264,19 +265,19 @@ class ReportOtherForm extends PureComponent {
           })(
             <Checkbox.Group onChange={(value) => {
               form.setFieldsValue({['majorName-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Row>
-                <Col span={6}><Checkbox value="1">生物医学工程</Checkbox></Col>
-                <Col span={6}><Checkbox value="2">计算机</Checkbox></Col>
-                <Col span={6}><Checkbox value="3">电子</Checkbox></Col>
-                <Col span={6}><Checkbox value="4">机械</Checkbox></Col>
-                <Col span={6}><Checkbox value="5">管理</Checkbox></Col>
-                <Col span={6}><Checkbox value="6">经济</Checkbox></Col>
-                <Col span={6}><Checkbox value="7">医学</Checkbox></Col>
-                <Col span={6}><Checkbox value="8">护理</Checkbox></Col>
-                <Col span={6}><Checkbox value="9">药学</Checkbox></Col>
-                <Col span={6}><Checkbox value="0">其他</Checkbox></Col>
+                <Col span={6}><Checkbox value="01">生物医学工程</Checkbox></Col>
+                <Col span={6}><Checkbox value="02">计算机</Checkbox></Col>
+                <Col span={6}><Checkbox value="03">电子</Checkbox></Col>
+                <Col span={6}><Checkbox value="04">机械</Checkbox></Col>
+                <Col span={6}><Checkbox value="05">管理</Checkbox></Col>
+                <Col span={6}><Checkbox value="06">经济</Checkbox></Col>
+                <Col span={6}><Checkbox value="07">医学</Checkbox></Col>
+                <Col span={6}><Checkbox value="08">护理</Checkbox></Col>
+                <Col span={6}><Checkbox value="09">药学</Checkbox></Col>
+                <Col span={6}><Checkbox value="10">其他</Checkbox></Col>
               </Row>
             </Checkbox.Group>
           )}
@@ -293,7 +294,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <Checkbox.Group onChange={(value) => {
               form.setFieldsValue({['postType-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Row>
                 <Col span={8}><Checkbox value="1">设备购置管理</Checkbox></Col>
@@ -302,7 +303,7 @@ class ReportOtherForm extends PureComponent {
                 <Col span={8}><Checkbox value="4">设备维修维护</Checkbox></Col>
                 <Col span={8}><Checkbox value="5">质量安全管理</Checkbox></Col>
                 <Col span={8}><Checkbox value="6">教学科研</Checkbox></Col>
-                <Col span={4}><Checkbox value={'其他'}>其他</Checkbox></Col>
+                <Col span={4}><Checkbox value={'7'}>其他</Checkbox></Col>
 
                 {form.getFieldDecorator('postTypeOther-' + i, {
                   // rules: [{ required: true, message: '职称获取途径' }],
@@ -314,6 +315,17 @@ class ReportOtherForm extends PureComponent {
             </Checkbox.Group>
           )}
         </FormItem> 
+      </Col>,
+      <Col span={6} key={14}>
+        近3年以第一作者、通讯作者发表论文数量（具有ISSN和CN刊号的国内外期刊:
+      </Col>,
+      <Col span={18} key={15}>
+        {form.getFieldDecorator('publishThesis-' + i, {
+          rules: [{ required: true, message: '不能为空' }],
+          //initialValue: updateData.deptName
+        })(
+          <Input style={{width: 100}}  addonAfter={<span>篇</span>}/>
+        )}
       </Col>,
       <Col style={{textAlign: 'right'}} key={13} span={24}>
         <Button type="dashed" style={{marginRight: 10}} onClick={() => this.delItem('itemTwoList', i)}>删除该行</Button>
@@ -331,12 +343,12 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '请输入部门名称' }],
             //initialValue: updateData.deptName
           })(
-            <Input onBlur={this.getProgress}/>
+            <Input />
           )}
         </FormItem> 
       </Col>,
       <Col span={12} key={2}>
-        说明：建立的医学工程部门包括以下业务：1、设备购置 2、耗材采购 3、耗材物流管理  4、设备维修维护  5、医疗器械质量安全管理。
+        说明：如以上医学工程部门业务属于集中管理，则填写一个部门名称及其相关部门信息。如以上医学工程部门业务属于多部门管理，则添加部门信息，各部门分别单独填写。
       </Col>,
       <Col span={24} key={3}>
         <FormItem {...formItemLayout} label='部门医学工程业务管理范围(可多选)'>
@@ -346,7 +358,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <Checkbox.Group onChange={(value) => {
               form.setFieldsValue({['workScope-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Row>
                 <Col span={8}><Checkbox value="1">设备购置</Checkbox></Col>
@@ -354,9 +366,9 @@ class ReportOtherForm extends PureComponent {
                 <Col span={8}><Checkbox value="3">耗材物流管理</Checkbox></Col>
                 <Col span={8}><Checkbox value="4">设备维修维护</Checkbox></Col>
                 <Col span={10}><Checkbox value="5">医疗器械质量安全管理</Checkbox></Col>
-                <Col span={4}><Checkbox value="其他">其他</Checkbox></Col>
+                <Col span={4}><Checkbox value="6">其他</Checkbox></Col>
                 {form.getFieldDecorator('workScopeOther-'+i, {
-                  rules: [{ required: true, message: '请输入部门名称' }],
+                  // rules: [{ required: true, message: '请输入部门名称' }],
                   //initialValue: updateData.deptName
                 })(
                   <Col span={2}>
@@ -377,7 +389,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
               form.setFieldsValue({['deptTypeName-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'3'}>处级</Radio>
               <Radio value={'2'}>科级</Radio>
@@ -392,7 +404,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '部门职工总人数' }],
             //initialValue: updateData.deptName
           })(
-            <Input style={{width: 100}} onBlur={this.getProgress}/>
+            <Input style={{width: 100}}/>
           )}
           <span style={{display: 'inlineBlock', padding: 5}}>(仅本部门涉及医学工程业务人员数量)</span>
         </FormItem> 
@@ -403,7 +415,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '部门占地面积' }],
             //initialValue: updateData.deptName
           })(
-            <Input style={{width: 150}} addonAfter={<span>平方米</span>} onBlur={this.getProgress}/>
+            <Input style={{width: 150}} addonAfter={<span>平方米</span>}/>
           )}
         </FormItem> 
       </Col>,
@@ -415,14 +427,14 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
               form.setFieldsValue({['deptBelong-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
-              <Radio value={'1'}>医技</Radio>
-              <Radio value={'2'}>后勤</Radio>
-              <Radio value={'3'}>行政</Radio>
-              <Radio value={'其他'}>其他 
+              <Radio value={'0'}>医技</Radio>
+              <Radio value={'1'}>后勤</Radio>
+              <Radio value={'2'}>行政</Radio>
+              <Radio value={'3'}>其他 
               {form.getFieldDecorator('deptBelongOther-'+i, {
-                rules: [{ required: true, message: '部门归属' }],
+                // rules: [{ required: true, message: '部门归属' }],
                 //initialValue: updateData.deptName
               })(
                 <Input style={{ width: 100, marginLeft: 10 }}/>
@@ -438,7 +450,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '负责人姓名' }],
             //initialValue: updateData.deptName
           })(
-            <Input onBlur={this.getProgress}/>
+            <Input />
           )}
         </FormItem> 
       </Col>,
@@ -450,7 +462,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
               form.setFieldsValue({['leaderPost-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'04'}>正高</Radio>
               <Radio value={'01'}>副高</Radio>
@@ -468,7 +480,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
               form.setFieldsValue({['leaderDegree-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'01'}>博士</Radio>
               <Radio value={'02'}>硕士</Radio>
@@ -487,7 +499,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
               form.setFieldsValue({['leaderMajor-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'01'}>生物医学工程</Radio>
               <Radio value={'02'}>计算机</Radio>
@@ -497,7 +509,7 @@ class ReportOtherForm extends PureComponent {
               <Radio value={'06'}>管理</Radio>
               <Radio value={'07'}>医学</Radio>
               <Radio value={'08'}>护理</Radio>
-              <Radio value={'09'}>医药</Radio>
+              <Radio value={'09'}>药学</Radio>
               <Radio value={'10'}>其他</Radio>
             </RadioGroup>
           )}
@@ -511,7 +523,7 @@ class ReportOtherForm extends PureComponent {
           })(
             <RadioGroup style={{width: 500}} onChange={(value) => {
               form.setFieldsValue({['leaderAge-' + i]: value})
-              this.getProgress();
+              //this.getProgress();
             }}>
               <Radio value={'01'}>＜30岁</Radio>
               <Radio value={'02'}>30～39岁</Radio>
@@ -527,7 +539,7 @@ class ReportOtherForm extends PureComponent {
             rules: [{ required: true, message: '负责人在本部门任职年限' }],
             //initialValue: updateData.deptName
           })(
-            <Input style={{width: 100}} addonAfter={<span>年</span>} onBlur={this.getProgress}/>
+            <Input style={{width: 100}} addonAfter={<span>年</span>} />
           )}
         </FormItem> 
       </Col>,
@@ -591,9 +603,32 @@ class ReportOtherForm extends PureComponent {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        for (let key in values) {
+          if (key.indexOf('birthday') >= 0 || key.indexOf('entryDate') >= 0) {
+            values[key] = values[key].format('YYYY-DD-MM');
+          }
+        }
+        values.schedule = 100.00;
+        fetchData({
+          url: api.INSERT_CONSTR_DEPT,
+          body: JSON.stringify(values),//querystring.stringify(postData),
+          type: 'application/json',
+          success: data => {
+            if (data.status) {
+              this.props.form.resetFields();
+              this.setState({
+                itemOneList: [0],
+                itemTwoList: [0]
+              })
+              message.success('操作成功')
+              this.props.setProgress(0)
+            } else {
+              message.error(data.msg);
+            }
+          }
+        })
       }
     });
   }
@@ -626,7 +661,7 @@ class ReportOtherForm extends PureComponent {
                 })(
                   <RadioGroup onChange={(value) => {
                     form.setFieldsValue({buildFlag: value})
-                    this.getProgress();
+                    //this.getProgress();
                   }}>
                     <Radio value={'01'}>有</Radio>
                     <Radio value={'00'}>无</Radio>
