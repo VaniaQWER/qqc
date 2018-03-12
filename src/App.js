@@ -62,6 +62,13 @@ class App extends Component {
           ]
         }, 
         {
+          path: '/',
+          onEnter: (nextState, replace, next) => {
+            replace('/login')//重定向
+            next();
+          }
+        }, 
+        {
           path: 'login',
           getComponent: (nextState, cb) => {
             require.ensure([], (require) => {

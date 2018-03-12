@@ -18,7 +18,7 @@ const styles = {
   },
   content: {
     padding: '10px',
-    minHeight: 600
+    minHeight: '100vh'
   },
   footer: {
     textAlign: 'center',
