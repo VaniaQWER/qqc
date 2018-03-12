@@ -127,7 +127,7 @@ class RegistrationForm52 extends React.Component {
         <div style={styles.formWarp}>
 
         <Row>
-          <Col span={6} offset={6}>
+          <Col xxl={8} xl={10} offset={6}>
             <FormItem 
             {...formItemLayout}
             label='设备维修场地'>
@@ -143,7 +143,7 @@ class RegistrationForm52 extends React.Component {
               )}
             </FormItem> 
           </Col>
-          <Col span={4}>
+          <Col xxl={4} xl={8}>
               <FormItem
               {...formItemLayout}
               label="场地面积"
@@ -158,7 +158,7 @@ class RegistrationForm52 extends React.Component {
         </Row>
 
         <Row>
-          <Col span={6} offset={6}>
+          <Col  xxl={8} xl={10} offset={6}>
             <FormItem 
             {...formItemLayout}
             label='维修备件库房'>
@@ -174,7 +174,7 @@ class RegistrationForm52 extends React.Component {
               )}
             </FormItem> 
           </Col>
-          <Col span={4}>
+          <Col xxl={4} xl={8}>
               <FormItem
               {...formItemLayout}
               label="场地面积"
@@ -345,7 +345,7 @@ class RegistrationForm52 extends React.Component {
             </FormItem>
 
             <Row>
-              <Col span={6} offset={6}>
+              <Col xxl={8} xl={10} offset={6}>
                 <FormItem 
                 {...formItemLayout}
                 label='应急库房'>
@@ -360,7 +360,7 @@ class RegistrationForm52 extends React.Component {
                   )}
                 </FormItem> 
               </Col>
-              <Col span={4}>
+              <Col xxl={4} xl={8}>
                   <FormItem
                   {...formItemLayout}
                   label="场地面积"
