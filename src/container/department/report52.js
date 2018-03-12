@@ -102,6 +102,20 @@ class RegistrationForm52 extends React.Component {
         lg: { span: 12 },
       },
     };
+    const twoItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 9 },
+        md: { span: 9 },
+        lg: { span: 9 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 12 },
+        lg: { span: 12 },
+      },
+    }
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
@@ -218,10 +232,10 @@ class RegistrationForm52 extends React.Component {
             label="场地面积"
           >
             {getFieldDecorator('yijichangdimiaji', )(
-              <span>
-              <InputNumber  min={0}/>&nbsp;&nbsp;平方米
-              </span>
+              
+              <InputNumber  min={0}/>
             )}
+            <span className="ant-form-text">平方米</span>
           </FormItem>
         
         
@@ -230,10 +244,9 @@ class RegistrationForm52 extends React.Component {
             label="管理人员"
           >
             {getFieldDecorator('yijiguanlirenyuangeshu', )(
-              <span>
-              <InputNumber  min={0}/>&nbsp;&nbsp;人
-              </span>
+              <InputNumber  min={0}/>
             )}
+            <span className="ant-form-text">人</span>
           </FormItem>
        
 
@@ -251,10 +264,9 @@ class RegistrationForm52 extends React.Component {
                 required:true,type:'number',message:'请填写手术室面积'
               }]
             })(
-              <span>
-              <InputNumber  min={0}/>&nbsp;&nbsp;平方米
-              </span>
+              <InputNumber  min={0}/>
             )}
+            <span className="ant-form-text">平方米</span>
           </FormItem>
         
             <FormItem
@@ -266,10 +278,9 @@ class RegistrationForm52 extends React.Component {
                 required:true,type:'number',message:'请填写手术间数量'
               }]
             })(
-              <span>
-              <InputNumber  min={0}/>&nbsp;&nbsp;间
-              </span>
+              <InputNumber  min={0}/>
             )}
+            <span className="ant-form-text">间</span>
           </FormItem>
           <FormItem
                 {...formItemLayout}
@@ -292,10 +303,9 @@ class RegistrationForm52 extends React.Component {
                 label='二级库房场地面积'
               >
                 {getFieldDecorator('erjikufangmianji')(
-                    <span>
-                     <InputNumber min={0}/>&nbsp;&nbsp;平方米
-                    </span>
+                     <InputNumber min={0}/>
                 )}
+                <span className="ant-form-text">平方米</span>
               </FormItem>
         </Row>
 
@@ -356,35 +366,34 @@ class RegistrationForm52 extends React.Component {
                 </Checkbox.Group>
               )}
             </FormItem>
+            <Col span={24} offset={6}>管理人员组成：</Col>
             <FormItem 
-              {...formItemLayout}
-              label={<div></div>}
-              colon={false}
+              {...twoItemLayout}
+              label="临床科室"
             >
               {getFieldDecorator('linchuangkeshi', {
                 rules:[{
                   type:'number', required:true,message:'请填写临床科室人员数量！'
                 }]
               })(
-                  <span>
-                  管理人员组成：<br/>临床科室：<InputNumber min={0} max={99999999999}/> &nbsp;&nbsp;人
-                  </span>
+                  <InputNumber min={0} max={99999999999}/>
               )}
+              <span className="ant-form-text">人</span>
             </FormItem>
+
+            
             <FormItem
-              {...formItemLayout}
-              label={<div></div>}
-              colon={false}
-            >
+              {...twoItemLayout}
+              label="医学工程部门"
+              >
               {getFieldDecorator('yixuekechengbumen', {
                 rules:[{
                   type:'number', required:true,message:'请填写医学工程部门数量！'
                 }]
               })(
-                  <span>
-                  医学工程部门：<InputNumber min={0} max={99999999999}/> &nbsp;&nbsp;人
-                  </span>
+                <InputNumber min={0} max={99999999999}/>
               )}
+              <span className="ant-form-text">人</span>
             </FormItem>
         </Row>
         
@@ -410,9 +419,6 @@ class RegistrationForm52 extends React.Component {
           <span className="ant-form-text">%</span>
         </FormItem>
 
-      
-  
-  
         <FormItem {...formItemLayout} 
         label="已开展的技术管理（耗材）">
           {getFieldDecorator('jishuguanli', {
@@ -422,7 +428,6 @@ class RegistrationForm52 extends React.Component {
             }]
           })(
             <Checkbox.Group>
-            
               <Row> 
                 <Col span={8}>
                 <Checkbox value={'1'} >医用耗材准入遴选</Checkbox>

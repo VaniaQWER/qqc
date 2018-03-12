@@ -118,65 +118,7 @@ class RegistrationForm62 extends React.Component {
         </Row>
 
         <Row>
-          <Col span={4} style={{textAlign: 'center', border:'1px'}}>尚未建立</Col>
-          <Col span={3} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout}>
-              {getFieldDecorator('agreement', {
-                valuePropName: 'checked',
-              })(
-                  <Checkbox value={'1'} ></Checkbox>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={3} style={{textAlign: 'center'}}>
-              <FormItem {...formItemLayout} >
-              {getFieldDecorator('agreement', {
-                valuePropName: 'checked',
-              })(
-                  <Checkbox value={'1'} ></Checkbox>
-              )}
-              </FormItem>
-          </Col>
-          <Col span={4} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-          <Col span={3} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-          <Col span={3} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-          <Col span={3} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={4} style={{textAlign: 'center', border:'1px'}}>已建立</Col>
+          <Col span={4} style={{textAlign: 'center', border:'1px'}}>是否建立</Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout}>
               {getFieldDecorator('agreement', {
@@ -255,7 +197,7 @@ class RegistrationForm62 extends React.Component {
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('agreemen43t', {
               valuePropName: 'checked',
             })(
                 <Checkbox value={'1'} ></Checkbox>
@@ -264,7 +206,7 @@ class RegistrationForm62 extends React.Component {
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('agreement123', {
               valuePropName: 'checked',
             })(
                 <Checkbox value={'1'} ></Checkbox>
@@ -273,7 +215,7 @@ class RegistrationForm62 extends React.Component {
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('agreement32', {
               valuePropName: 'checked',
             })(
                 <Checkbox value={'1'} ></Checkbox>
@@ -282,7 +224,7 @@ class RegistrationForm62 extends React.Component {
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('agreement12', {
               valuePropName: 'checked',
             })(
                 <Checkbox value={'1'} ></Checkbox>

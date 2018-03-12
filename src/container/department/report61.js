@@ -115,56 +115,7 @@ class RegistrationForm62 extends React.Component {
         </Row>
 
         <Row>
-          <Col span={4} style={{textAlign: 'center', border:'1px'}}>尚未建立</Col>
-          <Col span={4} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout}>
-              {getFieldDecorator('agreement', {
-                valuePropName: 'checked',
-              })(
-                  <Checkbox value={'1'} ></Checkbox>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={4} style={{textAlign: 'center'}}>
-              <FormItem {...formItemLayout} >
-              {getFieldDecorator('agreement', {
-                valuePropName: 'checked',
-              })(
-                  <Checkbox value={'1'} ></Checkbox>
-              )}
-              </FormItem>
-          </Col>
-          <Col span={4} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-          <Col span={4} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-          <Col span={4} style={{textAlign: 'center'}}>
-            <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-                <Checkbox value={'1'} ></Checkbox>
-            )}
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={4} style={{textAlign: 'center', border:'1px'}}>已建立</Col>
+          <Col span={4} style={{textAlign: 'center', border:'1px'}}>是否建立</Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout}>
               {getFieldDecorator('agreement', {
