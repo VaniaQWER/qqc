@@ -25,9 +25,45 @@ const styles={
     marginBottom:30
   }
 }
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 0 },
+    sm: { span: 0 },
+    md: { span: 0 },
+    lg: { span: 0 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 24 },
+    lg: { span: 24 },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 14,
+      offset:11,
+    },
+    md: { 
+      span: 14,
+      offset:11,
+    },
+    lg: { 
+      span: 14,
+      offset:11,
+     },
+  },
+};
+
 class RegistrationForm62 extends React.Component {
   state = {
     confirmDirty: false,
+    data: {}
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -61,37 +97,42 @@ class RegistrationForm62 extends React.Component {
     });
   }
 
-  componentDidMount = () =>{
-    var that =this;
-    fetchData({
-      url: api.QUERY_Equipment,
-      body: JSON.stringify({}),//querystring.stringify(postData),
-      type: 'application/json',
-      success: data => {
-        if (data.status) {
-          //回填数据操作
-        var b =  _.forIn(data.result,(value,key)=>{
-            if(data.result[key]==="01"){
-              data.result[key]=true
-            }else{
-              delete data.result[key]
-            }
-          })
-          console.log(b);
-          that.setState({
-            formInfo:b
-          })
-        } else {
-          message.error(data.msg);
-        }  
-      }
-    })
+  // componentDidMount = () =>{
+  //   var that =this;
+  //   fetchData({
+  //     url: api.QUERY_Equipment,
+  //     body: JSON.stringify({}),//querystring.stringify(postData),
+  //     type: 'application/json',
+  //     success: data => {
+  //       if (data.status) {
+  //         //回填数据操作
+  //       var b =  _.forIn(data.result,(value,key)=>{
+  //           if(data.result[key]==="01"){
+  //             data.result[key]=true
+  //           }else{
+  //             delete data.result[key]
+  //           }
+  //         })
+  //         console.log(b);
+  //         that.setState({
+  //           formInfo:b
+  //         })
+  //       } else {
+  //         message.error(data.msg);
+  //       }  
+  //     }
+  //   })
     
-  }
+  // }
   componentDidMount = () => {
     console.log('子组件componentDidMount')
     const { formInfo } = this.state ;
     this.props.form.setFieldsValue(formInfo)
+  }
+  componentWillReceiveProps = nextProps => {
+    this.setState({
+      data: nextProps.formInfo
+    })
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value;
@@ -100,42 +141,7 @@ class RegistrationForm62 extends React.Component {
   render() {
     console.log('子组件render')
     const { getFieldDecorator } = this.props.form;
-
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 0 },
-        sm: { span: 0 },
-        md: { span: 0 },
-        lg: { span: 0 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-      },
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 14,
-          offset:11,
-        },
-        md: { 
-          span: 14,
-          offset:11,
-        },
-        lg: { 
-          span: 14,
-          offset:11,
-         },
-      },
-    };
-
+    const { data } = this.state;
     return (
       <div style={styles.container}>
       <h2 style={styles.head}>6.1设备新信息化现状</h2>
@@ -165,6 +171,7 @@ class RegistrationForm62 extends React.Component {
               <FormItem {...formItemLayout} >
               {getFieldDecorator('equipmentOa', {
                 valuePropName: 'checked',
+                initialValue: data.equipmentOa
               })(
                   <Checkbox value={'01'} ></Checkbox>
               )}
@@ -262,49 +269,54 @@ class RegistrationForm62 extends React.Component {
 const WrappedRegistrationForm = Form.create()(RegistrationForm62);
 
 class Report62 extends Component {
-
-    
     constructor(props){
-      super(props)
-      this.state={
-        formInfo:{
+      super(props);
+      this.state = {
+        formInfo: {
+          
         }
       }
     }
 
     componentWillMount(){
       console.log('componentWillMount')
-      var  that = this;
+      setTimeout(() => {
+        this.setState({
+          formInfo: {
+            equipmentOa: true
+          }
+        })
+      }, 1000)
       // this.setState({
       //   formInfo:{
       //     'equipmentOa':true
       //   }
       // })
       // 此处应该发出用户信息的请求，获取之前该表格内容回填
-      fetchData({
-        url: api.QUERY_Equipment,
-        body: JSON.stringify({}),//querystring.stringify(postData),
-        type: 'application/json',
-        success: data => {
-          if (data.status) {
-            //回填数据操作
-           var b =  _.forIn(data.result,(value,key)=>{
-              if(data.result[key]==="01"){
-                data.result[key]=true
-              }else{
-                delete data.result[key]
-              }
-            })
-            debugger
-            console.log(b);
-            that.setState({
-              formInfo:b
-            })
-          } else {
-            message.error(data.msg);
-          }  
-        }
-      })
+      // fetchData({
+      //   url: api.QUERY_Equipment,
+      //   body: JSON.stringify({}),//querystring.stringify(postData),
+      //   type: 'application/json',
+      //   success: data => {
+      //     if (data.status) {
+      //       //回填数据操作
+      //      var b =  _.forIn(data.result,(value,key)=>{
+      //         if(data.result[key]==="01"){
+      //           data.result[key]=true
+      //         }else{
+      //           delete data.result[key]
+      //         }
+      //       })
+      //       debugger
+      //       console.log(b);
+      //       that.setState({
+      //         formInfo:b
+      //       })
+      //     } else {
+      //       message.error(data.msg);
+      //     }  
+      //   }
+      // })
     }
     render(){
       return(
