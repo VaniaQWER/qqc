@@ -51,7 +51,16 @@ const help5= '计算公式：医用耗材收入/医疗收入x100%（不含药品
 class RegistrationForm52 extends React.Component {
   state = {
     confirmDirty: false,
+    firstCheck:false,
   };
+  //联动状态
+  handleChange = (e) => {
+    this.setState({
+      checkNick: e.target.checked,
+    }, () => {
+      this.props.form.validateFields(['nickname'], { force: true });
+    });
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -366,35 +375,73 @@ class RegistrationForm52 extends React.Component {
                 </Checkbox.Group>
               )}
             </FormItem>
-            <Col span={24} offset={6}>管理人员组成：</Col>
-            <FormItem 
-              {...twoItemLayout}
-              label="临床科室"
-            >
-              {getFieldDecorator('linchuangkeshi', {
-                rules:[{
-                  type:'number', required:true,message:'请填写临床科室人员数量！'
-                }]
-              })(
-                  <InputNumber min={0} max={99999999999}/>
-              )}
-              <span className="ant-form-text">人</span>
-            </FormItem>
-
-            
-            <FormItem
-              {...twoItemLayout}
-              label="医学工程部门"
+            <Col span={18} offset={6}>管理人员组成：</Col>
+            <Row>
+              <Col span={6} offset={6}>
+                  <FormItem 
+                    {...twoItemLayout}
+                    label="临床科室 专职" 
+                  >
+                    {getFieldDecorator('linchuangkeshi', {
+                      rules:[{
+                        type:'number', required:true,message:'请填写临床科室人员数量！'
+                      }]
+                    })(
+                        <InputNumber min={0} max={99999999999}/>
+                    )}
+                    <span className="ant-form-text">人</span>
+                  </FormItem>
+                </Col>
+                <Col span={5}>
+                <FormItem 
+                {...twoItemLayout}
+                label="兼职" 
               >
-              {getFieldDecorator('yixuekechengbumen', {
-                rules:[{
-                  type:'number', required:true,message:'请填写医学工程部门数量！'
-                }]
-              })(
-                <InputNumber min={0} max={99999999999}/>
-              )}
-              <span className="ant-form-text">人</span>
-            </FormItem>
+                {getFieldDecorator('linchuangkeshijianzhi', {
+                  rules:[{
+                    type:'number', required:true,message:'请填写临床科室人员数量！'
+                  }]
+                })(
+                    <InputNumber min={0} max={99999999999}/>
+                )}
+                <span className="ant-form-text">人</span>
+              </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={7} offset={6}>
+                  <FormItem 
+                    {...twoItemLayout}
+                    label="医学工程部门 专职" 
+                  >
+                    {getFieldDecorator('yixuekechengbumen', {
+                      rules:[{
+                        type:'number', required:true,message:'请填写医学工程部门人员专职数量！！'
+                      }]
+                    })(
+                        <InputNumber min={0} max={99999999999}/>
+                    )}
+                    <span className="ant-form-text">人</span>
+                  </FormItem>
+                </Col>
+                <Col span={5}>
+                <FormItem 
+                {...twoItemLayout}
+                label="兼职" 
+              >
+                {getFieldDecorator('yixuekechengbumenjianzhi', {
+                  rules:[{
+                    type:'number', required:true,message:'请填写医学工程部门人员兼职数量！！'
+                  }]
+                })(
+                    <InputNumber min={0} max={99999999999}/>
+                )}
+                <span className="ant-form-text">人</span>
+              </FormItem>
+              </Col>
+            </Row>
+            
+
         </Row>
         
         <FormItem
