@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReportOtherForm from 'container/department/reportOtherForm';
-import { Form  ,Input, Card , Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
+import { Form  ,Input, Tooltip , Icon , Card , Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
 /**
@@ -43,6 +43,7 @@ const styles = {
     marginBottom:30
   }
 }
+const tip='注：请选择具有自修能力且自修比例不低于50%的设备类型'
 class RegistrationForm52 extends React.Component {
   state = {
     confirmDirty: false,
@@ -393,10 +394,9 @@ class RegistrationForm52 extends React.Component {
               <Row>
                     
               </Row>
-        <Card style={styles.card}>
-          <Row span={6}> 
+              
               <FormItem
-                {...inlineLayout}
+                {...formItemLayout}
                 label="医疗设备维修量(当年):"
               >
               {getFieldDecorator('pingfangmi', { 
@@ -409,16 +409,14 @@ class RegistrationForm52 extends React.Component {
                 </span>
               )}
             </FormItem>
-          </Row>
 
-          <Row span={6}> 
               <FormItem
-                {...inlineLayout}
+                {...formItemLayout}
                 label="医疗设备维修总费用"
               >
               {getFieldDecorator('pingfangmi', { 
                 rules:[{
-                  type:'number','message':'请填写医疗设备维修总费用！'
+                  required:true,type:'number','message':'请填写医疗设备维修总费用！'
                 }]
               })(
                 <span>
@@ -426,142 +424,140 @@ class RegistrationForm52 extends React.Component {
                 </span>
               )}
             </FormItem>
-          </Row>
           
-          <Col span={24}>
-          其中保修费用：
-          </Col>
-          <Row span={8}>
-            <FormItem
-                {...inlineLayout}
-                label="原厂保修"
-              >
-              {getFieldDecorator('pingfangmi', { 
-                rules:[{
-                  type:'number','message':'请填写原厂保修费用！'
-                }]
-              })(
-                <span>
-                <InputNumber min={0}/>&nbsp;&nbsp;万元
-                </span> 
-              )}
-            </FormItem>
+            <Col span={12} offset={6}>
+            其中保修费用：
+            </Col>
+              <FormItem
+                  {...formItemLayout}
+                  label="原厂保修"
+                >
+                {getFieldDecorator('pingfangmi', { 
+                  rules:[{
+                    required:true,type:'number','message':'请填写原厂保修费用！'
+                  }]
+                })(
+                  <span>
+                  <InputNumber min={0}/>&nbsp;&nbsp;万元
+                  </span> 
+                )}
+              </FormItem>
+
+              <FormItem
+                  {...formItemLayout}
+                  label="第三方维修"
+                >
+                {getFieldDecorator('pingfangmi',{ 
+                  rules:[{
+                    required:true,type:'number','message':'请填写第三方维修费用！'
+                  }]
+                })(
+                  <span>
+                  <InputNumber min={0}/>&nbsp;&nbsp;万元
+                  </span>
+                )}
+              </FormItem>
 
             <FormItem
-                {...inlineLayout}
-                label="第三方维修"
-              >
-              {getFieldDecorator('pingfangmi',{ 
-                rules:[{
-                  type:'number','message':'请填写第三方维修费用！'
-                }]
-              })(
+              {...formItemLayout}
+              label={(
                 <span>
-                <InputNumber min={0}/>&nbsp;&nbsp;万元
+                自修的医疗设备类型&nbsp;
+                  <Tooltip title={tip}>
+                    <Icon type="question-circle-o" />
+                  </Tooltip>
                 </span>
-              )}
-            </FormItem>
-
-          </Row>
-          
-        </Card> 
-
-        <Card style={styles.card}>
-          <Col span={24}>
-            自修的医疗设备类型<br/>
-            <small>注：请选择具有自修能力且自修比例不低于50%的设备类型</small>
-          </Col>  
-          <Col span={24}>
-          <FormItem>
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-              <Checkbox.Group>
-                <Row style={{marginTop:10}}> 
-                  <Col span={6}>
-                  <Checkbox value={'1'} >普通放射类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'2'} >CT/MR类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'3'} >血液透析</Checkbox>
-                  </Col>
-                  
-                  <Col span={6}>
-                    <Checkbox value={'3'} >超声影像类</Checkbox>
-                  </Col>
-                </Row>
-                <Row style={{marginTop:10}}> 
-                  <Col span={6}>
-                  <Checkbox value={'1'} >内窥镜类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'2'} >血液净化类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'3'} >放疗类</Checkbox>
-                  </Col>
-                  
-                  <Col span={6}>
-                    <Checkbox value={'3'} >核医学类</Checkbox>
-                  </Col>
-                </Row>
-                <Row style={{marginTop:10}}> 
-                  <Col span={6}>
-                  <Checkbox value={'1'} >检验类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'2'} >消毒灭菌类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'3'} >呼吸麻醉类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'3'} >监护、电生理类</Checkbox>
-                  </Col>
-                </Row>
-                <Row style={{marginTop:10}}> 
-                  <Col span={6}>
-                  <Checkbox value={'1'} >输液类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'2'} >除颤类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'2'} >电刀类</Checkbox>
-                  </Col>
-                  <Col span={6}>
-                    <Checkbox value={'2'} >病房普通设备</Checkbox>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={6}>
+              )}>
+              {getFieldDecorator('agreement', {
+                valuePropName: 'checked',
+                rules:[{
+                  required:true,type:'number','message':'请选择自修的医疗设备类型！'
+                }]
+              })(
+                <Checkbox.Group>
+                  <Row style={{marginTop:10}}> 
+                    <Col span={6}>
+                    <Checkbox value={'1'} >普通放射类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'2'} >CT/MR类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'3'} >血液透析</Checkbox>
+                    </Col>
+                    
+                    <Col span={6}>
+                      <Checkbox value={'3'} >超声影像类</Checkbox>
+                    </Col>
+                  </Row>
+                  <Row style={{marginTop:10}}> 
+                    <Col span={6}>
+                    <Checkbox value={'1'} >内窥镜类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'2'} >血液净化类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'3'} >放疗类</Checkbox>
+                    </Col>
+                    
+                    <Col span={6}>
+                      <Checkbox value={'3'} >核医学类</Checkbox>
+                    </Col>
+                  </Row>
+                  <Row style={{marginTop:10}}> 
+                    <Col span={6}>
+                    <Checkbox value={'1'} >检验类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'2'} >消毒灭菌类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'3'} >呼吸麻醉类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'3'} >监护、电生理类</Checkbox>
+                    </Col>
+                  </Row>
+                  <Row style={{marginTop:10}}> 
+                    <Col span={6}>
+                    <Checkbox value={'1'} >输液类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'2'} >除颤类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'2'} >电刀类</Checkbox>
+                    </Col>
+                    <Col span={6}>
+                      <Checkbox value={'2'} >病房普通设备</Checkbox>
+                    </Col>
+                  </Row>
+                  <Row>
                     <Checkbox value={'2'} >其他:&nbsp;&nbsp;
-                        <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                          {getFieldDecorator('qitaneirong',)(
-                            <Input/>
-                          )}
-                        </FormItem>
-                      </Checkbox>
-                  </Col>
-                </Row>
-                
-                
-              </Checkbox.Group>
-            )}
+                      <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
+                        {getFieldDecorator('qitaneirong',)(
+                          <Input/>
+                        )}
+                      </FormItem>
+                    </Checkbox>
+                  </Row>
+                  
+                  
+                </Checkbox.Group>
+              )}
           </FormItem>
-          </Col>
-        </Card> 
+          
 
-        <Card style={styles.card}>
-          <Col span={24}>
-          已开展的维修技术管理
-          </Col>  
-          <Col span={24}>
-          <FormItem>
+        
+          <FormItem
+          {...formItemLayout}
+          label="已开展的维修技术管理">
             {getFieldDecorator('agreement', {
               valuePropName: 'checked',
+              rules:[{
+                required:true,type:'number','message':'请选择已开展的维修技术管理！'
+              }]
             })(
               <Checkbox.Group>
                 <Row style={{marginTop:10}}> 
@@ -598,12 +594,7 @@ class RegistrationForm52 extends React.Component {
               </Checkbox.Group>
             )}
           </FormItem>
-          </Col>
-        </Card> 
-
-
-        
-
+          
         </div>
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">保存</Button>
