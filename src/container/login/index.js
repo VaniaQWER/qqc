@@ -29,8 +29,13 @@ class NormalLoginForm extends React.Component {
             if (!data.result.userInfo) {
               message.error(data.result.loginResult)
             } else {
+              // this.props.login.push({
+              //   pathname: '/home',
+              //   state: { tips: data.result.loginResult }
+              // })
+              //此处直接跳转至首页科室建设
               this.props.login.push({
-                pathname: '/home',
+                pathname: '/department/describe',
                 state: { tips: data.result.loginResult }
               })
             }
