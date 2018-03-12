@@ -11838,7 +11838,7 @@ class RegistrationForm extends React.Component {
             {...formItemLayout}
             label="填表人姓名"
           >
-            {getFieldDecorator('xingming', {
+            {getFieldDecorator('userName', {
               rules: [{ required: true, message: '请填写填表人姓名！', whitespace: true }],
             })(
               <Input />
@@ -11848,7 +11848,7 @@ class RegistrationForm extends React.Component {
             {...formItemLayout}
             label="科室"
           >
-            {getFieldDecorator('keshi', {
+            {getFieldDecorator('deptName', {
               rules: [{ required: true, message: '请填写科室！', whitespace: true }],
             })(
               <Input />
@@ -11858,7 +11858,7 @@ class RegistrationForm extends React.Component {
             {...formItemLayout}
             label="职务"
           >
-            {getFieldDecorator('zhiwu', {
+            {getFieldDecorator('postName', {
               rules: [{ required: true, message: '请填写职务！', whitespace: true }],
             })(
               <Input />
@@ -11869,7 +11869,7 @@ class RegistrationForm extends React.Component {
             {...formItemLayout}
             label="座机"
           >
-            {getFieldDecorator('zuoji', {
+            {getFieldDecorator('landlineTelephone', {
               rules: [{ required: true, message: '请填写座机！', whitespace: true }],
             })(
               <Input />
@@ -11880,7 +11880,7 @@ class RegistrationForm extends React.Component {
             {...formItemLayout}
             label="手机"
           >
-            {getFieldDecorator('phone', {
+            {getFieldDecorator('mobilePhone', {
               rules: [
               { required: true, message: '请填写手机！' , whitespace: true},
               ],

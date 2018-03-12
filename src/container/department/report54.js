@@ -87,15 +87,15 @@ class RegistrationForm52 extends React.Component {
     // const formItemLayout = {
     //   labelCol: {
     //     xs: { span: 24 },
-    //     sm: { span: 6 },
+    //     sm: { span: 9 },
     //     md: { span: 6 },
-    //     lg: { span: 6 },
+    //     lg: { span: 4 },
     //   },
     //   wrapperCol: {
     //     xs: { span: 24 },
-    //     sm: { span: 15 },
-    //     md: { span: 15 },
-    //     lg: { span: 15 },
+    //     sm: { span: 24 },
+    //     md: { span: 24 },
+    //     lg: { span: 24},
     //   },
     // };
     const tailFormItemLayout = {
@@ -188,6 +188,11 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('agreement', {
                   valuePropName: 'checked',
+                  // rules:[
+                  //   {
+                  //     required:true,message:'请选择，不能为空！'
+                  //   }
+                  // ]
                 })(
                   <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
@@ -636,8 +641,7 @@ class Report52 extends Component {
     componentWillMount(){
 
       const testData = {
-        caigouzongshu:"湖北省中医院",
-        caigounumber:"999999-HAHAHAH"
+       
       }
       this.setState({
         'formInfo':testData

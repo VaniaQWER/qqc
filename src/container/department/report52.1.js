@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form  , Tooltip ,Icon ,  Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
+import { Form  , Tooltip ,Icon ,  Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
 /**
@@ -48,11 +48,19 @@ const tip3 = '植入和介入类耗材：包括血管介入类（心脏介入类
 const tip4 = '计算公式：植入和介入类耗材采购金额/医用耗材采购金额x100%';
 const tip5 = '定义：指医疗机构用于医疗、教学、科研、预防、保健等工作，按国家相关法规纳入医疗器械注册管理的或取得上级行政主管部门行政许可，并具有卫生专业技术特征的消耗性材料，包括一次性及可重复使用的医疗器械等。'
 const help5= '计算公式：医用耗材收入/医疗收入x100%（不含药品）'
+
+const plainOptions = ['Apple', 'Pear', 'Orange'];
+const defaultCheckedList = ['Apple', 'Orange'];
+
 class RegistrationForm52 extends React.Component {
   state = {
     confirmDirty: false,
     firstCheck:false,
     secondCheck:false,
+
+    checkedList: defaultCheckedList,
+    indeterminate: true,
+    checkAll: false,
   };
   //联动状态
   handleAChange = (e) => {
@@ -86,10 +94,23 @@ class RegistrationForm52 extends React.Component {
     });
   }
   //全选
-  onCheckAllChange = (e) =>{
-    // e.target.checked 
-  
-    this.props.form.validateFields(['xueguan11'], { checked: true });
+  onChange = (checkedList) => {
+    debugger
+    this.props.form.setFieldsValue({
+      erjikufanghaocun:checkedList
+    })
+    this.setState({
+      checkedList,
+      indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+      checkAll: checkedList.length === plainOptions.length,
+    });
+  }
+  onCheckAllChange = (e) => {
+    this.setState({
+      checkedList: e.target.checked ? plainOptions : [],
+      indeterminate: false,
+      checkAll: e.target.checked,
+    });
   }
 
   handleSubmit = (e) => {
@@ -365,14 +386,19 @@ class RegistrationForm52 extends React.Component {
                   required:true,message:'请选择二级库房存储耗材类型'
                 }]
               })(
-                <Checkbox.Group>
+                <div>
                   <Row> 
                       <Checkbox value={'1'}
-                      onChange={this.onCheckAllChange}>
-                        血管介入类（ &nbsp;
-                          <Checkbox value={'xueguan11'} >心脏介入类</Checkbox>、
-                          <Checkbox value={'12'} >周围血管介入类</Checkbox>
-                        &nbsp;）
+                      indeterminate={this.state.indeterminate}
+                      onChange={this.onCheckAllChange}
+                      checked={this.state.checkAll}>
+                        血管介入类
+                          <Checkbox.Group options={plainOptions} value={this.state.checkedList} onChange={this.onChange} >
+                            （ &nbsp;
+                              <Checkbox value={'11'}>心脏介入类</Checkbox>、
+                              <Checkbox value={'12'}>周围血管介入类</Checkbox>
+                            &nbsp;）
+                          </Checkbox.Group>
                       </Checkbox>
                   </Row> 
                   <Row> 
@@ -411,7 +437,7 @@ class RegistrationForm52 extends React.Component {
                   <Checkbox value={'2'} >普外通用高值耗材（吻合器、止血材料、穿刺器等）</Checkbox>
                   </Row> 
                   
-                </Checkbox.Group>
+                </div>
               )}
             </FormItem>
             <Col span={18} offset={6}>管理人员组成：</Col>

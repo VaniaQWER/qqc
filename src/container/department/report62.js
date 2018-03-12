@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import ReportOtherForm from 'container/department/reportOtherForm';
+import _ from 'lodash';
 import { Form , Row , Col , Checkbox , Button , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
@@ -36,9 +36,18 @@ class RegistrationForm62 extends React.Component {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
 
+        let a = _.forIn(values, (value,key)=>{
+          console.log(values[key]);
+          if(values[key]){
+            values[key]="01"
+          }else{
+            values[key]="00"
+          }
+        });
+
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
-          body: JSON.stringify(values),//querystring.stringify(postData),
+          url: api.ADD_Management,
+          body: JSON.stringify(a),//querystring.stringify(postData),
           type: 'application/json',
           success: data => {
             if (data.status) {
@@ -121,55 +130,55 @@ class RegistrationForm62 extends React.Component {
           <Col span={4} style={{textAlign: 'center', border:'1px'}}>是否建立</Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout}>
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('suppliesManagementOa', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
               <FormItem {...formItemLayout} >
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('logisticsManagement', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
               </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('traceManagement', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('useBi', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('aptitudeManagement', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('serviceEvaluate', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
@@ -179,55 +188,55 @@ class RegistrationForm62 extends React.Component {
           <Col span={4} style={{textAlign: 'center', border:'1px'}}>是否属于HRP中模块</Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout}>
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('suppliesManagementOaHrp', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
               <FormItem {...formItemLayout} >
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('logisticsManagementHrp', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
               </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreemen43t', {
+            {getFieldDecorator('traceManagementHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement123', {
+            {getFieldDecorator('useBiHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement32', {
+            {getFieldDecorator('aptitudeManagementHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={3} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement12', {
+            {getFieldDecorator('serviceEvaluateHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
@@ -260,7 +269,6 @@ class Report62 extends Component {
     componentWillMount(){
 
       const testData = {
-        agreement:true
       }
       this.setState({
         'formInfo':testData
@@ -268,21 +276,21 @@ class Report62 extends Component {
       
 
       //此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.INSERT_CONSTR_DEPT,
-      //   body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //       this.setState({
-      //         formInfo:testData
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }
-      //   }
-      // })
+      fetchData({
+        url: api.QUERY_Management,
+        body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
+        type: 'application/json',
+        success: data => {
+          if (data.status) {
+            //回填数据操作
+            this.setState({
+              formInfo:testData
+            })
+          } else {
+            message.error(data.msg);
+          }
+        }
+      })
       
     }
 

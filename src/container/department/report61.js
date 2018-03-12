@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import ReportOtherForm from 'container/department/reportOtherForm';
+import _ from 'lodash';
 import { Form , Row , Col , Checkbox , Button , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
@@ -35,10 +35,16 @@ class RegistrationForm62 extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
-
+        let a = _.forIn(values, (value,key)=>{
+          if(values[key]){
+            values[key]="01"
+          }else{
+            values[key]="00"
+          }
+        });
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
-          body: JSON.stringify(values),//querystring.stringify(postData),
+          url: api.ADD_Equipment,
+          body: JSON.stringify(a),//querystring.stringify(postData),
           type: 'application/json',
           success: data => {
             if (data.status) {
@@ -46,6 +52,7 @@ class RegistrationForm62 extends React.Component {
               message.success('操作成功')
               this.props.setProgress(0)
             } else {
+              console.log(a)
               message.error(data.msg);
             }
           }
@@ -53,9 +60,37 @@ class RegistrationForm62 extends React.Component {
       }
     });
   }
+
+  componentDidMount = () =>{
+    var that =this;
+    fetchData({
+      url: api.QUERY_Equipment,
+      body: JSON.stringify({}),//querystring.stringify(postData),
+      type: 'application/json',
+      success: data => {
+        if (data.status) {
+          //回填数据操作
+        var b =  _.forIn(data.result,(value,key)=>{
+            if(data.result[key]==="01"){
+              data.result[key]=true
+            }else{
+              delete data.result[key]
+            }
+          })
+          console.log(b);
+          that.setState({
+            formInfo:b
+          })
+        } else {
+          message.error(data.msg);
+        }  
+      }
+    })
+    
+  }
   componentDidMount = () => {
-    console.log(this.props.formInfo)
-    const { formInfo } = this.props ; 
+    console.log('子组件componentDidMount')
+    const { formInfo } = this.state ;
     this.props.form.setFieldsValue(formInfo)
   }
   handleConfirmBlur = (e) => {
@@ -63,6 +98,7 @@ class RegistrationForm62 extends React.Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   }
   render() {
+    console.log('子组件render')
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
@@ -110,7 +146,7 @@ class RegistrationForm62 extends React.Component {
           <Col span={4} style={{textAlign: 'center'}}>设备资产管理</Col>
           <Col span={4} style={{textAlign: 'center'}}>设备采购管理OA</Col>
           <Col span={4} style={{textAlign: 'center'}}>维修/维护/计量等质量管理</Col>
-          <Col span={4} style={{textAlign: 'center'}}>设备使用数据分</Col>
+          <Col span={4} style={{textAlign: 'center'}}>设备使用数据分析与应用</Col>
           <Col span={4} style={{textAlign: 'center'}}>成本效益分析</Col>
         </Row>
 
@@ -118,46 +154,46 @@ class RegistrationForm62 extends React.Component {
           <Col span={4} style={{textAlign: 'center', border:'1px'}}>是否建立</Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout}>
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('equipmentManagement', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
             </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
               <FormItem {...formItemLayout} >
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('equipmentOa', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
               </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('qcManagement', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('equipmentBi', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('costAnalysis', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
@@ -167,46 +203,46 @@ class RegistrationForm62 extends React.Component {
           <Col span={4} style={{textAlign: 'center', border:'1px'}}>是否属于HRP中模块</Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout}>
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('equipmentManagementHrp', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
             </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
               <FormItem {...formItemLayout} >
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('equipmentOaHrp', {
                 valuePropName: 'checked',
               })(
-                  <Checkbox value={'1'} ></Checkbox>
+                  <Checkbox value={'01'} ></Checkbox>
               )}
               </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('qcHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('equipmentBiHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
           <Col span={4} style={{textAlign: 'center'}}>
             <FormItem {...formItemLayout} >
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('costAnalysisHrp', {
               valuePropName: 'checked',
             })(
-                <Checkbox value={'1'} ></Checkbox>
+                <Checkbox value={'01'} ></Checkbox>
             )}
             </FormItem>
           </Col>
@@ -225,47 +261,51 @@ class RegistrationForm62 extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm62);
 
-
 class Report62 extends Component {
 
-
+    
     constructor(props){
       super(props)
-      this.State={
-        formInfo:{}
+      this.state={
+        formInfo:{
+        }
       }
     }
 
     componentWillMount(){
-
-      const testData = {
-        agreement:true
-      }
-      this.setState({
-        'formInfo':testData
-      })
-      
-
-      //此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.INSERT_CONSTR_DEPT,
-      //   body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //       this.setState({
-      //         formInfo:testData
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }  
+      console.log('componentWillMount')
+      var  that = this;
+      // this.setState({
+      //   formInfo:{
+      //     'equipmentOa':true
       //   }
       // })
-      
+      // 此处应该发出用户信息的请求，获取之前该表格内容回填
+      fetchData({
+        url: api.QUERY_Equipment,
+        body: JSON.stringify({}),//querystring.stringify(postData),
+        type: 'application/json',
+        success: data => {
+          if (data.status) {
+            //回填数据操作
+           var b =  _.forIn(data.result,(value,key)=>{
+              if(data.result[key]==="01"){
+                data.result[key]=true
+              }else{
+                delete data.result[key]
+              }
+            })
+            debugger
+            console.log(b);
+            that.setState({
+              formInfo:b
+            })
+          } else {
+            message.error(data.msg);
+          }  
+        }
+      })
     }
-
-
     render(){
       return(
         <WrappedRegistrationForm formInfo={this.state.formInfo} ></WrappedRegistrationForm>
