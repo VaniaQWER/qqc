@@ -231,62 +231,52 @@ class RegistrationForm51 extends React.Component {
           })(
             <Checkbox.Group>
             
-              <Row> 
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                 <Checkbox value={'1'} >年度规划</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'2'} >临床需求评估</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'3'} >政策合规评审</Checkbox>
                 </Col>
-              </Row> 
-
-              <Row> 
-                <Col span={8}>
+          
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'4'} >采购可行性论证</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'21'} >功能评价</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'5'} >成本效益分析</Checkbox>
                 </Col>
                
-              </Row> 
-              <Row> 
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'6'} >招标采购</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'7'} >政府采购</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'8'} >安装验收</Checkbox>
                 </Col>
-                
-              </Row> 
-              <Row> 
-                <Col span={8}>
+               
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'9'} >报废处置管理</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'10'} >供应商管理</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'11'} >采购追溯管理</Checkbox>
                 </Col>
                 
-              </Row> 
-              <Row> 
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'12'} >档案管理</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'13'} >临床使用效果评价</Checkbox>
                 </Col>
-              </Row> 
             </Checkbox.Group>
           )}
         </FormItem>

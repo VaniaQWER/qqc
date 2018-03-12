@@ -195,52 +195,44 @@ class RegistrationForm52 extends React.Component {
                   // ]
                 })(
                   <Checkbox.Group>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                       <Checkbox value={'1'} >采购、验收、预防性维护、维修、质量检测、处置制度与流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'2'} >临床使用部门管理制度</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'3'} >医疗器械医疗不良事件报告与处理制度与流程</Checkbox>
                       </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'4'} >急救和生命支持医疗器械应急调配与保障完好待用状态制度与流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'21'} >甲乙类大型医疗设备的使用制度和流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'5'} >植入和介入类器械管理制度和流程</Checkbox>
                       </Col>
                     
-                    </Row> 
-                    <Row style={{marginTop:10}}> 
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'6'} >一次性使用医疗器械的使用管理制度和流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'7'} >医疗器械应用质量分析与评价制度和流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'7'} >使用环境与支持系统质量管理制度和流程</Checkbox>
                       </Col>
                       
-                    </Row> 
-                    <Row style={{marginTop:10}}> 
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'6'} >院内物流全生命周期溯源管理制度和流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'7'} >医疗器械合理使用评价制度和流程</Checkbox>
                       </Col>
-                      <Col span={8}>
+                      <Col xxl={8} xl={12}>
                         <Checkbox value={'7'} >人员培训考核制度与流程</Checkbox>
                       </Col>
-                    </Row> 
                     
                   </Checkbox.Group>
                 )}
@@ -347,58 +339,51 @@ class RegistrationForm52 extends React.Component {
                   valuePropName: 'checked',
                 })(
                   <Checkbox.Group>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                       <Checkbox value={'1'} >大型设备配置许可</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >厂商与供应商评价</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'3'} >大型医用设备临床使用记录</Checkbox>
                       </Col>
                       
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'3'} >急救和生命支持设备完好待用状态管理</Checkbox>
                       </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                       <Checkbox value={'1'} >大型设备机房环境监测并有记录</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >放射辐射类设备机房防护检测并有记录</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'3'} >库房环境定期检查并有记录</Checkbox>
                       </Col>
                       
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'3'} >医疗器械不良事件报告、记录和分析</Checkbox>
                       </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                       <Checkbox value={'1'} >对医学工程技术人员培训</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >对临床使用人员培训</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'3'} >预防性维护并有记录</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'3'} >开展设备巡检并有记录</Checkbox>
                       </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                       <Checkbox value={'1'} >医疗器械应用质量分析与评价</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >医疗器械合理使用评价</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >其他:&nbsp;&nbsp;
                             <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                               {getFieldDecorator('qitaneirong')(
@@ -407,7 +392,6 @@ class RegistrationForm52 extends React.Component {
                             </FormItem>
                           </Checkbox>
                       </Col>
-                    </Row>
                     
                     
                   </Checkbox.Group>
@@ -428,7 +412,7 @@ class RegistrationForm52 extends React.Component {
                 })(
                   <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                       <Checkbox value={'1'} >呼吸机 ( 年PM次数：
                         <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                           {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -438,7 +422,7 @@ class RegistrationForm52 extends React.Component {
                         
                       )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >监护仪 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -448,7 +432,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >除颤仪 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -459,7 +443,7 @@ class RegistrationForm52 extends React.Component {
                         )</Checkbox>
                       </Col>
                       
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >高频电刀 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -471,7 +455,7 @@ class RegistrationForm52 extends React.Component {
                       </Col>
                     </Row>
                     <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >输注泵 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -481,7 +465,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >血透机 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -491,7 +475,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >婴儿培养箱 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -501,7 +485,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >普通放射类 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -512,7 +496,7 @@ class RegistrationForm52 extends React.Component {
                       </Col>
                     </Row>
                     <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >超声影像设备 ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -522,7 +506,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >CT ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -532,7 +516,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >MR ( 年PM次数：
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
@@ -542,7 +526,7 @@ class RegistrationForm52 extends React.Component {
                           
                         )</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >其他:&nbsp;&nbsp;
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('qitaneirong',)(
@@ -568,38 +552,33 @@ class RegistrationForm52 extends React.Component {
                   valuePropName: 'checked',
                 })(
                   <Checkbox.Group>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                       <Checkbox value={'1'} >国家卫生计生委医院管理评审</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                         <Checkbox value={'2'} >地方等级医院评审</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                         <Checkbox value={'3'} >JCI评审</Checkbox>
                       </Col>
                       
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                         <Checkbox value={'3'} >ISO9000质量体系评审</Checkbox>
                       </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}> 
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                       <Checkbox value={'1'} >区域质量控制检查</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                         <Checkbox value={'2'} >三好一满意</Checkbox>
                       </Col>
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                         <Checkbox value={'3'} >质量万里行</Checkbox>
                       </Col>
                       
-                      <Col span={6}>
+                      <Col xxl={6} xl={8}>
                         <Checkbox value={'3'} >未参加</Checkbox>
                       </Col>
-                    </Row>
-                    <Row>
-                      <Col span={6}>
+                      <Col xxl={6} xl={12}>
                         <Checkbox value={'2'} >其他:&nbsp;&nbsp;
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                             {getFieldDecorator('qitaneirong',)(
@@ -607,8 +586,7 @@ class RegistrationForm52 extends React.Component {
                             )}
                           </FormItem>
                         </Checkbox>
-                    </Col>              
-                    </Row>
+                    </Col>  
                   </Checkbox.Group>
                 )}
               </FormItem>

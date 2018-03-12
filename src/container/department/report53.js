@@ -209,14 +209,14 @@ class RegistrationForm52 extends React.Component {
               required:true, message:'请选择人员岗位职责划分！'
             }]
           })(
-            <Checkbox.Group>
-                <Col span={4}>
+            <Checkbox.Group style={{marginTop:8}}>
+                <Col xxl={4} xl={8}>
                 <Checkbox value={'1'} >按临床科室区域划分</Checkbox>
                 </Col>
-                <Col span={4}>
+                <Col  xxl={4} xl={8}>
                   <Checkbox value={'2'} >按设备类型划分</Checkbox>
                 </Col>
-                <Col span={4}>
+                <Col  xxl={4} xl={8}>
                   <Checkbox value={'3'} >无明确划分</Checkbox>
                 </Col>
             </Checkbox.Group>
@@ -252,13 +252,13 @@ class RegistrationForm52 extends React.Component {
               })(
                 <Checkbox.Group>
                   <Row style={{marginTop:10}}> 
-                    <Col span={4}>
+                    <Col xxl={4} xl={8}>
                     <Checkbox value={'1'} >万用表</Checkbox>
                     </Col>
-                    <Col span={4}>
+                    <Col xxl={4} xl={8}>
                       <Checkbox value={'2'} >示波器</Checkbox>
                     </Col>
-                    <Col span={4}>
+                    <Col xxl={4} xl={8}>
                       <Checkbox value={'3'} >在线测试仪</Checkbox>
                     </Col>
                     
@@ -288,7 +288,7 @@ class RegistrationForm52 extends React.Component {
               })(
                 <Checkbox.Group>
                   <Row > 
-                    <Col span={8}>
+                    <Col xxl={8} xl={12}>
                     <Checkbox value={'1'} >监护仪 ( 台数：
                       <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                         {getFieldDecorator('jianhuyi', { initialValue: 0 })(
@@ -298,7 +298,7 @@ class RegistrationForm52 extends React.Component {
                       
                     )</Checkbox>
                     </Col>
-                    <Col span={8}>
+                    <Col xxl={8} xl={12}>
                       <Checkbox value={'2'} >输液泵 ( 台数：
                         <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                           {getFieldDecorator('shuyebeng', { initialValue: 0 })(
@@ -308,7 +308,7 @@ class RegistrationForm52 extends React.Component {
                         
                       )</Checkbox>
                     </Col>
-                    <Col span={8}>
+                    <Col xxl={8} xl={12}>
                       <Checkbox value={'2'} >呼吸机 ( 台数：
                         <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                           {getFieldDecorator('huxiji', { initialValue: 0 })(
@@ -319,7 +319,7 @@ class RegistrationForm52 extends React.Component {
                       )</Checkbox>
                     </Col>
                     
-                    <Col span={8}>
+                    <Col xxl={8} xl={12}>
                       <Checkbox value={'2'} >除颤仪 ( 台数：
                         <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                           {getFieldDecorator('chuchanyi', { initialValue: 0 })(
@@ -329,7 +329,7 @@ class RegistrationForm52 extends React.Component {
                         
                       )</Checkbox>
                     </Col>
-                    <Col span={8}>
+                    <Col xxl={8} xl={12}>
                       <Checkbox value={'2'} >其他:&nbsp;&nbsp;
                         <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
                           {getFieldDecorator('qitaaqita',)(
@@ -535,36 +535,33 @@ class RegistrationForm52 extends React.Component {
               }]
             })(
               <Checkbox.Group defaultValue={this.props.formInfo.weixiuguanlidejishu}>
-                <Row style={{marginTop:10}}> 
-                  <Col span={6}>
+                
+                  <Col xxl={8} xl={8}>
                   <Checkbox value={'haha1'} >开机率统计分析</Checkbox>
                   </Col>
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                     <Checkbox value={'haha2'} >修复时间统计分析</Checkbox>
                   </Col>
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                     <Checkbox value={'haha3'} >报修响应时间统计分析</Checkbox>
                   </Col>
                   
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                     <Checkbox value={'3'} >失效模式与影响分析（FMEA）</Checkbox>
                   </Col>
-                </Row>
-                <Row style={{marginTop:10}}> 
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                   <Checkbox value={'1'} >根因分析（RCA）</Checkbox>
                   </Col>
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                     <Checkbox value={'2'} >维修后质量检测和校准</Checkbox>
                   </Col>
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                     <Checkbox value={'3'} >维修记录档案管理</Checkbox>
                   </Col>
                   
-                  <Col span={6}>
+                  <Col xxl={8} xl={8}>
                     <Checkbox value={'3'} >售后服务评价</Checkbox>
                   </Col>
-                </Row>
               
               </Checkbox.Group>
             )}

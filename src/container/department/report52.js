@@ -416,7 +416,7 @@ class RegistrationForm52 extends React.Component {
             </FormItem>
             <Col span={18} offset={6}>管理人员组成：</Col>
             <Row>
-              <Col span={6} offset={6}>
+              <Col xl={9} xxl={6} offset={6}>
                   <FormItem 
                     {...twoItemLayout}
                     label="临床科室 专职" 
@@ -431,7 +431,7 @@ class RegistrationForm52 extends React.Component {
                     <span className="ant-form-text">人</span>
                   </FormItem>
                 </Col>
-                <Col span={5}>
+                <Col xl={8} xxl={5}>
                 <FormItem 
                 {...twoItemLayout}
                 label="兼职" 
@@ -448,7 +448,7 @@ class RegistrationForm52 extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={7} offset={6}>
+              <Col xl={11} xxl={7} offset={5}>
                   <FormItem 
                     {...twoItemLayout}
                     label="医学工程部门 专职" 
@@ -463,7 +463,7 @@ class RegistrationForm52 extends React.Component {
                     <span className="ant-form-text">人</span>
                   </FormItem>
                 </Col>
-                <Col span={5}>
+                <Col xl={8} xxl={5}>
                 <FormItem 
                 {...twoItemLayout}
                 label="兼职" 
@@ -514,39 +514,33 @@ class RegistrationForm52 extends React.Component {
             }]
           })(
             <Checkbox.Group>
-              <Row> 
-                <Col span={8}>
-                <Checkbox value={'1'} >医用耗材准入遴选</Checkbox>
+             
+                <Col xxl={8} xl={12}>
+                  <Checkbox value={'1'} >医用耗材准入遴选</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'2'} >医用耗材验收</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'3'} >追溯管理</Checkbox>
                 </Col>
-              </Row> 
-
-              <Row> 
-                <Col span={8}>
+             
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'4'} >临床使用效果评价</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'21'} >供应商服务能力评价</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'5'} >卫生技术评估</Checkbox>
                 </Col>
-               
-              </Row> 
-              <Row> 
-                <Col span={8}>
+              
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'6'} >耗材使用培训</Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col xxl={8} xl={12}>
                   <Checkbox value={'7'} >产品与供应商资质管理</Checkbox>
                 </Col>
-                
-              </Row> 
               
             </Checkbox.Group>
           )}
