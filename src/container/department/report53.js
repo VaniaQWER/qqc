@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReportOtherForm from 'container/department/reportOtherForm';
-import { Form  ,Input, Tooltip , Icon , Card , Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
+import { Form  ,Input, Tooltip , Icon , Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
 /**
@@ -98,20 +98,6 @@ class RegistrationForm52 extends React.Component {
         lg: { span: 16 },
       },
     };
-    const inlineLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 3 },
-        md: { span: 3 },
-        lg: { span: 3 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 15 },
-        md: { span: 15 },
-        lg: { span: 15 },
-      },
-    };
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
@@ -162,7 +148,7 @@ class RegistrationForm52 extends React.Component {
               {...formItemLayout}
               label="场地面积"
             >
-              {getFieldDecorator('平方米', { initialValue: 0 })(
+              {getFieldDecorator('pingfangmia', { initialValue: 0 })(
                 <span>
                 <InputNumber/>&nbsp;&nbsp;平方米
                 </span>
@@ -176,7 +162,7 @@ class RegistrationForm52 extends React.Component {
             <FormItem 
             {...formItemLayout}
             label='维修备件库房'>
-              {getFieldDecorator('buildFlag', {
+              {getFieldDecorator('weixiubeijiankufang', {
                 rules: [{ required: true, message: '请填写维修备件库房！' }],
                 //initialValue: updateData.deptName
               })(
@@ -205,23 +191,22 @@ class RegistrationForm52 extends React.Component {
           {...formItemLayout}
           label="维修维护工程师"
         >
-        {getFieldDecorator('weixiuweihugongchengshu', { 
-          rules:[{
-            type:'number',required:true,message:'请填写维修维护工程师数量！'
-          }]
-        })(
-          <span>
-          <InputNumber min={0}/>&nbsp;&nbsp;人
-          </span>
-        )}
+          {getFieldDecorator('weixiuweihugongchengshu', { 
+            rules: [
+              { required: true, type: 'number', message: '请填写编制床位数！' , whitespace: true},
+            ],
+          })(
+              <InputNumber min={0}/>
+          )}
+        <span className="ant-form-text"> 人</span>
       </FormItem>
       <FormItem
       {...formItemLayout}
         label="人员岗位职责划分">
-          {getFieldDecorator('agreement', {
+          {getFieldDecorator('renyuanzhizehuafen', {
             valuePropName: 'checked',
             rules:[{
-              required:true,message:'请选择人员岗位职责划分！'
+              required:true, message:'请选择人员岗位职责划分！'
             }]
           })(
             <Checkbox.Group>
@@ -242,7 +227,7 @@ class RegistrationForm52 extends React.Component {
           {...formItemLayout}
           label="是否定时定期轮岗"
         >
-          {getFieldDecorator('buildFlag',{
+          {getFieldDecorator('shifoulungang',{
             valuePropName: 'checked',
             rules:[{
               required:true,message:'请选择是否定时定期轮岗！'
@@ -259,7 +244,7 @@ class RegistrationForm52 extends React.Component {
             <FormItem
             {...formItemLayout}
             label="专业维修工具">
-              {getFieldDecorator('agreement', {
+              {getFieldDecorator('zhuanyeweixiugongjuxuanze', {
                 valuePropName: 'checked',
                 rules:[{
                   required:true,message:'请选择专业维修工具！'
@@ -278,10 +263,10 @@ class RegistrationForm52 extends React.Component {
                     </Col>
                     
                     <Col span={24} style={{marginTop:10}}>
-                        <Checkbox value={'2'} >其他:&nbsp;&nbsp;
+                        <Checkbox value={'zhuanyeweixiugongju2'} >其他:&nbsp;&nbsp;
                           <FormItem 
                           style={{display:'inline-block',verticalAlign:'baseline'}}>
-                            {getFieldDecorator('qitaneirong',)(
+                            {getFieldDecorator('zhuanyeweixiugongjuqita',)(
                               <Input/>
                             )}
                           </FormItem>
@@ -292,137 +277,129 @@ class RegistrationForm52 extends React.Component {
               )}
             </FormItem>
 
-              <FormItem
+            <FormItem
               {...formItemLayout}
               label="应急库房设备">
-                {getFieldDecorator('agreement', {
-                  valuePropName: 'checked',
-                  rules:[{
-                    required:true,message:'请选择应急库房设备！'
-                  }]
-                })(
-                  <Checkbox.Group>
-                    <Row > 
-                      <Col span={8}>
-                      <Checkbox value={'1'} >监护仪 ( 台数：
+              {getFieldDecorator('yingjikufangshebei', {
+                valuePropName: 'checked',
+                rules:[{
+                  required:true,message:'请选择应急库房设备！'
+                }]
+              })(
+                <Checkbox.Group>
+                  <Row > 
+                    <Col span={8}>
+                    <Checkbox value={'1'} >监护仪 ( 台数：
+                      <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
+                        {getFieldDecorator('jianhuyi', { initialValue: 0 })(
+                          <InputNumber min={0} max={99999999999}/>
+                        )}
+                      </FormItem>
+                      
+                    )</Checkbox>
+                    </Col>
+                    <Col span={8}>
+                      <Checkbox value={'2'} >输液泵 ( 台数：
                         <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                          {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
+                          {getFieldDecorator('shuyebeng', { initialValue: 0 })(
                             <InputNumber min={0} max={99999999999}/>
                           )}
                         </FormItem>
                         
                       )</Checkbox>
-                      </Col>
-                      <Col span={8}>
-                        <Checkbox value={'2'} >输液泵 ( 台数：
-                          <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                            {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
-                              <InputNumber min={0} max={99999999999}/>
-                            )}
-                          </FormItem>
-                          
-                        )</Checkbox>
-                      </Col>
-                      <Col span={8}>
-                        <Checkbox value={'2'} >呼吸机 ( 台数：
-                          <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                            {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
-                              <InputNumber min={0} max={99999999999}/>
-                            )}
-                          </FormItem>
-                          
-                        )</Checkbox>
-                      </Col>
-                      
-                      <Col span={8}>
-                        <Checkbox value={'2'} >除颤仪 ( 台数：
-                          <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                            {getFieldDecorator('in-chuangwei', { initialValue: 0 })(
-                              <InputNumber min={0} max={99999999999}/>
-                            )}
-                          </FormItem>
-                          
-                        )</Checkbox>
-                      </Col>
-                      <Col span={8}>
-                        <Checkbox value={'2'} >其他:&nbsp;&nbsp;
-                          <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                            {getFieldDecorator('qitaneirong',)(
-                              <Input style={{width:'145px'}}/>
-                            )}
-                          </FormItem>
-                        </Checkbox>
-                      </Col>
-                    </Row>
-                  
-                  </Checkbox.Group>
-                )}
-              </FormItem>
-
-              <Row>
-                <Col span={6} offset={6}>
-                  <FormItem 
-                  {...formItemLayout}
-                  label='应急库房'>
-                    {getFieldDecorator('buildFlag', {
-                      rules: [{ required: true, message: '请选择, 不能为空' }],
-                      //initialValue: updateData.deptName
-                    })(
-
-                      <RadioGroup>
-                        <Radio value={'01'}>有</Radio>
-                        <Radio value={'00'}>无</Radio>
-                      </RadioGroup>
-                    )}
-                  </FormItem> 
-                </Col>
-                <Col span={4}>
-                    <FormItem
-                    {...formItemLayout}
-                    label="场地面积"
-                  >
-                    {getFieldDecorator('平方米', { initialValue: 0 })(
-                      <span>
-                      <InputNumber/>&nbsp;&nbsp;平方米
-                      </span>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
-
-
-              <Row>
+                    </Col>
+                    <Col span={8}>
+                      <Checkbox value={'2'} >呼吸机 ( 台数：
+                        <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
+                          {getFieldDecorator('huxiji', { initialValue: 0 })(
+                            <InputNumber min={0} max={99999999999}/>
+                          )}
+                        </FormItem>
+                        
+                      )</Checkbox>
+                    </Col>
                     
-              </Row>
-              
-              <FormItem
+                    <Col span={8}>
+                      <Checkbox value={'2'} >除颤仪 ( 台数：
+                        <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
+                          {getFieldDecorator('chuchanyi', { initialValue: 0 })(
+                            <InputNumber min={0} max={99999999999}/>
+                          )}
+                        </FormItem>
+                        
+                      )</Checkbox>
+                    </Col>
+                    <Col span={8}>
+                      <Checkbox value={'2'} >其他:&nbsp;&nbsp;
+                        <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
+                          {getFieldDecorator('qitaaqita',)(
+                            <Input style={{width:'145px'}}/>
+                          )}
+                        </FormItem>
+                      </Checkbox>
+                    </Col>
+                  </Row>
+                
+                </Checkbox.Group>
+              )}
+            </FormItem>
+
+            <Row>
+              <Col span={6} offset={6}>
+                <FormItem 
                 {...formItemLayout}
-                label="医疗设备维修量(当年):"
-              >
-              {getFieldDecorator('pingfangmi', { 
+                label='应急库房'>
+                  {getFieldDecorator('yingjikufangshifouyouwu', {
+                    rules: [{ required: true, message: '请选择, 不能为空' }],
+                  })(
+
+                    <RadioGroup>
+                      <Radio value={'01'}>有</Radio>
+                      <Radio value={'00'}>无</Radio>
+                    </RadioGroup>
+                  )}
+                </FormItem> 
+              </Col>
+              <Col span={4}>
+                  <FormItem
+                  {...formItemLayout}
+                  label="场地面积"
+                >
+                  {getFieldDecorator('pingfangmiyingjichangdi', { initialValue: 0 })(
+                    <span>
+                    <InputNumber/>&nbsp;&nbsp;平方米
+                    </span>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+
+            <FormItem
+              {...formItemLayout}
+              label="医疗设备维修量(当年):"
+            >
+              {getFieldDecorator('yiliaoshebeiweixiuliang',{ 
                 rules:[{
                   required:true,type:'number','message':'请填写医疗设备维修量！'
                 }]
               })(
-                <span>
-                <InputNumber min={0}/>&nbsp;&nbsp;台
-                </span>
+                  <InputNumber min={0}/>
               )}
+              <span className="ant-form-text"> 台</span>
             </FormItem>
 
-              <FormItem
-                {...formItemLayout}
-                label="医疗设备维修总费用"
+            <FormItem
+              {...formItemLayout}
+              label="医疗设备维修总费用"
               >
-              {getFieldDecorator('pingfangmi', { 
+              {getFieldDecorator('yiliaoshebeiweixiufeiyong', { 
                 rules:[{
                   required:true,type:'number','message':'请填写医疗设备维修总费用！'
                 }]
               })(
-                <span>
-                <InputNumber min={0}/>&nbsp;&nbsp;万元
-                </span>
+                <InputNumber min={0}/>
               )}
+              <span className="ant-form-text">万元</span>
             </FormItem>
           
             <Col span={12} offset={6}>
@@ -432,143 +409,141 @@ class RegistrationForm52 extends React.Component {
                   {...formItemLayout}
                   label="原厂保修"
                 >
-                {getFieldDecorator('pingfangmi', { 
+                {getFieldDecorator('yuanchangbaoxiufeiyong', { 
                   rules:[{
                     required:true,type:'number','message':'请填写原厂保修费用！'
                   }]
                 })(
-                  <span>
-                  <InputNumber min={0}/>&nbsp;&nbsp;万元
-                  </span> 
+                  <InputNumber min={0}/>
                 )}
+                <span className="ant-form-text">万元</span>
               </FormItem>
 
               <FormItem
                   {...formItemLayout}
                   label="第三方维修"
                 >
-                {getFieldDecorator('pingfangmi',{ 
+                {getFieldDecorator('disanfangweixiufeiyong',{ 
                   rules:[{
                     required:true,type:'number','message':'请填写第三方维修费用！'
                   }]
                 })(
-                  <span>
-                  <InputNumber min={0}/>&nbsp;&nbsp;万元
-                  </span>
+                  <InputNumber min={0}/>
                 )}
+                <span className="ant-form-text">万元</span>
               </FormItem>
 
             <FormItem
-              {...formItemLayout}
-              label={(
-                <span>
-                自修的医疗设备类型&nbsp;
-                  <Tooltip title={tip}>
-                    <Icon type="question-circle-o" />
-                  </Tooltip>
-                </span>
-              )}>
-              {getFieldDecorator('agreement', {
-                valuePropName: 'checked',
-                rules:[{
-                  required:true,type:'number','message':'请选择自修的医疗设备类型！'
-                }]
-              })(
-                <Checkbox.Group>
-                  <Row style={{marginTop:10}}> 
-                    <Col span={6}>
-                    <Checkbox value={'1'} >普通放射类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'2'} >CT/MR类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'3'} >血液透析</Checkbox>
-                    </Col>
+                {...formItemLayout}
+                label={(
+                  <span>
+                  自修的医疗设备类型&nbsp;
+                    <Tooltip title={tip}>
+                      <Icon type="question-circle-o" />
+                    </Tooltip>
+                  </span>
+                )}>
+                {getFieldDecorator('zixiuyiliaoshebeileixing', {
+                  valuePropName: 'checked',
+                  rules:[{
+                    required:true,'message':'请选择自修的医疗设备类型！'
+                  }]
+                })(
+                  <Checkbox.Group>
+                    <Row style={{marginTop:10}}> 
+                      <Col span={6}>
+                      <Checkbox value={'1'} >普通放射类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'2'} >CT/MR类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'3'} >血液透析</Checkbox>
+                      </Col>
+                      
+                      <Col span={6}>
+                        <Checkbox value={'3'} >超声影像类</Checkbox>
+                      </Col>
+                    </Row>
+                    <Row style={{marginTop:10}}> 
+                      <Col span={6}>
+                      <Checkbox value={'1'} >内窥镜类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'2'} >血液净化类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'3'} >放疗类</Checkbox>
+                      </Col>
+                      
+                      <Col span={6}>
+                        <Checkbox value={'3'} >核医学类</Checkbox>
+                      </Col>
+                    </Row>
+                    <Row style={{marginTop:10}}> 
+                      <Col span={6}>
+                      <Checkbox value={'1'} >检验类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'2'} >消毒灭菌类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'3'} >呼吸麻醉类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'3'} >监护、电生理类</Checkbox>
+                      </Col>
+                    </Row>
+                    <Row style={{marginTop:10}}> 
+                      <Col span={6}>
+                      <Checkbox value={'1'} >输液类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'2'} >除颤类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'2'} >电刀类</Checkbox>
+                      </Col>
+                      <Col span={6}>
+                        <Checkbox value={'2'} >病房普通设备</Checkbox>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Checkbox value={'2'} >其他:&nbsp;&nbsp;
+                        <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
+                          {getFieldDecorator('zixiuyiliaoshebeileixingqita',)(
+                            <Input/>
+                          )}
+                        </FormItem>
+                      </Checkbox>
+                    </Row>
                     
-                    <Col span={6}>
-                      <Checkbox value={'3'} >超声影像类</Checkbox>
-                    </Col>
-                  </Row>
-                  <Row style={{marginTop:10}}> 
-                    <Col span={6}>
-                    <Checkbox value={'1'} >内窥镜类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'2'} >血液净化类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'3'} >放疗类</Checkbox>
-                    </Col>
                     
-                    <Col span={6}>
-                      <Checkbox value={'3'} >核医学类</Checkbox>
-                    </Col>
-                  </Row>
-                  <Row style={{marginTop:10}}> 
-                    <Col span={6}>
-                    <Checkbox value={'1'} >检验类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'2'} >消毒灭菌类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'3'} >呼吸麻醉类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'3'} >监护、电生理类</Checkbox>
-                    </Col>
-                  </Row>
-                  <Row style={{marginTop:10}}> 
-                    <Col span={6}>
-                    <Checkbox value={'1'} >输液类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'2'} >除颤类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'2'} >电刀类</Checkbox>
-                    </Col>
-                    <Col span={6}>
-                      <Checkbox value={'2'} >病房普通设备</Checkbox>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Checkbox value={'2'} >其他:&nbsp;&nbsp;
-                      <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                        {getFieldDecorator('qitaneirong',)(
-                          <Input/>
-                        )}
-                      </FormItem>
-                    </Checkbox>
-                  </Row>
-                  
-                  
-                </Checkbox.Group>
-              )}
-          </FormItem>
+                  </Checkbox.Group>
+                )}
+            </FormItem>
           
 
         
           <FormItem
           {...formItemLayout}
           label="已开展的维修技术管理">
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('weixiuguanlidejishu', {
               valuePropName: 'checked',
               rules:[{
-                required:true,type:'number','message':'请选择已开展的维修技术管理！'
+                required:true,'message':'请选择已开展的维修技术管理！'
               }]
             })(
-              <Checkbox.Group>
+              <Checkbox.Group defaultValue={this.props.formInfo.weixiuguanlidejishu}>
                 <Row style={{marginTop:10}}> 
                   <Col span={6}>
-                  <Checkbox value={'1'} >开机率统计分析</Checkbox>
+                  <Checkbox value={'haha1'} >开机率统计分析</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={'2'} >修复时间统计分析</Checkbox>
+                    <Checkbox value={'haha2'} >修复时间统计分析</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={'3'} >报修响应时间统计分析</Checkbox>
+                    <Checkbox value={'haha3'} >报修响应时间统计分析</Checkbox>
                   </Col>
                   
                   <Col span={6}>
@@ -610,7 +585,6 @@ const WrappedRegistrationForm = Form.create()(RegistrationForm52);
 
 class Report52 extends Component {
 
-
     constructor(props){
       super(props)
       this.State={
@@ -621,8 +595,8 @@ class Report52 extends Component {
     componentWillMount(){
 
       const testData = {
-        caigouzongshu:"湖北省中医院",
-        caigounumber:"999999-HAHAHAH"
+        weixiuweihugongchengshu:12,
+        weixiuguanlidejishu:['haha1']
       }
       this.setState({
         'formInfo':testData
