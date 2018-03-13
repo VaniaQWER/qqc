@@ -85,4 +85,8 @@ export default {
   QUERY_Management:`/investigation/selectInvestigationSuppliesL`,//查询
   ADD_Management:`/investigation/insertInvestigationSuppliesL`,//新增-修改
 
+  //问卷调查
+  QUESTION_3: `/investigation/insertEditConstrDept`, //3, 4新增编辑
+  QUSETION3_BACK: `/investigation/getInvestigationDept`, // 3回填
+  QUESTION4_BACK: `/investigation/getInvestigationDeptUser`, // 4回填
 }
