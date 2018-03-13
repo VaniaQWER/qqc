@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Form , Input , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
+import querystring from 'querystring';
 /**
  * @file 2医疗机构基本情况
  */
@@ -26,27 +27,28 @@ const styles={
     marginBottom:30
   }
 }
+let Guid ='';
+let OrgGuid = '';
 
 class RegistrationForm2 extends React.Component {
   state = {
     confirmDirty: false,
+    data:{}
   };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        values.investigationGuid = Guid;
+        values.investigationOrgGuid = OrgGuid;
         //这里的values是json数据。
-
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
-          body: JSON.stringify(values),//querystring.stringify(postData),
-          type: 'application/json',
+          url: api.ADD_Hospital,
+          body: querystring.stringify(values),
           success: data => {
             if (data.status) {
-              this.props.form.resetFields();
               message.success('操作成功')
-              this.props.setProgress(0)
             } else {
               message.error(data.msg);
             }
@@ -55,10 +57,10 @@ class RegistrationForm2 extends React.Component {
       }
     });
   }
-  componentDidMount = () => {
-    console.log(this.props.formInfo)
-    const { formInfo } = this.props ; 
-    this.props.form.setFieldsValue(formInfo)
+  componentWillReceiveProps = nextProps => {
+    this.setState({
+      data: nextProps.formInfo
+    })
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value;
@@ -66,7 +68,7 @@ class RegistrationForm2 extends React.Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const { data } = this.state; 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -111,7 +113,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医院名称"
         >
-          {getFieldDecorator('yiyuanmingchen', {
+          {getFieldDecorator('hospitalName', {
+            initialValue: data.hospitalName,
             rules: [
               {
                 required: true, message: '请填写医院名称！',
@@ -125,7 +128,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医院登记号"
         >
-          {getFieldDecorator('yiyuandengjihao', {
+          {getFieldDecorator('hospitalRegisterNo', {
+            initialValue: data.hospitalRegisterNo,
             rules: [ {
               required: true, message: '请填写医院登记号！',
             }],
@@ -138,14 +142,15 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医疗机构等级"
         >
-          {getFieldDecorator('radio-group',{
+          {getFieldDecorator('hospitalLevel',{
+            initialValue: data.hospitalLevel,
             rules: [
               { required: true, message: '请选择医疗机构等级！' , whitespace: true},
               ],
           })(
             <RadioGroup>
-              <Radio value="a">三甲</Radio>
-              <Radio value="b">三乙</Radio>
+              <Radio value="1">三甲</Radio>
+              <Radio value="2">三乙</Radio>
             </RadioGroup>
           )}
         </FormItem>
@@ -154,17 +159,18 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医院类型"
         >
-          {getFieldDecorator('yiyuantype',{
+          {getFieldDecorator('hospitalType',{
+            initialValue:data.hospitalType,
             rules: [
               { required: true, message: '请选择医院类型！' , whitespace: true},
               ],
           })(
             <RadioGroup>
-              <Radio value="a">综合性医院</Radio>
-              <Radio value="b">专科医院</Radio>
-              <Radio value="b">中医院</Radio>
-              <Radio value="b">中西医结合医院</Radio>
-              <Radio value="b">其他</Radio>
+              <Radio value="8">综合性医院</Radio>
+              <Radio value="6">专科医院</Radio>
+              <Radio value="2">中医院</Radio>
+              <Radio value="4">中西医结合医院</Radio>
+              <Radio value="99">其他</Radio>
             </RadioGroup>
           )}
         </FormItem>
@@ -173,17 +179,18 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医院性质"
         >
-          {getFieldDecorator('yiyuanxingzhi',{
+          {getFieldDecorator('hospitalProperty',{
+            initialValue:data.hospitalProperty,
             rules: [
               { required: true, message: '请选择医院性质！' , whitespace: true},
               ],
           })(
             <RadioGroup>
-              <Radio value="a">公立医院</Radio>
-              <Radio value="b">非公立医院</Radio>
-              <Radio value="c">教学医院</Radio>
-              <Radio value="d">非教学医院</Radio>
-              <Radio value="e">其他</Radio>
+              <Radio value="01">公立医院</Radio>
+              <Radio value="02">非公立医院</Radio>
+              <Radio value="03">教学医院</Radio>
+              <Radio value="04">非教学医院</Radio>
+              <Radio value="99">其他</Radio>
             </RadioGroup>
           )}
         </FormItem>
@@ -192,7 +199,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="编制床位数"
         >
-          {getFieldDecorator('in-chuangwei', {
+          {getFieldDecorator('planBedSum', {
+            initialValue:data.planBedSum,
             rules: [
             { required: true, type: 'number', message: '请填写编制床位数！' , whitespace: true},
             ],
@@ -206,7 +214,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="开放床位数"
         >
-          {getFieldDecorator('open-chuangwei', {
+          {getFieldDecorator('actualBedSum', {
+            initialValue:data.actualBedSum,
             rules: [
             { required: true, type: 'number',message: '请填写开放床位数！' , whitespace: true},
             ],
@@ -220,7 +229,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="职工总数"
         >
-          {getFieldDecorator('deptnum',{
+          {getFieldDecorator('staffSum',{
+            initialValue:data.staffSum,
             rules: [
             { required: true,type: 'number', message: '请填写职工总数！' , whitespace: true},
             ],
@@ -234,7 +244,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="卫生技术人员"
         >
-          {getFieldDecorator('deptnum-weisheng', {
+          {getFieldDecorator('healthTechnician', {
+            initialValue:data.healthTechnician,
             rules: [
             { required: true, type: 'number', message: '请填写卫生技术人员总数！' , whitespace: true},
             ],
@@ -248,7 +259,8 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="管理人员"
         >
-          {getFieldDecorator('deptnum-admin', {
+          {getFieldDecorator('administrators', {
+            initialValue:data.administrators,
             rules: [
             { required: true, type: 'number', message: '请填写管理人员总数！' , whitespace: true},
             ],
@@ -271,42 +283,41 @@ const WrappedRegistrationForm = Form.create()(RegistrationForm2);
 
 
 class Report2 extends Component {
-
-
     constructor(props){
       super(props)
-      this.State={
+      this.state={
         formInfo:{}
       }
     }
 
     componentWillMount(){
 
-      const testData = {
-        yiyuanmingchen:"湖北省中医院",
-        yiyuandengjihao:"999999-HAHAHAH"
-      }
-      this.setState({
-        'formInfo':testData
-      })
       
-
       //此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.INSERT_CONSTR_DEPT,
-      //   body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //       this.setState({
-      //         formInfo:testData
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }
-      //   }
-      // })
+      let that = this ; 
+      fetchData({
+        url: api.QUERY_Hospital,
+        body: {},
+        type: 'application/json',
+        success: data => {
+          if (data.status) {
+
+            let info = data.result;
+            if(info.investigationGuid){
+              Guid = info['investigationGuid']
+            }else if(info.investigationOrgGuid){
+              OrgGuid = info['investigationOrgGuid']
+            }
+           
+            //回填数据操作
+            that.setState({
+              formInfo:data.result || {}
+            })
+          } else {
+            message.error(data.msg);
+          }
+        }
+      })
       
     }
 

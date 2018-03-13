@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 // import ReportOtherForm from 'container/department/reportOtherForm';
-import { Form , Select , Cascader , Input , Button , message} from 'antd';
+import { Form , Cascader , Input , Button , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
+import querystring from 'querystring';
 /**
  * @file 1填报人信息
  */
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 const styles={
   container:{
     padding:'40px 80px'
@@ -26,6 +26,8 @@ const styles={
     marginBottom:30
   }
 }
+let Guid ='';
+let UserGuid = '';
 const options  = [{
     "value": "北京",
     "children": [{
@@ -11731,6 +11733,7 @@ const options  = [{
 class RegistrationForm extends React.Component {
   state = {
     confirmDirty: false,
+    data:{}
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -11739,15 +11742,20 @@ class RegistrationForm extends React.Component {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
 
+        values.investigationGuid = Guid||'';
+        values.investigationUserGuid = UserGuid||'';
+        values.tfProvince = values.address[0] || '';
+        values.tfCity = values.address[1] || '';
+        values.tfDistrict = values.address[2] || '';
+        delete values['address']
+
+        console.log('处理之后的：', values)
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
-          body: JSON.stringify(values),//querystring.stringify(postData),
-          type: 'application/json',
+          url: api.ADD_UserInfo,
+          body: querystring.stringify(values),
           success: data => {
             if (data.status) {
-              this.props.form.resetFields();
               message.success('操作成功')
-              this.props.setProgress(0)
             } else {
               message.error(data.msg);
             }
@@ -11756,10 +11764,10 @@ class RegistrationForm extends React.Component {
       }
     });
   }
-  componentDidMount = () => {
-    console.log(this.props.formInfo)
-    const { formInfo } = this.props ; 
-    this.props.form.setFieldsValue(formInfo)
+  componentWillReceiveProps = nextProps => {
+    this.setState({
+      data: nextProps.formInfo
+    })
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value;
@@ -11770,7 +11778,7 @@ class RegistrationForm extends React.Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const { data } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -11805,15 +11813,6 @@ class RegistrationForm extends React.Component {
          },
       },
     };
-
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86',
-    })(
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    );
     
     return (
       <div style={styles.container}>
@@ -11824,7 +11823,8 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="请选择省市区（县）"
             >
-            {getFieldDecorator('adress', {
+            {getFieldDecorator('address', {
+              initialValue: data.address,
               rules: [
                 {
                   required: true, message: '请选择省市区（县）！',
@@ -11839,6 +11839,7 @@ class RegistrationForm extends React.Component {
             label="填表人姓名"
           >
             {getFieldDecorator('userName', {
+              initialValue: data.userName,
               rules: [{ required: true, message: '请填写填表人姓名！', whitespace: true }],
             })(
               <Input />
@@ -11849,6 +11850,7 @@ class RegistrationForm extends React.Component {
             label="科室"
           >
             {getFieldDecorator('deptName', {
+              initialValue: data.deptName,
               rules: [{ required: true, message: '请填写科室！', whitespace: true }],
             })(
               <Input />
@@ -11859,6 +11861,7 @@ class RegistrationForm extends React.Component {
             label="职务"
           >
             {getFieldDecorator('postName', {
+              initialValue: data.postName,
               rules: [{ required: true, message: '请填写职务！', whitespace: true }],
             })(
               <Input />
@@ -11870,6 +11873,7 @@ class RegistrationForm extends React.Component {
             label="座机"
           >
             {getFieldDecorator('landlineTelephone', {
+              initialValue: data.landlineTelephone,
               rules: [{ required: true, message: '请填写座机！', whitespace: true }],
             })(
               <Input />
@@ -11881,11 +11885,12 @@ class RegistrationForm extends React.Component {
             label="手机"
           >
             {getFieldDecorator('mobilePhone', {
+              initialValue: data.mobilePhone,
               rules: [
               { required: true, message: '请填写手机！' , whitespace: true},
               ],
             })(
-              <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+              <Input  style={{ width: '100%' }} />
             )}
           </FormItem>
           <FormItem
@@ -11893,6 +11898,7 @@ class RegistrationForm extends React.Component {
             label="邮箱"
           >
             {getFieldDecorator('email', {
+              initialValue: data.email,
               rules: [{
                 required: true, message: '请填写邮箱！', whitespace: true
               }],
@@ -11918,40 +11924,46 @@ class Report1 extends Component {
 
     constructor(props){
       super(props)
-      this.State={
+      this.state={
         formInfo:{}
       }
     }
 
     componentWillMount(){
 
-      const testData = {
-          adress:["广东", "深圳", "罗湖区"]
-      }
-      this.setState({
-        'formInfo':testData
-      })
-      
       //此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.REPORT_PCS_JSON,
-      //   body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //       this.setState({
-      //         formInfo:testData
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }
-      //   }
-      // })
-      
+      let that = this;
+      fetchData({
+        url: api.QUERY_UserInfo,
+        body: JSON.stringify({}),//querystring.stringify(postData),
+        type: 'application/',
+        success: data => {
+          if (data.status) {
+            //回填数据操作
+            let info = data.result;
+            info.address = [info.tfProvince || '' ,info.tfCity|| ''  , info.tfDistrict || '' ]
+            for(let item in info){
+              if(item ==="tfProvince" || item ==="tfCity" || item ==="tfDistrict"){
+                  delete info[item]
+              }else if(item==='investigationGuid'){
+                Guid = info[item]
+                delete info[item]
+              }else if(item==='investigationUserGuid'){
+                UserGuid = info[item]
+                delete info[item]
+              }else if(item==='mobilePhone'){
+                info[item] = info[item].toString();
+              }else{}
+            }
+            that.setState({
+              'formInfo':info || {}
+            })
+          } else {
+            message.error(data.msg);
+          }
+        }
+      })
     }
-
-
     render(){
       return(
         <WrappedRegistrationForm formInfo={this.state.formInfo} ></WrappedRegistrationForm>

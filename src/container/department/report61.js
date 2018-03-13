@@ -96,33 +96,6 @@ class RegistrationForm61 extends React.Component {
     });
   }
 
-  // componentDidMount = () =>{
-  //   var that =this;
-  //   fetchData({
-  //     url: api.QUERY_Equipment,
-  //     body: JSON.stringify({}),//querystring.stringify(postData),
-  //     type: 'application/json',
-  //     success: data => {
-  //       if (data.status) {
-  //         //回填数据操作
-  //       var b =  _.forIn(data.result,(value,key)=>{
-  //           if(data.result[key]==="01"){
-  //             data.result[key]=true
-  //           }else{
-  //             delete data.result[key]
-  //           }
-  //         })
-  //         console.log(b);
-  //         that.setState({
-  //           formInfo:b
-  //         })
-  //       } else {
-  //         message.error(data.msg);
-  //       }  
-  //     }
-  //   })
-    
-  // }
   componentDidMount = () => {
     // console.log('子组件componentDidMount')
     // console.log(formInfo)

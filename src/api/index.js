@@ -54,9 +54,18 @@ export default {
 
 
   //问卷调查01
-  QUERY_UserInfo:`/investigation/selectInvestigationEqipmerL`,//查询
-  
+  QUERY_UserInfo:`/investigation/getInvestigationUser`,//查询
+  ADD_UserInfo:`/investigation/addUpdateInvestigationUser`,
  
+  //问卷调查02
+  QUERY_Hospital:`/investigation/getInvestigationOrg`,//查询
+  ADD_Hospital:`/investigation/addUpdateInvestigationOrg`,
+
+
+  //问卷调查54
+  QUERY_Qc:`/investigation/getInvestigationQc`,//查询
+  ADD_Qc:`/investigation/addUpdateInvestigationQc`,
+
   //问卷调查61
   QUERY_Equipment:`/investigation/selectInvestigationEqipmerL`,//查询
   ADD_Equipment:`/investigation/insertInvestigationEqipmerL`,//新增-修改
