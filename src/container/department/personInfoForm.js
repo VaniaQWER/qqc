@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Card, Form, Input, Row, Col, Select, DatePicker,
-  message, BackTop,
+  message, BackTop, Spin,
   Checkbox, Radio, Button, Icon, Divider } from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
@@ -46,17 +46,20 @@ const formItemLayoutForLine = {
 /**
  * @file 质控上报
  */
-
-let uuid = 1;
 class PersonInfoForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      itemOneList: [ 0 ]
+      itemOneList: [ 0 ],
+      btnLoading: false,
+      initialValue: {},
+      formLoading: true
     }
+    this.uuid = 1;
   }
   createItems = i => {
     const { form } = this.props;
+    const { initialValue } = this.state;
     let items = [
       <Col span={12} key={1}>
         <FormItem
@@ -65,7 +68,7 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('fname-' + i, {
             rules: [{ required: true, message: '请输入姓名' }],
-            // initialValue: data[`${fname}-i`]
+            initialValue: initialValue[`fname-${i}`]
           })(
             <Input/>
           )}
@@ -78,12 +81,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('gender-' + i, {
             rules: [{ required: true, message: '请输入性别' }],
-            // initialValue: data[`${gender}-i`]
+            initialValue: initialValue[`gender-${i}`]
           })(
-            <Select style={{width:'100%'}} onChange={value => {
-              form.setFieldsValue({['gender-' + i]: value})
-              //this.getProgress();
-            }}>
+            <Select style={{width:'100%'}}>
               <Option value={'男'}>男</Option>
               <Option value={'女'}>女</Option>
             </Select>
@@ -97,12 +97,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('birthday-' + i, {
             rules: [{ required: true, message: '请输入出生年月' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`birthday-${i}`]
           })(
-            <DatePicker format="YYYY-MM" onChange={(value, val) => {
-              form.setFieldsValue({['birthday-' + i]: val})
-              //this.getProgress();
-            }}/>
+            <DatePicker format="YYYY-MM" />
           )}
         </FormItem> 
       </Col>,
@@ -113,7 +110,7 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('politicalStatus-' + i, {
             rules: [{ required: true, message: '请输入政治面貌' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`politicalStatus-${i}`]
           })(
             <Input/>
           )}
@@ -126,12 +123,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('entryDate-' + i, {
             rules: [{ required: true, message: '请输入入职（本部门）年月' }],
+            initialValue: initialValue[`entryDate-${i}`]
           })(
             <MonthPicker
-              onChange={(value, val) => {
-                form.setFieldsValue({['entryDate-' + i]: val})
-                //this.getProgress();
-              }}
               format="YYYY-MM"
             />
           )}
@@ -144,12 +138,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('highestEducation-' + i, {
             rules: [{ required: true, message: '学历' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`highestEducation-${i}`]
           })(
-            <Select style={{width:'100%'}} onChange={(value) => {
-              form.setFieldsValue({['highestEducation-' + i]: value})
-              //this.getProgress();
-            }}>
+            <Select style={{width:'100%'}}>
               <Option value={'01'}>博士</Option>
               <Option value={'02'}>硕士</Option>
               <Option value={'03'}>本科</Option>
@@ -166,7 +157,7 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('highestEducationSchool-' + i, {
             rules: [{ required: true, message: '毕业院校' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`highestEducationSchool-${i}`]
           })(
             <Input/>
           )}
@@ -179,12 +170,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('technicalTitlesB-' + i, {
             rules: [{ required: true, message: '职称' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`technicalTitlesB-${i}`]
           })(
-            <RadioGroup onChange={(value) => {
-              form.setFieldsValue({['technicalTitlesB-' + i]: value})
-              //this.getProgress();
-            }}>
+            <RadioGroup>
               <Radio value={'1'}>正高</Radio>
               <Radio value={'2'}>副高</Radio>
               <Radio value={'3'}>中级</Radio>
@@ -201,21 +189,18 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('technicalSource-' + i, {
             rules: [{ required: true, message: '职称获取途径' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`technicalSource-${i}`]
           })(
-            <Checkbox.Group onChange={(value) => {
-              form.setFieldsValue({['technicalSource-' + i]: value})
-              //this.getProgress();
-            }}>
-              <Col span={8}><Checkbox value={'1'}>医院</Checkbox></Col>
-              <Col span={8}><Checkbox value={'2'}>大学</Checkbox></Col>
-              <Col span={8}><Checkbox value={'3'}>药监局</Checkbox></Col>
-              <Col span={8}><Checkbox value={'4'}>卫计委</Checkbox></Col>
-              <Col span={4}><Checkbox value={'5'}>其他</Checkbox></Col>
+            <Checkbox.Group>
+              <Col span={8}><Checkbox value={'01'}>医院</Checkbox></Col>
+              <Col span={8}><Checkbox value={'02'}>大学</Checkbox></Col>
+              <Col span={8}><Checkbox value={'03'}>药监局</Checkbox></Col>
+              <Col span={8}><Checkbox value={'04'}>卫计委</Checkbox></Col>
+              <Col span={4}><Checkbox value={'99'}>其他</Checkbox></Col>
               <Col span={6}>
                 {form.getFieldDecorator('technicalSourceOther-' + i, {
                   // rules: [{ required: true, message: '职称获取途径' }],
-                  // initialValue: updateData.deptName
+                  initialValue: initialValue[`technicalSourceOther-${i}`]
                   })(<Input placeholder='请输入'/>
                 )}
               </Col>
@@ -230,12 +215,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('approvalFlag-' + i, {
             rules: [{ required: true, message: '医院是否认可和聘任以上职称' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`approvalFlag-${i}`]
           })(
-            <RadioGroup onChange={(value) => {
-              form.setFieldsValue({['approvalFlag-' + i]: value})
-              //this.getProgress();
-            }}>
+            <RadioGroup>
               <Radio value={'01'}>是</Radio>
               <Radio value={'02'}>否</Radio>
             </RadioGroup>
@@ -249,23 +231,20 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('majorName-' + i, {
             rules: [{ required: true, message: '专业背景' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`majorName-${i}`]
           })(
-            <Checkbox.Group onChange={(value) => {
-              form.setFieldsValue({['majorName-' + i]: value})
-              //this.getProgress();
-            }}>
+            <Checkbox.Group>
               <Row>
                 <Col span={6}><Checkbox value="01">生物医学工程</Checkbox></Col>
                 <Col span={6}><Checkbox value="02">计算机</Checkbox></Col>
                 <Col span={6}><Checkbox value="03">电子</Checkbox></Col>
-                <Col span={6}><Checkbox value="04">机械</Checkbox></Col>
+                <Col span={6}><Checkbox value="07">机械</Checkbox></Col>
                 <Col span={6}><Checkbox value="05">管理</Checkbox></Col>
-                <Col span={6}><Checkbox value="06">经济</Checkbox></Col>
-                <Col span={6}><Checkbox value="07">医学</Checkbox></Col>
+                <Col span={6}><Checkbox value="04">经济</Checkbox></Col>
+                <Col span={6}><Checkbox value="06">医学</Checkbox></Col>
                 <Col span={6}><Checkbox value="08">护理</Checkbox></Col>
                 <Col span={6}><Checkbox value="09">药学</Checkbox></Col>
-                <Col span={6}><Checkbox value="10">其他</Checkbox></Col>
+                <Col span={6}><Checkbox value="99">其他</Checkbox></Col>
               </Row>
             </Checkbox.Group>
           )}
@@ -278,24 +257,21 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('postType-' + i, {
             rules: [{ required: true, message: '岗位类型' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`postType-${i}`]
           })(
-            <Checkbox.Group onChange={(value) => {
-              form.setFieldsValue({['postType-' + i]: value})
-              //this.getProgress();
-            }}>
+            <Checkbox.Group>
               <Row>
-                <Col span={8}><Checkbox value="1">设备购置管理</Checkbox></Col>
-                <Col span={8}><Checkbox value="2">耗材采购管理</Checkbox></Col>
-                <Col span={8}><Checkbox value="3">耗材物流管理</Checkbox></Col>
-                <Col span={8}><Checkbox value="4">设备维修维护</Checkbox></Col>
-                <Col span={8}><Checkbox value="5">质量安全管理</Checkbox></Col>
-                <Col span={8}><Checkbox value="6">教学科研</Checkbox></Col>
-                <Col span={4}><Checkbox value={'7'}>其他</Checkbox></Col>
+                <Col span={8}><Checkbox value="01">设备购置管理</Checkbox></Col>
+                <Col span={8}><Checkbox value="02">耗材采购管理</Checkbox></Col>
+                <Col span={8}><Checkbox value="03">耗材物流管理</Checkbox></Col>
+                <Col span={8}><Checkbox value="04">设备维修维护</Checkbox></Col>
+                <Col span={8}><Checkbox value="05">质量安全管理</Checkbox></Col>
+                <Col span={8}><Checkbox value="06">教学科研</Checkbox></Col>
+                <Col span={4}><Checkbox value={'99'}>其他</Checkbox></Col>
 
                 {form.getFieldDecorator('postTypeOther-' + i, {
                   // rules: [{ required: true, message: '职称获取途径' }],
-                  //initialValue: updateData.deptName
+                  initialValue: initialValue[`postTypeOther-${i}`]
                   })(<Col span={6}><Input placeholder='请输入'/></Col>
                 )}
 
@@ -311,7 +287,7 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('publishThesis-' + i, {
             rules: [{ required: true, message: '不能为空' }],
-            //initialValue: updateData.deptName
+            initialValue: initialValue[`publishThesis-${i}`]
           })(
             <Input style={{width: 100}}  addonAfter={<span>篇</span>}/>
           )}
@@ -343,11 +319,9 @@ class PersonInfoForm extends PureComponent {
   }
   addItem = () => {
     const list = this.state.itemOneList
-    let id = uuid;
-    uuid++;
     this.setState({
       itemOneList: [
-        ...list, id
+        ...list, this.uuid++
       ]
     })
   }
@@ -356,63 +330,84 @@ class PersonInfoForm extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.schedule = 100.00;
+        this.setState({btnLoading: true});
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
+          url: api.QUESTION_3,
           body: JSON.stringify(values),//querystring.stringify(postData),
           type: 'application/json',
           success: data => {
             if (data.status) {
-              this.setState({
-                itemOneList: [0]
-              })
               message.success('操作成功')
             } else {
               message.error(data.msg);
             }
+            this.setState({btnLoading: false});
           }
         })
       }
     });
   }
   componentWillMount = () => {
-    const data = []
-    this.setState({
-      data
+    fetchData({
+      url: api.QUESTION4_BACK,
+      type: 'application/json',
+      success: data => {
+        if (data.status) {
+          if (data.result.total) {
+            const items = Array.apply(null, Array(data.result.total)).map((item, i) => i)
+            this.setState({
+              initialValue: data.result,
+              itemOneList: items,
+              formLoading: false
+            })
+            this.uuid = data.result.total;
+          } else {
+            this.setState({
+              formLoading: false
+            })
+          }
+        } else {
+          message.error(data.msg);
+        }
+      }
     })
   }
   
   render() {
-    const { itemOneList } = this.state;
+    const { itemOneList, formLoading, btnLoading } = this.state;
     return (
-      <Form onSubmit={this.handleSubmit} style={{padding: '40px 80px'}} className='right_content'>
-        <BackTop />
-        <Row>
-          <Card style={{marginBottom: 20}}>
-            <h2 style={{textAlign: 'center'}}> 4.医学工程部门人员情况 </h2>
-            <span style={{color: 'red'}}>(含在编和合同制员工。部门职能范围包括1、设备购置  2、耗材采购  3、耗材物流管理  4、设备维修维护  5、医疗器械质量安全管理。需填写每位职工信息)</span>
-          </Card> 
-          <Card style={{marginTop: 20}}>
-            { itemOneList.map(item => (
-                this.createItems(item)
-              )) 
-            }
-            <Button style={{ width: '60%', marginLeft: '20%' }} onClick={() => this.addItem()}>
-              <Icon type="plus" /> 添加更多
-            </Button>
-          </Card>   
-        </Row>
-        <Row>
-          <Col style={{textAlign: 'center', marginTop: 10}}> 
-            <Button 
-              htmlType='submit'
-              type='primary'
-              style={{width: 300}}
-            >
-              <Icon type="save" /> 保存
-            </Button>
-          </Col>
-        </Row>
-      </Form>  
+      <Spin spinning={formLoading} delay={500}>
+        <Form onSubmit={this.handleSubmit} style={{padding: '40px 80px'}} className='right_content'>
+          <BackTop />
+          <Row>
+            <Card style={{marginBottom: 20}}>
+              <h2 style={{textAlign: 'center'}}> 4.医学工程部门人员情况 </h2>
+              <span style={{color: 'red'}}>(含在编和合同制员工。部门职能范围包括1、设备购置  2、耗材采购  3、耗材物流管理  4、设备维修维护  5、医疗器械质量安全管理。需填写每位职工信息)</span>
+            </Card> 
+            <Card style={{marginTop: 20}}>
+              { itemOneList.map(item => (
+                  this.createItems(item)
+                )) 
+              }
+              <Button style={{ width: '60%', marginLeft: '20%' }} onClick={() => this.addItem()}>
+                <Icon type="plus" /> 添加更多
+              </Button>
+            </Card>   
+          </Row>
+          <Row>
+            <Col style={{textAlign: 'center', marginTop: 10}}> 
+              <Button 
+                htmlType='submit'
+                type='primary'
+                style={{width: 300}}
+                loading={btnLoading}
+              >
+                <Icon type="save" /> 保存
+              </Button>
+            </Col>
+          </Row>
+        </Form>  
+      </Spin>
     )
   }
 }

@@ -182,7 +182,6 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('flow', {
                   initialValue: data.flow,
-                  valuePropName: 'checked',
                   rules:[
                     {
                       required:true,message:'请选择，不能为空！'
