@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Form  ,Tooltip ,Icon , Col , Checkbox , Button , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
-import querystring from 'querystring'
 /**
  * @file 2医疗机构基本情况
  */
@@ -231,13 +230,12 @@ class RegistrationForm51 extends React.Component {
         </FormItem>
 
         <FormItem {...formItemLayout} 
-        label="已开展的技术管理（设备）">
+          label="已开展的技术管理（设备）">
           {getFieldDecorator('management', {
             initialValue:data.management,
             rules: [
               { required: true, message: '请选择已开展的技术管理！'},
             ],
-            valuePropName: 'checked',
           })(
             <Checkbox.Group>
                 <Col xxl={8} xl={12}>
@@ -249,7 +247,6 @@ class RegistrationForm51 extends React.Component {
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'03'} >政策合规评审</Checkbox>
                 </Col>
-          
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'04'} >采购可行性论证</Checkbox>
                 </Col>
@@ -259,7 +256,6 @@ class RegistrationForm51 extends React.Component {
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'06'} >成本效益分析</Checkbox>
                 </Col>
-               
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'07'} >招标采购</Checkbox>
                 </Col>
@@ -269,7 +265,6 @@ class RegistrationForm51 extends React.Component {
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'09'} >安装验收</Checkbox>
                 </Col>
-               
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'10'} >报废处置管理</Checkbox>
                 </Col>
@@ -279,7 +274,6 @@ class RegistrationForm51 extends React.Component {
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'12'} >采购追溯管理</Checkbox>
                 </Col>
-                
                 <Col xxl={8} xl={12}>
                   <Checkbox value={'13'} >档案管理</Checkbox>
                 </Col>

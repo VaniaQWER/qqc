@@ -112,7 +112,6 @@ class RegistrationForm61 extends React.Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   }
   render() {
-    console.log('子组件render')
     const { getFieldDecorator } = this.props.form;
     const { data } = this.state;
     return (

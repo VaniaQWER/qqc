@@ -211,23 +211,16 @@ class RegistrationForm52 extends React.Component {
       {...formItemLayout}
         label="人员岗位职责划分">
           {getFieldDecorator('postDuty', {
-            valuePropName: 'checked',
             initialValue:data.postDuty,
             rules:[{
               required:true, message:'请选择人员岗位职责划分！'
             }]
           })(
-            <Checkbox.Group style={{marginTop:8}}>
-                <Col xxl={4} xl={8}>
-                <Checkbox value={'01'} >按临床科室区域划分</Checkbox>
-                </Col>
-                <Col  xxl={4} xl={8}>
-                  <Checkbox value={'02'} >按设备类型划分</Checkbox>
-                </Col>
-                <Col  xxl={4} xl={8}>
-                  <Checkbox value={'03'} >无明确划分</Checkbox>
-                </Col>
-            </Checkbox.Group>
+            <RadioGroup>
+                <Radio value={'01'} >按临床科室区域划分</Radio>
+                <Radio value={'02'} >按设备类型划分</Radio>
+                <Radio value={'03'} >无明确划分</Radio>
+            </RadioGroup>
           )}
         </FormItem>
 
@@ -253,12 +246,12 @@ class RegistrationForm52 extends React.Component {
             {...formItemLayout}
             label="专业维修工具">
               {getFieldDecorator('tool', {
-                valuePropName: 'checked',
+                initialValue:data.tool,
                 rules:[{
                   required:true,message:'请选择专业维修工具！'
                 }]
               })(
-                <Checkbox.Group defaultValue={data.tool} >
+                <Checkbox.Group>
                   <Row style={{marginTop:10}}> 
                     <Col xxl={4} xl={8}>
                     <Checkbox value={'01'} >万用表</Checkbox>
@@ -289,12 +282,12 @@ class RegistrationForm52 extends React.Component {
               {...formItemLayout}
               label="应急库房设备">
               {getFieldDecorator('equip', {
-                valuePropName: 'checked',
+                initialValue:data.equip,
                 rules:[{
                   required:true,message:'请选择应急库房设备！'
                 }]
               })(
-                <Checkbox.Group defaultValue={data.equip}>
+                <Checkbox.Group>
                   <Row > 
                     <Col xxl={8} xl={12}>
                     <Checkbox value={'01'} >监护仪 ( 台数：
@@ -454,13 +447,13 @@ class RegistrationForm52 extends React.Component {
                     </Tooltip>
                   </span>
                 )}>
-                {getFieldDecorator('Type', {
-                  valuePropName: 'checked',
+                {getFieldDecorator('type', {
+                  initialValue: data.type,
                   rules:[{
                     required:true,'message':'请选择自修的医疗设备类型！'
                   }]
                 })(
-                  <Checkbox.Group defaultValue={data.Type}>
+                  <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
                       <Col span={6}>
                       <Checkbox value={'01'} >普通放射类</Checkbox>
@@ -540,12 +533,12 @@ class RegistrationForm52 extends React.Component {
           {...formItemLayout}
           label="已开展的维修技术管理">
             {getFieldDecorator('repair', {
-              valuePropName: 'checked',
+              initialValue:data.repair,
               rules:[{
                 required:true,'message':'请选择已开展的维修技术管理！'
               }]
             })(
-              <Checkbox.Group defaultValue={data.repair}>
+              <Checkbox.Group>
                 
                   <Col xxl={8} xl={8}>
                   <Checkbox value={'01'} >开机率统计分析</Checkbox>

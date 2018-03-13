@@ -372,7 +372,6 @@ class RegistrationForm52 extends React.Component {
             <FormItem {...formItemLayout} 
             label="二级库房存储耗材类型">
               {getFieldDecorator('suppliesType', {
-                valuePropName: 'checked',
                 initialValue:data.suppliesType,
                 rules:[{
                   required:true,message:'请选择二级库房存储耗材类型'
@@ -515,9 +514,7 @@ class RegistrationForm52 extends React.Component {
           {getFieldDecorator('hzb', { 
             initialValue:data.hzb,
             rules:[{
-              
-              required:true,
-              message:'请填写耗占比'
+              required:true,message:'请填写耗占比'
             }]
           })(
               <InputNumber min={0} max={100} />
@@ -529,7 +526,6 @@ class RegistrationForm52 extends React.Component {
         label="已开展的技术管理（耗材）">
           {getFieldDecorator('manageSup', {
             initialValue:data.manageSup,
-            valuePropName: 'checked',
             rules:[{
               required:true,message:'请填写耗占比'
             }]

@@ -176,13 +176,12 @@ class RegistrationForm52 extends React.Component {
 
             <Card style={styles.card}>
               <Col span={24}>
-              已建立的质控管理制度和流程
+              已建立的质控管理制度和流程已建立的质控管理制度和流程
               </Col>  
               <Col span={24}>
               <FormItem>
                 {getFieldDecorator('flow', {
                   initialValue: data.flow,
-                  valuePropName: 'checked',
                   rules:[
                     {
                       required:true,message:'请选择，不能为空！'
@@ -260,9 +259,11 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('profession', {
                   initialValue:data.profession,
-                  valuePropName: 'checked',
+                  rules:[{
+                    required:true,message:'请选择，不能为空！'
+                  }]
                 })(
-                  <Checkbox.Group defaultValue={data.profession}>
+                  <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
                       <Col span={6}>
                       <Checkbox value={'01'} >电气安全分析仪</Checkbox>
@@ -331,9 +332,11 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('management', {
                   initialValue:data.management,
-                  valuePropName: 'checked',
+                  rules:[{
+                    required:true,message:'请选择，不能为空！'
+                  }]
                 })(
-                  <Checkbox.Group defaultValue={data.management}>
+                  <Checkbox.Group>
                       <Col xxl={6} xl={12}>
                       <Checkbox value={'01'} >大型设备配置许可</Checkbox>
                       </Col>
@@ -403,9 +406,11 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('pm', {
                   initialValue:data.pm,
-                  valuePropName: 'checked',
+                  rules:[{
+                    required:true,message:'请选择，不能为空！'
+                  }]
                 })(
-                  <Checkbox.Group defaultValue={data.pm}>
+                  <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
                       <Col xxl={6} xl={12}>
                       <Checkbox value={'01'} >呼吸机 ( 年PM次数：
@@ -545,7 +550,9 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('review', {
                   initialValue:data.review,
-                  valuePropName: 'checked',
+                  rules:[{
+                    required:true,message:'请选择，不能为空！'
+                  }]
                 })(
 
                   <Checkbox.Group >
