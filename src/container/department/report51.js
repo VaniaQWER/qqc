@@ -68,7 +68,8 @@ class RegistrationForm51 extends React.Component {
         values.investigationEquipmentGuid = EquipmentGuid;
         fetchData({
           url: api.ADD_HEquipment,
-          body: querystring.stringify(values),
+          body: JSON.stringify(values),
+          type:'application/json',
           success: data => {
             if (data.status) {
               message.success('操作成功')
@@ -239,7 +240,6 @@ class RegistrationForm51 extends React.Component {
             valuePropName: 'checked',
           })(
             <Checkbox.Group>
-            
                 <Col xxl={8} xl={12}>
                 <Checkbox value={'01'} >年度规划</Checkbox>
                 </Col>
@@ -330,6 +330,7 @@ class Report51 extends Component {
             if(info.investigationEquipmentGuid){
               EquipmentGuid = info['investigationEquipmentGuid']
             }
+            // info.management = ['01','02','03'];
             that.setState({
               formInfo:info || {}
             })
