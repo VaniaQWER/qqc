@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Form  , Tooltip ,Icon ,  Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
+import querystring from 'querystring';
 /**
  * @file 5.2医用耗材采购管理情况
  */
@@ -48,11 +49,15 @@ const tip3 = '植入和介入类耗材：包括血管介入类（心脏介入类
 const tip4 = '计算公式：植入和介入类耗材采购金额/医用耗材采购金额x100%';
 const tip5 = '定义：指医疗机构用于医疗、教学、科研、预防、保健等工作，按国家相关法规纳入医疗器械注册管理的或取得上级行政主管部门行政许可，并具有卫生专业技术特征的消耗性材料，包括一次性及可重复使用的医疗器械等。'
 const help5= '计算公式：医用耗材收入/医疗收入x100%（不含药品）'
+ 
+let Guid = '';
+let SuppliesGuid = '';
 class RegistrationForm52 extends React.Component {
   state = {
     confirmDirty: false,
     firstCheck:false,
     secondCheck:false,
+    data:{}
   };
   //联动状态
   handleAChange = (e) => {
@@ -98,16 +103,14 @@ class RegistrationForm52 extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
-
+        values.investigationGuid = Guid;
+        values.investigationSuppliesGuid = SuppliesGuid;
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
-          body: JSON.stringify(values),//querystring.stringify(postData),
-          type: 'application/json',
+          url: api.ADD_Supplies,
+          body: querystring.stringify(values),
           success: data => {
             if (data.status) {
-              this.props.form.resetFields();
               message.success('操作成功')
-              this.props.setProgress(0)
             } else {
               message.error(data.msg);
             }
@@ -116,10 +119,10 @@ class RegistrationForm52 extends React.Component {
       }
     });
   }
-  componentDidMount = () => {
-    console.log(this.props.formInfo)
-    const { formInfo } = this.props ; 
-    this.props.form.setFieldsValue(formInfo)
+  componentWillReceiveProps = (nextProps) =>{
+    this.setState({
+      data:nextProps.formInfo
+    })
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value;
@@ -127,7 +130,7 @@ class RegistrationForm52 extends React.Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const { data } = this.state; 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -194,7 +197,8 @@ class RegistrationForm52 extends React.Component {
               </span>
             )}
           >
-            {getFieldDecorator('zichanzongzhi', {
+            {getFieldDecorator('suppliesTotalSl', {
+              initialValue:data.suppliesTotalSl,
               rules: [
               { required: true, type: 'number', message: '请填写医用耗材总数！' , whitespace: true},
               ],
@@ -215,7 +219,8 @@ class RegistrationForm52 extends React.Component {
               </span>
             )}
           >
-            {getFieldDecorator('caigoujine', {
+            {getFieldDecorator('suppliesTotalPrice', {
+              initialValue:data.suppliesTotalPrice,
               rules: [
               { required: true, type: 'number', message: '请填写医用耗材采购金额！' , whitespace: true},
               ],
@@ -237,7 +242,8 @@ class RegistrationForm52 extends React.Component {
             )}
             help={tip4}
           >
-            {getFieldDecorator('caigoubili', {
+            {getFieldDecorator('purchaseRatio', {
+              initialValue:data.purchaseRatio,
               rules: [
               { required: true, type: 'number', message: '请填写植入和介入类耗材采购比例！' , whitespace: true},
               ],
@@ -252,7 +258,8 @@ class RegistrationForm52 extends React.Component {
           <FormItem
             {...formItemLayout}
             label='一级耗材库房'>
-            {getFieldDecorator('yijihaocai', {
+            {getFieldDecorator('storageFlag1', {
+              initialValue:data.storageFlag1,
               rules:[{
                 required:true,message:'请选择是否有一级耗材库房'
               }]
@@ -268,12 +275,12 @@ class RegistrationForm52 extends React.Component {
             {...formItemLayout}
             label="场地面积"
           >
-            {getFieldDecorator('yijichangdimiaji', {
+            {getFieldDecorator('storageAcreage1', {
+              initialValue:data.storageAcreage1,
               rules:[{
                 required:this.state.firstCheck,message:'请填写一级耗材库房面积！'
               }]
             })(
-              
               <InputNumber  min={0}/>
             )}
             <span className="ant-form-text">平方米</span>
@@ -283,7 +290,8 @@ class RegistrationForm52 extends React.Component {
               {...formItemLayout}
               label="管理人员"
             >
-              {getFieldDecorator('yijiguanlirenyuangeshu',{
+              {getFieldDecorator('managementTotalSl',{
+                initialValue:data.managementTotalSl,
                 rules:[{
                   required:this.state.firstCheck,message:'请填写一级耗材库房管理人员数量！'
                 }]
@@ -302,7 +310,8 @@ class RegistrationForm52 extends React.Component {
               {...formItemLayout}
               label="手术室面积"
             >
-              {getFieldDecorator('erjichangdimiaji', {
+              {getFieldDecorator('operationAcreage', {
+                initialValue:data.operationAcreage,
                 rules:[{
                   required:true,type:'number',message:'请填写手术室面积'
                 }]
@@ -316,7 +325,8 @@ class RegistrationForm52 extends React.Component {
               {...formItemLayout}
               label="手术间数量"
             >
-              {getFieldDecorator('erjiguanlirenyuangeshu',{
+              {getFieldDecorator('operationTotalSl',{
+                initialValue:data.operationTotalSl,
                 rules:[{
                   required:true,type:'number',message:'请填写手术间数量'
                 }]
@@ -329,14 +339,15 @@ class RegistrationForm52 extends React.Component {
                   {...formItemLayout}
                   label='二级库房'
                 >
-                  {getFieldDecorator('erjikufang', {
+                  {getFieldDecorator('storageFlag2', {
+                    initialValue:data.storageFlag2,
                     rules:[{
                       required:true,message:'请选择有无二级库房'
                     }]
                   })(
                         <RadioGroup onChange={this.handleBChange}>
-                          <Radio value="01B">有</Radio>
-                          <Radio value="00B">无</Radio>
+                          <Radio value="01">有</Radio>
+                          <Radio value="00">无</Radio>
                         </RadioGroup>
                   )}
                 </FormItem>
@@ -345,7 +356,8 @@ class RegistrationForm52 extends React.Component {
                   {...formItemLayout}
                   label='二级库房场地面积'
                 >
-                  {getFieldDecorator('erjikufangmianji',{
+                  {getFieldDecorator('storageAcreage2',{
+                    initialValue:data.storageAcreage2,
                     rules:[{
                       type:'number',required:this.state.secondCheck,message:'请填写二级库房场地面积！'
                     }]
@@ -359,56 +371,57 @@ class RegistrationForm52 extends React.Component {
         <Row>
             <FormItem {...formItemLayout} 
             label="二级库房存储耗材类型">
-              {getFieldDecorator('erjikufanghaocun', {
+              {getFieldDecorator('suppliesType', {
                 valuePropName: 'checked',
+                initialValue:data.suppliesType,
                 rules:[{
                   required:true,message:'请选择二级库房存储耗材类型'
                 }]
               })(
                 <Checkbox.Group>
                   <Row> 
-                      <Checkbox value={'1'}
+                      <Checkbox value={'01'}
                       onChange={this.onCheckAllChange}>
                         血管介入类（ &nbsp;
-                          <Checkbox value={'xueguan11'} >心脏介入类</Checkbox>、
-                          <Checkbox value={'12'} >周围血管介入类</Checkbox>
+                          <Checkbox value={'01'} >心脏介入类</Checkbox>、
+                          <Checkbox value={'02'} >周围血管介入类</Checkbox>
                         &nbsp;）
                       </Checkbox>
                   </Row> 
                   <Row> 
-                  <Checkbox value={'2'} >非血管介入</Checkbox>
+                  <Checkbox value={'03'} >非血管介入</Checkbox>
                   </Row> 
                   <Row> 
-                  <Checkbox value={'3'} >
+                  <Checkbox value={'04'} >
                         骨科植入（ &nbsp;
-                          <Checkbox value={'31'} >脊柱</Checkbox>、
-                          <Checkbox value={'32'} >关节</Checkbox>、
-                          <Checkbox value={'33'} >创伤</Checkbox>
+                          <Checkbox value={'04'} >脊柱</Checkbox>、
+                          <Checkbox value={'05'} >关节</Checkbox>、
+                          <Checkbox value={'06'} >创伤</Checkbox>
                         &nbsp;）
                       </Checkbox>
                 </Row>
                   <Row> 
                     <Col span={8}>
-                      <Checkbox value={'2'} >神经外科</Checkbox>
+                      <Checkbox value={'07'} >神经外科</Checkbox>
                     </Col>
                     <Col span={8}>
-                      <Checkbox value={'2'} >电生理类</Checkbox>
+                      <Checkbox value={'08'} >电生理类</Checkbox>
                     </Col>
                     <Col span={8}>
-                      <Checkbox value={'3'} >起搏器类</Checkbox>
+                      <Checkbox value={'09'} >起搏器类</Checkbox>
                     </Col>
                   </Row> 
 
                   <Row> 
                     <Col span={8}>
-                      <Checkbox value={'4'} >体外循环及血液净化</Checkbox>
+                      <Checkbox value={'10'} >体外循环及血液净化</Checkbox>
                     </Col>
                     <Col span={8}>
-                      <Checkbox value={'21'} >眼科（晶体等）</Checkbox>
+                      <Checkbox value={'11'} >眼科（晶体等）</Checkbox>
                     </Col>
                   </Row> 
                   <Row> 
-                  <Checkbox value={'2'} >普外通用高值耗材（吻合器、止血材料、穿刺器等）</Checkbox>
+                  <Checkbox value={'12'} >普外通用高值耗材（吻合器、止血材料、穿刺器等）</Checkbox>
                   </Row> 
                   
                 </Checkbox.Group>
@@ -421,7 +434,8 @@ class RegistrationForm52 extends React.Component {
                     {...twoItemLayout}
                     label="临床科室 专职" 
                   >
-                    {getFieldDecorator('linchuangkeshi', {
+                    {getFieldDecorator('fulltimeClinicalSl', {
+                      initialValue:data.fulltimeClinicalSl,
                       rules:[{
                         type:'number', required:true,message:'请填写临床科室人员数量！'
                       }]
@@ -436,7 +450,8 @@ class RegistrationForm52 extends React.Component {
                 {...twoItemLayout}
                 label="兼职" 
               >
-                {getFieldDecorator('linchuangkeshijianzhi', {
+                {getFieldDecorator('parttimeClinicalSl', {
+                  initialValue:data.parttimeClinicalSl,
                   rules:[{
                     type:'number', required:true,message:'请填写临床科室人员数量！'
                   }]
@@ -453,7 +468,8 @@ class RegistrationForm52 extends React.Component {
                     {...twoItemLayout}
                     label="医学工程部门 专职" 
                   >
-                    {getFieldDecorator('yixuekechengbumen', {
+                    {getFieldDecorator('fulltimeYxgcSl', {
+                      initialValue:data.fulltimeYxgcSl,
                       rules:[{
                         type:'number', required:true,message:'请填写医学工程部门人员专职数量！！'
                       }]
@@ -468,7 +484,8 @@ class RegistrationForm52 extends React.Component {
                 {...twoItemLayout}
                 label="兼职" 
               >
-                {getFieldDecorator('yixuekechengbumenjianzhi', {
+                {getFieldDecorator('parttimeYxgcSl', {
+                  initialValue:data.parttimeYxgcSl,
                   rules:[{
                     type:'number', required:true,message:'请填写医学工程部门人员兼职数量！！'
                   }]
@@ -495,9 +512,12 @@ class RegistrationForm52 extends React.Component {
           )}
           help={help5}
         >
-          {getFieldDecorator('haozhanbi', { 
+          {getFieldDecorator('hzb', { 
+            initialValue:data.hzb,
             rules:[{
-              required:true,message:'请填写耗占比'
+              
+              required:true,
+              message:'请填写耗占比'
             }]
           })(
               <InputNumber min={0} max={100} />
@@ -507,7 +527,8 @@ class RegistrationForm52 extends React.Component {
 
         <FormItem {...formItemLayout} 
         label="已开展的技术管理（耗材）">
-          {getFieldDecorator('jishuguanli', {
+          {getFieldDecorator('manageSup', {
+            initialValue:data.manageSup,
             valuePropName: 'checked',
             rules:[{
               required:true,message:'请填写耗占比'
@@ -516,30 +537,30 @@ class RegistrationForm52 extends React.Component {
             <Checkbox.Group>
              
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'1'} >医用耗材准入遴选</Checkbox>
+                  <Checkbox value={'01'} >医用耗材准入遴选</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'2'} >医用耗材验收</Checkbox>
+                  <Checkbox value={'02'} >医用耗材验收</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'3'} >追溯管理</Checkbox>
+                  <Checkbox value={'03'} >追溯管理</Checkbox>
                 </Col>
              
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'4'} >临床使用效果评价</Checkbox>
+                  <Checkbox value={'04'} >临床使用效果评价</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'21'} >供应商服务能力评价</Checkbox>
+                  <Checkbox value={'05'} >供应商服务能力评价</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'5'} >卫生技术评估</Checkbox>
+                  <Checkbox value={'06'} >卫生技术评估</Checkbox>
                 </Col>
               
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'6'} >耗材使用培训</Checkbox>
+                  <Checkbox value={'07'} >耗材使用培训</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'7'} >产品与供应商资质管理</Checkbox>
+                  <Checkbox value={'08'} >产品与供应商资质管理</Checkbox>
                 </Col>
               
             </Checkbox.Group>
@@ -557,41 +578,39 @@ class RegistrationForm52 extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm52);
 
-
 class Report52 extends Component {
 
     constructor(props){
       super(props)
-      this.State={
+      this.state={
         formInfo:{}
       }
     }
     componentWillMount(){
 
-      const testData = {
-      
-      }
-      this.setState({
-        'formInfo':testData
-      })
-      
-
       //此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.INSERT_CONSTR_DEPT,
-      //   body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //       this.setState({
-      //         formInfo:testData
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }
-      //   }
-      // })
+      let that = this;
+      fetchData({
+        url: api.QUERY_Supplies,
+        body: {},
+        success: data => {
+          if (data.status) {
+            //回填数据操作
+            let info = data.result;
+            if(data.investigationGuid){
+              Guid = data.investigationGuid
+            }
+            if(data.investigationUserGuid){
+              SuppliesGuid = data.investigationSuppliesGuid
+            }
+            that.setState({
+              formInfo:info || {}
+            })
+          } else {
+            message.error(data.msg);
+          }
+        }
+      })
       
     }
     render(){

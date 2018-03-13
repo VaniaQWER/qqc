@@ -58,11 +58,18 @@ class RegistrationForm52 extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
-        values.investigationQcGuid = QcGuid ||'';
-        values.investigationGuid = Guid ||'';
+
+        let info = values;
+        for(let item in info ){
+          if(!info[item]){
+            delete info[item]
+          }
+        }
+        info.investigationQcGuid = QcGuid ||'';
+        info.investigationGuid = Guid ||'';
         fetchData({
           url: api.ADD_Qc,
-          body: querystring.stringify(values),
+          body: querystring.stringify(info),
           success: data => {
             if (data.status) {
               message.success('操作成功')
@@ -255,7 +262,7 @@ class RegistrationForm52 extends React.Component {
                   initialValue:data.profession,
                   valuePropName: 'checked',
                 })(
-                  <Checkbox.Group>
+                  <Checkbox.Group defaultValue={data.profession}>
                     <Row style={{marginTop:10}}> 
                       <Col span={6}>
                       <Checkbox value={'01'} >电气安全分析仪</Checkbox>
@@ -326,7 +333,7 @@ class RegistrationForm52 extends React.Component {
                   initialValue:data.management,
                   valuePropName: 'checked',
                 })(
-                  <Checkbox.Group>
+                  <Checkbox.Group defaultValue={data.management}>
                       <Col xxl={6} xl={12}>
                       <Checkbox value={'01'} >大型设备配置许可</Checkbox>
                       </Col>
@@ -398,7 +405,7 @@ class RegistrationForm52 extends React.Component {
                   initialValue:data.pm,
                   valuePropName: 'checked',
                 })(
-                  <Checkbox.Group>
+                  <Checkbox.Group defaultValue={data.pm}>
                     <Row style={{marginTop:10}}> 
                       <Col xxl={6} xl={12}>
                       <Checkbox value={'01'} >呼吸机 ( 年PM次数：
@@ -540,7 +547,8 @@ class RegistrationForm52 extends React.Component {
                   initialValue:data.review,
                   valuePropName: 'checked',
                 })(
-                  <Checkbox.Group>
+
+                  <Checkbox.Group >
                       <Col xxl={6} xl={8}>
                       <Checkbox value={'01'} >国家卫生计生委医院管理评审</Checkbox>
                       </Col>
@@ -570,7 +578,9 @@ class RegistrationForm52 extends React.Component {
                       <Col xxl={6} xl={12}>
                         <Checkbox value={'99'} >其他:&nbsp;&nbsp;
                           <FormItem style={{display:'inline-block',verticalAlign:'baseline'}}>
-                            {getFieldDecorator('reviewOther',)(
+                            {getFieldDecorator('reviewOther',{
+                              initialValue:data.reviewOther
+                            })(
                               <Input/>
                             )}
                           </FormItem>
@@ -618,11 +628,13 @@ class Report52 extends Component {
             let info = data.result;
             if(info.investigationGuid){
               Guid = info['investigationGuid']
-            }else if(info.investigationQcGuid){
+            }
+            if(info.investigationQcGuid){
               QcGuid = info['investigationQcGuid']
             }
+            
             that.setState({
-              formInfo:data.result || {}
+              formInfo:info || {}
             })
           } else {
             message.error(data.msg);
