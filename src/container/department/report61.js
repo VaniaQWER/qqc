@@ -60,7 +60,7 @@ const tailFormItemLayout = {
   },
 };
 
-class RegistrationForm62 extends React.Component {
+class RegistrationForm61 extends React.Component {
   state = {
     confirmDirty: false,
     data: {}
@@ -71,11 +71,12 @@ class RegistrationForm62 extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
-        let a = _.forIn(values, (value,key)=>{
+        let arr = _.cloneDeep(values);
+        let a = _.forIn(arr, (value,key)=>{
           if(values[key]){
-            values[key]="01"
+            arr[key]="01"
           }else{
-            values[key]="00"
+            arr[key]="00"
           }
         });
         fetchData({
@@ -84,9 +85,7 @@ class RegistrationForm62 extends React.Component {
           type: 'application/json',
           success: data => {
             if (data.status) {
-              this.props.form.resetFields();
               message.success('操作成功')
-              this.props.setProgress(0)
             } else {
               console.log(a)
               message.error(data.msg);
@@ -125,9 +124,10 @@ class RegistrationForm62 extends React.Component {
     
   // }
   componentDidMount = () => {
-    console.log('子组件componentDidMount')
-    const { formInfo } = this.state ;
-    this.props.form.setFieldsValue(formInfo)
+    // console.log('子组件componentDidMount')
+    // console.log(formInfo)
+    // const { formInfo } = this.state ;
+    // this.props.form.setFieldsValue(formInfo)
   }
   componentWillReceiveProps = nextProps => {
     this.setState({
@@ -162,6 +162,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout}>
               {getFieldDecorator('equipmentManagement', {
                 valuePropName: 'checked',
+                initialValue: data.equipmentManagement
               })(
                   <Checkbox value={'01'} ></Checkbox>
               )}
@@ -181,6 +182,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout} >
             {getFieldDecorator('qcManagement', {
               valuePropName: 'checked',
+              initialValue: data.qcManagement
             })(
                 <Checkbox value={'01'} ></Checkbox>
             )}
@@ -190,6 +192,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout} >
             {getFieldDecorator('equipmentBi', {
               valuePropName: 'checked',
+              initialValue: data.equipmentBi
             })(
                 <Checkbox value={'01'} ></Checkbox>
             )}
@@ -199,6 +202,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout} >
             {getFieldDecorator('costAnalysis', {
               valuePropName: 'checked',
+              initialValue: data.costAnalysis
             })(
                 <Checkbox value={'01'} ></Checkbox>
             )}
@@ -212,6 +216,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout}>
               {getFieldDecorator('equipmentManagementHrp', {
                 valuePropName: 'checked',
+                initialValue: data.equipmentManagementHrp
               })(
                   <Checkbox value={'01'} ></Checkbox>
               )}
@@ -221,6 +226,7 @@ class RegistrationForm62 extends React.Component {
               <FormItem {...formItemLayout} >
               {getFieldDecorator('equipmentOaHrp', {
                 valuePropName: 'checked',
+                initialValue: data.equipmentOaHrp
               })(
                   <Checkbox value={'01'} ></Checkbox>
               )}
@@ -230,6 +236,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout} >
             {getFieldDecorator('qcHrp', {
               valuePropName: 'checked',
+              initialValue: data.qcHrp
             })(
                 <Checkbox value={'01'} ></Checkbox>
             )}
@@ -239,6 +246,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout} >
             {getFieldDecorator('equipmentBiHrp', {
               valuePropName: 'checked',
+              initialValue: data.equipmentBiHrp
             })(
                 <Checkbox value={'01'} ></Checkbox>
             )}
@@ -248,6 +256,7 @@ class RegistrationForm62 extends React.Component {
             <FormItem {...formItemLayout} >
             {getFieldDecorator('costAnalysisHrp', {
               valuePropName: 'checked',
+              initialValue: data.costAnalysisHrp
             })(
                 <Checkbox value={'01'} ></Checkbox>
             )}
@@ -266,57 +275,41 @@ class RegistrationForm62 extends React.Component {
   }
 }
 
-const WrappedRegistrationForm = Form.create()(RegistrationForm62);
+const WrappedRegistrationForm = Form.create()(RegistrationForm61);
 
-class Report62 extends Component {
+class Report61 extends Component {
     constructor(props){
       super(props);
       this.state = {
-        formInfo: {
-          
-        }
+        formInfo: {}
       }
     }
 
     componentWillMount(){
-      console.log('componentWillMount')
-      setTimeout(() => {
-        this.setState({
-          formInfo: {
-            equipmentOa: true
-          }
-        })
-      }, 1000)
-      // this.setState({
-      //   formInfo:{
-      //     'equipmentOa':true
-      //   }
-      // })
       // 此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.QUERY_Equipment,
-      //   body: JSON.stringify({}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //      var b =  _.forIn(data.result,(value,key)=>{
-      //         if(data.result[key]==="01"){
-      //           data.result[key]=true
-      //         }else{
-      //           delete data.result[key]
-      //         }
-      //       })
-      //       debugger
-      //       console.log(b);
-      //       that.setState({
-      //         formInfo:b
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }  
-      //   }
-      // })
+      let that = this; 
+      fetchData({
+        url: api.QUERY_Equipment,
+        body: JSON.stringify({}),//querystring.stringify(postData),
+        type: 'application/json',
+        success: data => {
+          if (data.status) {
+            //回填数据操作
+            var b =  _.forIn(data.result,(value,key)=>{
+              if(data.result[key]==="01"){
+                data.result[key]=true
+              }else{
+                delete data.result[key]
+              }
+            })
+            that.setState({
+              formInfo:b || {}
+            })
+          } else {
+            message.error(data.msg);
+          }  
+        }
+      })
     }
     render(){
       return(
@@ -325,4 +318,4 @@ class Report62 extends Component {
     }
 }
 
-export default Report62;
+export default Report61;

@@ -47,5 +47,22 @@ export default {
   ORG_EDUCATION: `/deptInfoController/getOrgEducation`,//学历
   ORG_ADVERSE: `/deptInfoController/getAdverseEvents`,//不良事件
   ORG_TRACE: `/deptInfoController/getMaterialTraceability`,//耗材追溯
-  ORG_LEVEL: `/deptInfoController/getOrgAllLevel`//机构分布
+  ORG_LEVEL: `/deptInfoController/getOrgAllLevel`,//机构分布
+
+  //问卷调查内容
+  REPORT_PCS_JSON: `/address`,//获取省市区联动json
+
+
+  //问卷调查01
+  QUERY_UserInfo:`/investigation/selectInvestigationEqipmerL`,//查询
+  
+ 
+  //问卷调查61
+  QUERY_Equipment:`/investigation/selectInvestigationEqipmerL`,//查询
+  ADD_Equipment:`/investigation/insertInvestigationEqipmerL`,//新增-修改
+
+  //问卷调查62
+  QUERY_Management:`/investigation/selectInvestigationSuppliesL`,//查询
+  ADD_Management:`/investigation/insertInvestigationSuppliesL`,//新增-修改
+
 }
