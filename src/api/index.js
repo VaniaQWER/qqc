@@ -61,6 +61,10 @@ export default {
   QUERY_Hospital:`/investigation/getInvestigationOrg`,//查询
   ADD_Hospital:`/investigation/addUpdateInvestigationOrg`,
 
+  //问卷调查51
+  QUERY_HEquipment:`/investigation/getInvestigationEquipment`,//查询
+  ADD_HEquipment:`/investigation/addUpdateInvestigationEquipment`,
+
   //问卷调查52
   QUERY_Supplies:`/investigation/getInvestigationSupplies`,//查询
   ADD_Supplies:`/investigation/addUpdateInvestigationSupplies`,

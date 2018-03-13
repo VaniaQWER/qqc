@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 // import ReportOtherForm from 'container/department/reportOtherForm';
-import { Form  ,Tooltip ,Icon ,  Row , Col , Checkbox , Button , InputNumber , message} from 'antd';
+import { Form  ,Tooltip ,Icon , Col , Checkbox , Button , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
+import querystring from 'querystring'
 /**
  * @file 2医疗机构基本情况
  */
@@ -50,9 +51,12 @@ const styles={
     marginBottom:30
   }
 }
+let Guid = '';
+let EquipmentGuid = '';
 class RegistrationForm51 extends React.Component {
   state = {
     confirmDirty: false,
+    data:{}
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -60,16 +64,14 @@ class RegistrationForm51 extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         //这里的values是json数据。
-
+        values.investigationGuid = Guid;
+        values.investigationEquipmentGuid = EquipmentGuid;
         fetchData({
-          url: api.INSERT_CONSTR_DEPT,
-          body: JSON.stringify(values),//querystring.stringify(postData),
-          type: 'application/json',
+          url: api.ADD_HEquipment,
+          body: querystring.stringify(values),
           success: data => {
             if (data.status) {
-              this.props.form.resetFields();
               message.success('操作成功')
-              this.props.setProgress(0)
             } else {
               message.error(data.msg);
             }
@@ -78,10 +80,10 @@ class RegistrationForm51 extends React.Component {
       }
     });
   }
-  componentDidMount = () => {
-    console.log(this.props.formInfo)
-    const { formInfo } = this.props ; 
-    this.props.form.setFieldsValue(formInfo)
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      data:nextProps.formInfo
+    })
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value;
@@ -89,7 +91,7 @@ class RegistrationForm51 extends React.Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const { data } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -134,7 +136,8 @@ class RegistrationForm51 extends React.Component {
           {...formItemLayout}
           label="医疗设备资产总值"
         >
-          {getFieldDecorator('zichanzongzhi',{
+          {getFieldDecorator('armariumTotalPrice',{
+            initialValue:data.armariumTotalPrice,
             rules: [
               { required: true, type: 'number', message: '请填写医疗设备资产总值！' , whitespace: true},
               ],
@@ -148,7 +151,8 @@ class RegistrationForm51 extends React.Component {
           {...formItemLayout}
           label="医疗设备总数（固定资产入账）"
         >
-          {getFieldDecorator('yiliaozongshu',{
+          {getFieldDecorator('armariumTotalSl',{
+            initialValue:data.armariumTotalSl,
             rules: [
               { required: true, type: 'number',  message: '请填写医疗设备总数！' , whitespace: true},
               ],
@@ -169,7 +173,8 @@ class RegistrationForm51 extends React.Component {
             </span>
           )}
         >
-          {getFieldDecorator('zongzhi',{
+          {getFieldDecorator('equipmentTotalPrice',{
+            initialValue:data.equipmentTotalPrice,
             rules: [
               { required: true,  type: 'number', message: '请填写甲乙类大型设备总值！' , whitespace: true},
               ],
@@ -183,7 +188,8 @@ class RegistrationForm51 extends React.Component {
           {...formItemLayout}
           label="甲乙类大型设备总数"
         >
-          {getFieldDecorator('daxingshebeizongshu',{
+          {getFieldDecorator('equipmentTotalSl',{
+            initialValue:data.equipmentTotalSl,
             rules: [
               { required: true, type: 'number', message: '请填写甲乙类大型设备总数！' , whitespace: true},
               ],
@@ -197,7 +203,8 @@ class RegistrationForm51 extends React.Component {
         {...formItemLayout}
         label="医疗设备采购金额（2017年度）"
       >
-        {getFieldDecorator('caigounumber', {
+        {getFieldDecorator('armariumPTotalPrice', {
+          initialValue:data.armariumPTotalPrice,
           rules: [
             { required: true, type: 'number', message: '请填写医疗设备采购金额！' , whitespace: true},
             ],
@@ -211,7 +218,8 @@ class RegistrationForm51 extends React.Component {
           {...formItemLayout}
           label="医疗设备采购总数（2017年度）"
         >
-          {getFieldDecorator('caigouzongshu', {
+          {getFieldDecorator('armariumPTotalSl', {
+            initialValue:data.armariumPTotalSl,
             rules: [
               { required: true, type: 'number', message: '请填写医疗设备采购总数！' , whitespace: true},
               ],
@@ -223,7 +231,8 @@ class RegistrationForm51 extends React.Component {
 
         <FormItem {...formItemLayout} 
         label="已开展的技术管理（设备）">
-          {getFieldDecorator('agreement', {
+          {getFieldDecorator('management', {
+            initialValue:data.management,
             rules: [
               { required: true, message: '请选择已开展的技术管理！'},
             ],
@@ -232,55 +241,54 @@ class RegistrationForm51 extends React.Component {
             <Checkbox.Group>
             
                 <Col xxl={8} xl={12}>
-                <Checkbox value={'1'} >年度规划</Checkbox>
+                <Checkbox value={'01'} >年度规划</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'2'} >临床需求评估</Checkbox>
+                  <Checkbox value={'02'} >临床需求评估</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'3'} >政策合规评审</Checkbox>
+                  <Checkbox value={'03'} >政策合规评审</Checkbox>
                 </Col>
           
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'4'} >采购可行性论证</Checkbox>
+                  <Checkbox value={'04'} >采购可行性论证</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'21'} >功能评价</Checkbox>
+                  <Checkbox value={'05'} >功能评价</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'5'} >成本效益分析</Checkbox>
-                </Col>
-               
-                <Col xxl={8} xl={12}>
-                  <Checkbox value={'6'} >招标采购</Checkbox>
-                </Col>
-                <Col xxl={8} xl={12}>
-                  <Checkbox value={'7'} >政府采购</Checkbox>
-                </Col>
-                <Col xxl={8} xl={12}>
-                  <Checkbox value={'8'} >安装验收</Checkbox>
+                  <Checkbox value={'06'} >成本效益分析</Checkbox>
                 </Col>
                
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'9'} >报废处置管理</Checkbox>
+                  <Checkbox value={'07'} >招标采购</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'10'} >供应商管理</Checkbox>
+                  <Checkbox value={'08'} >政府采购</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'11'} >采购追溯管理</Checkbox>
+                  <Checkbox value={'09'} >安装验收</Checkbox>
+                </Col>
+               
+                <Col xxl={8} xl={12}>
+                  <Checkbox value={'10'} >报废处置管理</Checkbox>
+                </Col>
+                <Col xxl={8} xl={12}>
+                  <Checkbox value={'11'} >供应商管理</Checkbox>
+                </Col>
+                <Col xxl={8} xl={12}>
+                  <Checkbox value={'12'} >采购追溯管理</Checkbox>
                 </Col>
                 
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'12'} >档案管理</Checkbox>
+                  <Checkbox value={'13'} >档案管理</Checkbox>
                 </Col>
                 <Col xxl={8} xl={12}>
-                  <Checkbox value={'13'} >临床使用效果评价</Checkbox>
+                  <Checkbox value={'14'} >临床使用效果评价</Checkbox>
                 </Col>
             </Checkbox.Group>
           )}
         </FormItem>
-
         </div>
 
         <FormItem {...tailFormItemLayout}>
@@ -300,41 +308,37 @@ class Report51 extends Component {
 
     constructor(props){
       super(props)
-      this.State={
+      this.state={
         formInfo:{}
       }
     }
 
     componentWillMount(){
-
-      const testData = {
-        caigouzongshu:123123131,
-        caigounumber:123123213
-      }
-      this.setState({
-        'formInfo':testData
-      })
-      
-
+ 
       //此处应该发出用户信息的请求，获取之前该表格内容回填
-      // fetchData({
-      //   url: api.INSERT_CONSTR_DEPT,
-      //   body: JSON.stringify({'userid':'12314546'}),//querystring.stringify(postData),
-      //   type: 'application/json',
-      //   success: data => {
-      //     if (data.status) {
-      //       //回填数据操作
-      //       this.setState({
-      //         formInfo:testData
-      //       })
-      //     } else {
-      //       message.error(data.msg);
-      //     }
-      //   }
-      // })
-      
+      let that = this ;
+      fetchData({
+        url: api.QUERY_HEquipment,
+        body: {},
+        success: data => {
+          if (data.status) {
+            //回填数据操作
+            let info = data.result;
+            if(info.investigationGuid){
+              Guid = info['investigationGuid']
+            }
+            if(info.investigationEquipmentGuid){
+              EquipmentGuid = info['investigationEquipmentGuid']
+            }
+            that.setState({
+              formInfo:info || {}
+            })
+          } else {
+            message.error(data.msg);
+          }
+        }
+      })
     }
-
 
     render(){
       return(
