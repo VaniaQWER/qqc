@@ -77,14 +77,14 @@ class BaseInfoForm extends PureComponent {
                 <Col span={8}><Checkbox value="04">设备维修维护</Checkbox></Col>
                 <Col span={8}><Checkbox value="05">医疗器械质量安全管理</Checkbox></Col>
                 <Col span={6}><Checkbox value="99">其他</Checkbox></Col>
-                {form.getFieldDecorator('workScopeOther-'+i, {
-                  initialValue: 12345
-                })(
-                  <Col span={2} pull={3}>
+                <Col span={2} pull={3}>
+                  {form.getFieldDecorator('workScopeOther-'+i, {
+                    // rules: [{ required: true, message: '请输入部门名称' }],
+                    initialValue: initialValue['workScopeOther-'+i]
+                  })(
                     <Input style={{width: 120}}/>
-                  </Col>
-                )}
-                
+                  )}
+                </Col>
               </Row>
             </Checkbox.Group>
           )}
@@ -260,6 +260,7 @@ class BaseInfoForm extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.schedule = 100.00;
+        values.investigationGuid = this.state.initialValue.investigationGuid;
         this.setState({btnLoading: true});
         fetchData({
           url: api.QUESTION_3,

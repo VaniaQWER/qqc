@@ -3,7 +3,10 @@ import { Card, Form, Input, Row, Col, Select, DatePicker,
   message, BackTop, Spin,
   Checkbox, Radio, Button, Icon, Divider } from 'antd';
 import api from 'api';
+import moment from 'moment';
 import { fetchData } from 'utils/tools';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 const Option = Select.Option;
 const { MonthPicker } = DatePicker;
 const FormItem = Form.Item;
@@ -95,7 +98,8 @@ class PersonInfoForm extends PureComponent {
           label='出生年月'
         >
           {form.getFieldDecorator('birthday-' + i, {
-            initialValue: initialValue[`birthday-${i}`]
+            // rules: [{ required: true, message: '请输入出生年月' }],
+            initialValue: initialValue[`birthday-${i}`] ? moment(initialValue[`birthday-${i}`], 'YYYY-MM') : null
           })(
             <DatePicker format="YYYY-MM" />
           )}
@@ -119,7 +123,8 @@ class PersonInfoForm extends PureComponent {
           label='入职（本部门）年月'
         >
           {form.getFieldDecorator('entryDate-' + i, {
-            initialValue: initialValue[`entryDate-${i}`]
+            // rules: [{ required: true, message: '请输入入职（本部门）年月' }],
+            initialValue: initialValue[`entryDate-${i}`] ? moment(initialValue[`entryDate-${i}`], 'YYYY-MM') : null
           })(
             <MonthPicker
               format="YYYY-MM"
@@ -166,11 +171,11 @@ class PersonInfoForm extends PureComponent {
             initialValue: initialValue[`technicalTitlesB-${i}`]
           })(
             <RadioGroup>
-              <Radio value={'1'}>正高</Radio>
-              <Radio value={'2'}>副高</Radio>
-              <Radio value={'3'}>中级</Radio>
-              <Radio value={'4'}>初级</Radio>
-              <Radio value={'5'}>未聘</Radio>
+              <Radio value={'01'}>正高</Radio>
+              <Radio value={'02'}>副高</Radio>
+              <Radio value={'03'}>中级</Radio>
+              <Radio value={'04'}>初级</Radio>
+              <Radio value={'05'}>未聘</Radio>
             </RadioGroup>
           )}
         </FormItem> 
@@ -219,8 +224,9 @@ class PersonInfoForm extends PureComponent {
           {...formItemLayout}
           label='专业背景(可多选)'
         >
-          {form.getFieldDecorator('majorName-' + i, {
-            initialValue: initialValue[`majorName-${i}`]
+          {form.getFieldDecorator('zy-' + i, {
+            rules: [{ required: true, message: '专业背景' }],
+            initialValue: initialValue[`zy-${i}`]
           })(
             <Checkbox.Group>
               <Row>
@@ -316,6 +322,7 @@ class PersonInfoForm extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.schedule = 100.00;
+        values.investigationGuid = this.state.initialValue.investigationGuid;
         this.setState({btnLoading: true});
         fetchData({
           url: api.QUESTION_3,
