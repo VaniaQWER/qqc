@@ -11817,7 +11817,7 @@ class RegistrationForm extends React.Component {
               label="请选择省市区（县）"
             >
             {getFieldDecorator('address', {
-              initialValue: data.address || ['湖北', '武汉'],
+              initialValue: data.address,
             })(
               <Cascader  options={options} />
             )}
@@ -11916,7 +11916,7 @@ class Report1 extends Component {
           if (data.status) {
             //回填数据操作
             let info = data.result;
-            info.address = [info.tfProvince || '' ,info.tfCity|| ''  , info.tfDistrict || '' ]
+            info.address = [info.tfProvince || '湖北' ,info.tfCity|| '武汉'  , info.tfDistrict || '' ]
             for(let item in info){
               if(item ==="tfProvince" || item ==="tfCity" || item ==="tfDistrict"){
                   delete info[item]
@@ -11926,7 +11926,7 @@ class Report1 extends Component {
               }else if(item==='investigationUserGuid'){
                 UserGuid = info[item]
                 delete info[item]
-              }else if(item==='mobilePhone'){
+              }else if(item==='mobilePhone' && info[item]){
                 info[item] = info[item].toString();
               }else{}
             }
