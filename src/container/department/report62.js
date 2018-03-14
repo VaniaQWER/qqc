@@ -305,8 +305,7 @@ class Report62 extends Component {
         }
       })
     }
-
-
+    
     render(){
       return(
         <WrappedRegistrationForm formInfo={this.state.formInfo} ></WrappedRegistrationForm>

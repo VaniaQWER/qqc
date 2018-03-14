@@ -199,9 +199,6 @@ class RegistrationForm52 extends React.Component {
           >
             {getFieldDecorator('suppliesTotalSl', {
               initialValue:data.suppliesTotalSl,
-              rules: [
-              { required: true, type: 'number', message: '请填写医用耗材总数！' , whitespace: true},
-              ],
             })(
               <InputNumber min={0} max={99999999999} style={{minWidth:180}} />
             )}
@@ -221,9 +218,6 @@ class RegistrationForm52 extends React.Component {
           >
             {getFieldDecorator('suppliesTotalPrice', {
               initialValue:data.suppliesTotalPrice,
-              rules: [
-              { required: true, type: 'number', message: '请填写医用耗材采购金额！' , whitespace: true},
-              ],
             })(
               <InputNumber min={0} max={99999999999} style={{minWidth:180}}/>
             )}
@@ -244,9 +238,6 @@ class RegistrationForm52 extends React.Component {
           >
             {getFieldDecorator('purchaseRatio', {
               initialValue:data.purchaseRatio,
-              rules: [
-              { required: true, type: 'number', message: '请填写植入和介入类耗材采购比例！' , whitespace: true},
-              ],
             })(
               
                 <InputNumber min={0} max={100} />
@@ -260,9 +251,6 @@ class RegistrationForm52 extends React.Component {
             label='一级耗材库房'>
             {getFieldDecorator('storageFlag1', {
               initialValue:data.storageFlag1,
-              rules:[{
-                required:true,message:'请选择是否有一级耗材库房'
-              }]
             })(
               <RadioGroup onChange={this.handleAChange}>
                 <Radio value={'01'}>有</Radio>
@@ -277,9 +265,6 @@ class RegistrationForm52 extends React.Component {
           >
             {getFieldDecorator('storageAcreage1', {
               initialValue:data.storageAcreage1,
-              rules:[{
-                required:this.state.firstCheck,message:'请填写一级耗材库房面积！'
-              }]
             })(
               <InputNumber  min={0}/>
             )}
@@ -292,9 +277,6 @@ class RegistrationForm52 extends React.Component {
             >
               {getFieldDecorator('managementTotalSl',{
                 initialValue:data.managementTotalSl,
-                rules:[{
-                  required:this.state.firstCheck,message:'请填写一级耗材库房管理人员数量！'
-                }]
               } )(
                 <InputNumber  min={0}/>
               )}
@@ -312,9 +294,6 @@ class RegistrationForm52 extends React.Component {
             >
               {getFieldDecorator('operationAcreage', {
                 initialValue:data.operationAcreage,
-                rules:[{
-                  required:true,type:'number',message:'请填写手术室面积'
-                }]
               })(
                 <InputNumber  min={0}/>
               )}
@@ -327,9 +306,6 @@ class RegistrationForm52 extends React.Component {
             >
               {getFieldDecorator('operationTotalSl',{
                 initialValue:data.operationTotalSl,
-                rules:[{
-                  required:true,type:'number',message:'请填写手术间数量'
-                }]
               })(
                 <InputNumber  min={0}/>
               )}
@@ -341,9 +317,6 @@ class RegistrationForm52 extends React.Component {
                 >
                   {getFieldDecorator('storageFlag2', {
                     initialValue:data.storageFlag2,
-                    rules:[{
-                      required:true,message:'请选择有无二级库房'
-                    }]
                   })(
                         <RadioGroup onChange={this.handleBChange}>
                           <Radio value="01">有</Radio>
@@ -358,9 +331,6 @@ class RegistrationForm52 extends React.Component {
                 >
                   {getFieldDecorator('storageAcreage2',{
                     initialValue:data.storageAcreage2,
-                    rules:[{
-                      type:'number',required:this.state.secondCheck,message:'请填写二级库房场地面积！'
-                    }]
                   })(
                       <InputNumber min={0}/>
                   )}
@@ -373,9 +343,6 @@ class RegistrationForm52 extends React.Component {
             label="二级库房存储耗材类型">
               {getFieldDecorator('suppliesType', {
                 initialValue:data.suppliesType,
-                rules:[{
-                  required:true,message:'请选择二级库房存储耗材类型'
-                }]
               })(
                 <Checkbox.Group>
                   <Row> 
@@ -435,9 +402,6 @@ class RegistrationForm52 extends React.Component {
                   >
                     {getFieldDecorator('fulltimeClinicalSl', {
                       initialValue:data.fulltimeClinicalSl,
-                      rules:[{
-                        type:'number', required:true,message:'请填写临床科室人员数量！'
-                      }]
                     })(
                         <InputNumber min={0} max={99999999999}/>
                     )}
@@ -451,9 +415,6 @@ class RegistrationForm52 extends React.Component {
               >
                 {getFieldDecorator('parttimeClinicalSl', {
                   initialValue:data.parttimeClinicalSl,
-                  rules:[{
-                    type:'number', required:true,message:'请填写临床科室人员数量！'
-                  }]
                 })(
                     <InputNumber min={0} max={99999999999}/>
                 )}
@@ -469,9 +430,6 @@ class RegistrationForm52 extends React.Component {
                   >
                     {getFieldDecorator('fulltimeYxgcSl', {
                       initialValue:data.fulltimeYxgcSl,
-                      rules:[{
-                        type:'number', required:true,message:'请填写医学工程部门人员专职数量！！'
-                      }]
                     })(
                         <InputNumber min={0} max={99999999999}/>
                     )}
@@ -485,9 +443,6 @@ class RegistrationForm52 extends React.Component {
               >
                 {getFieldDecorator('parttimeYxgcSl', {
                   initialValue:data.parttimeYxgcSl,
-                  rules:[{
-                    type:'number', required:true,message:'请填写医学工程部门人员兼职数量！！'
-                  }]
                 })(
                     <InputNumber min={0} max={99999999999}/>
                 )}
@@ -513,9 +468,6 @@ class RegistrationForm52 extends React.Component {
         >
           {getFieldDecorator('hzb', { 
             initialValue:data.hzb,
-            rules:[{
-              required:true,message:'请填写耗占比'
-            }]
           })(
               <InputNumber min={0} max={100} />
           )}
@@ -526,9 +478,6 @@ class RegistrationForm52 extends React.Component {
         label="已开展的技术管理（耗材）">
           {getFieldDecorator('manageSup', {
             initialValue:data.manageSup,
-            rules:[{
-              required:true,message:'请填写耗占比'
-            }]
           })(
             <Checkbox.Group>
              

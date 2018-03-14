@@ -115,11 +115,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('hospitalName', {
             initialValue: data.hospitalName,
-            rules: [
-              {
-                required: true, message: '请填写医院名称！',
-              }
-          ],
           })(
             <Input />
           )}
@@ -129,10 +124,7 @@ class RegistrationForm2 extends React.Component {
           label="医院登记号"
         >
           {getFieldDecorator('hospitalRegisterNo', {
-            initialValue: data.hospitalRegisterNo,
-            rules: [ {
-              required: true, message: '请填写医院登记号！',
-            }],
+            initialValue: data.hospitalRegisterNo
           })(
             <Input />
           )}
@@ -144,9 +136,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('hospitalLevel',{
             initialValue: data.hospitalLevel,
-            rules: [
-              { required: true, message: '请选择医疗机构等级！' , whitespace: true},
-              ],
           })(
             <RadioGroup>
               <Radio value="1">三甲</Radio>
@@ -161,9 +150,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('hospitalType',{
             initialValue:data.hospitalType,
-            rules: [
-              { required: true, message: '请选择医院类型！' , whitespace: true},
-              ],
           })(
             <RadioGroup>
               <Radio value="8">综合性医院</Radio>
@@ -181,9 +167,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('hospitalProperty',{
             initialValue:data.hospitalProperty,
-            rules: [
-              { required: true, message: '请选择医院性质！' , whitespace: true},
-              ],
           })(
             <RadioGroup>
               <Radio value="01">公立医院</Radio>
@@ -201,9 +184,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('planBedSum', {
             initialValue:data.planBedSum,
-            rules: [
-            { required: true, type: 'number', message: '请填写编制床位数！' , whitespace: true},
-            ],
           })(
             <InputNumber min={1} max={99999999999} style={{minWidth:180}}/>
           )}
@@ -216,9 +196,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('actualBedSum', {
             initialValue:data.actualBedSum,
-            rules: [
-            { required: true, type: 'number',message: '请填写开放床位数！' , whitespace: true},
-            ],
           })(
             <InputNumber min={1} max={99999999999} style={{minWidth:180}} />
           )}
@@ -231,9 +208,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('staffSum',{
             initialValue:data.staffSum,
-            rules: [
-            { required: true,type: 'number', message: '请填写职工总数！' , whitespace: true},
-            ],
           })(
             <InputNumber min={1} max={99999999999} style={{minWidth:180}} />
           )}
@@ -246,9 +220,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('healthTechnician', {
             initialValue:data.healthTechnician,
-            rules: [
-            { required: true, type: 'number', message: '请填写卫生技术人员总数！' , whitespace: true},
-            ],
           })(
             <InputNumber min={1} max={99999999999} style={{minWidth:180}} />
           )}
@@ -261,9 +232,6 @@ class RegistrationForm2 extends React.Component {
         >
           {getFieldDecorator('administrators', {
             initialValue:data.administrators,
-            rules: [
-            { required: true, type: 'number', message: '请填写管理人员总数！' , whitespace: true},
-            ],
           })(
             <InputNumber min={1} max={99999999999} style={{minWidth:180}} />
           )}

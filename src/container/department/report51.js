@@ -138,9 +138,6 @@ class RegistrationForm51 extends React.Component {
         >
           {getFieldDecorator('armariumTotalPrice',{
             initialValue:data.armariumTotalPrice,
-            rules: [
-              { required: true, type: 'number', message: '请填写医疗设备资产总值！' , whitespace: true},
-              ],
           })(
             <InputNumber min={0} max={99999999999} style={{minWidth:180}} />
           )}
@@ -153,9 +150,6 @@ class RegistrationForm51 extends React.Component {
         >
           {getFieldDecorator('armariumTotalSl',{
             initialValue:data.armariumTotalSl,
-            rules: [
-              { required: true, type: 'number',  message: '请填写医疗设备总数！' , whitespace: true},
-              ],
           })(
             <InputNumber min={0} max={99999999999} style={{minWidth:180}} addonAfter={<span>平方米</span>}/>
           )}
@@ -175,9 +169,6 @@ class RegistrationForm51 extends React.Component {
         >
           {getFieldDecorator('equipmentTotalPrice',{
             initialValue:data.equipmentTotalPrice,
-            rules: [
-              { required: true,  type: 'number', message: '请填写甲乙类大型设备总值！' , whitespace: true},
-              ],
           })(
             <InputNumber min={0} max={99999999999} style={{minWidth:180}} />
           )}
@@ -190,9 +181,6 @@ class RegistrationForm51 extends React.Component {
         >
           {getFieldDecorator('equipmentTotalSl',{
             initialValue:data.equipmentTotalSl,
-            rules: [
-              { required: true, type: 'number', message: '请填写甲乙类大型设备总数！' , whitespace: true},
-              ],
           })(
             <InputNumber min={0} max={99999999999} style={{minWidth:180}} />
           )}
@@ -205,9 +193,6 @@ class RegistrationForm51 extends React.Component {
       >
         {getFieldDecorator('armariumPTotalPrice', {
           initialValue:data.armariumPTotalPrice,
-          rules: [
-            { required: true, type: 'number', message: '请填写医疗设备采购金额！' , whitespace: true},
-            ],
         })(
           <InputNumber min={0} max={99999999999} style={{minWidth:180}} />
         )}
@@ -220,9 +205,6 @@ class RegistrationForm51 extends React.Component {
         >
           {getFieldDecorator('armariumPTotalSl', {
             initialValue:data.armariumPTotalSl,
-            rules: [
-              { required: true, type: 'number', message: '请填写医疗设备采购总数！' , whitespace: true},
-              ],
           })(
             <InputNumber min={0} max={99999999999} style={{minWidth:180}} />
           )}
@@ -233,9 +215,6 @@ class RegistrationForm51 extends React.Component {
           label="已开展的技术管理（设备）">
           {getFieldDecorator('management', {
             initialValue:data.management,
-            rules: [
-              { required: true, message: '请选择已开展的技术管理！'},
-            ],
           })(
             <Checkbox.Group>
                 <Col xxl={8} xl={12}>

@@ -126,7 +126,6 @@ class RegistrationForm52 extends React.Component {
               <Col span={24}>
                 <FormItem>
                   {getFieldDecorator('qcCoreFlag', {
-                    rules: [{ required: true, message: '请选择, 不能为空' }],
                     initialValue: data.qcCoreFlag
                   })(
                     <RadioGroup>
@@ -144,7 +143,6 @@ class RegistrationForm52 extends React.Component {
               <Col span={24}>
                 <FormItem>
                   {getFieldDecorator('qcPlanFlag', {
-                    rules: [{ required: true, message: '请选择, 不能为空' }],
                     initialValue: data.qcPlanFlag
                   })(
                     <RadioGroup>
@@ -162,7 +160,6 @@ class RegistrationForm52 extends React.Component {
               <Col span={24}>
                 <FormItem>
                   {getFieldDecorator('qcIncludeFlag', {
-                    rules: [{ required: true, message: '请选择, 不能为空' }],
                     initialValue: data.qcIncludeFlag
                   })(
                     <RadioGroup>
@@ -182,11 +179,6 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('flow', {
                   initialValue: data.flow,
-                  rules:[
-                    {
-                      required:true,message:'请选择，不能为空！'
-                    }
-                  ]
                 })(
                   <Checkbox.Group>
                       <Col xxl={8} xl={12}>
@@ -242,7 +234,6 @@ class RegistrationForm52 extends React.Component {
                   verticalAlign: 'middle',marginTop:15}}>
                   {getFieldDecorator('fulltimeQcSl', {
                     initialValue:data.fulltimeQcSl,
-                    rules: [{ type:'number', required: true, message: '请选择, 不能为空' }],
                   })(
                     <InputNumber style={{width: 150}} />
                   )}
@@ -259,9 +250,6 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('profession', {
                   initialValue:data.profession,
-                  rules:[{
-                    required:true,message:'请选择，不能为空！'
-                  }]
                 })(
                   <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
@@ -332,9 +320,6 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('management', {
                   initialValue:data.management,
-                  rules:[{
-                    required:true,message:'请选择，不能为空！'
-                  }]
                 })(
                   <Checkbox.Group>
                       <Col xxl={6} xl={12}>
@@ -406,9 +391,6 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('pm', {
                   initialValue:data.pm,
-                  rules:[{
-                    required:true,message:'请选择，不能为空！'
-                  }]
                 })(
                   <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
@@ -550,9 +532,6 @@ class RegistrationForm52 extends React.Component {
               <FormItem>
                 {getFieldDecorator('review', {
                   initialValue:data.review,
-                  rules:[{
-                    required:true,message:'请选择，不能为空！'
-                  }]
                 })(
 
                   <Checkbox.Group >

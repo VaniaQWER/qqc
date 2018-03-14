@@ -139,7 +139,6 @@ class RegistrationForm52 extends React.Component {
             {...formItemLayout}
             label='设备维修场地'>
               {getFieldDecorator('repairSpaceFlag', {
-                rules: [{ required: true, message: '请选择, 不能为空' }],
                 initialValue: data.repairSpaceFlag
               })(
 
@@ -170,7 +169,6 @@ class RegistrationForm52 extends React.Component {
             {...formItemLayout}
             label='维修备件库房'>
               {getFieldDecorator('attachmentStorageFlag', {
-                rules: [{ required: true, message: '请填写维修备件库房！' }],
                 initialValue: data.attachmentStorageFlag
               })(
 
@@ -199,9 +197,6 @@ class RegistrationForm52 extends React.Component {
         >
           {getFieldDecorator('maintenanceEngineer', { 
             initialValue:data.maintenanceEngineer,
-            rules: [
-              { required: true, type: 'number', message: '请填写编制床位数！' , whitespace: true},
-            ],
           })(
               <InputNumber min={0}/>
           )}
@@ -212,9 +207,6 @@ class RegistrationForm52 extends React.Component {
         label="人员岗位职责划分">
           {getFieldDecorator('postDuty', {
             initialValue:data.postDuty,
-            rules:[{
-              required:true, message:'请选择人员岗位职责划分！'
-            }]
           })(
             <RadioGroup>
                 <Radio value={'01'} >按临床科室区域划分</Radio>
@@ -230,9 +222,6 @@ class RegistrationForm52 extends React.Component {
         >
           {getFieldDecorator('workShiftFlag',{
             initialValue:data.workShiftFlag,
-            rules:[{
-              required:true,message:'请选择是否定时定期轮岗！'
-            }]
           })(
             <RadioGroup>
               <Radio value={'01'}>是</Radio>
@@ -247,9 +236,6 @@ class RegistrationForm52 extends React.Component {
             label="专业维修工具">
               {getFieldDecorator('tool', {
                 initialValue:data.tool,
-                rules:[{
-                  required:true,message:'请选择专业维修工具！'
-                }]
               })(
                 <Checkbox.Group>
                   <Row style={{marginTop:10}}> 
@@ -283,9 +269,6 @@ class RegistrationForm52 extends React.Component {
               label="应急库房设备">
               {getFieldDecorator('equip', {
                 initialValue:data.equip,
-                rules:[{
-                  required:true,message:'请选择应急库房设备！'
-                }]
               })(
                 <Checkbox.Group>
                   <Row > 
@@ -351,7 +334,6 @@ class RegistrationForm52 extends React.Component {
                 label='应急库房'>
                   {getFieldDecorator('emergencyStorageFlag', {
                     initialValue:data.emergencyStorageFlag,
-                    rules: [{ required: true, message: '请选择, 不能为空' }],
                   })(
 
                     <RadioGroup>
@@ -380,9 +362,6 @@ class RegistrationForm52 extends React.Component {
             >
               {getFieldDecorator('repairTotalSl',{ 
                 initialValue:data.repairTotalSl,
-                rules:[{
-                  required:true,type:'number','message':'请填写医疗设备维修量！'
-                }]
               })(
                   <InputNumber min={0}/>
               )}
@@ -395,9 +374,6 @@ class RegistrationForm52 extends React.Component {
               >
               {getFieldDecorator('repairTotalPrice', { 
                 initialValue:data.repairTotalPrice,
-                rules:[{
-                  required:true,type:'number','message':'请填写医疗设备维修总费用！'
-                }]
               })(
                 <InputNumber min={0}/>
               )}
@@ -413,9 +389,6 @@ class RegistrationForm52 extends React.Component {
                 >
                 {getFieldDecorator('originalRepair', { 
                   initialValue:data.originalRepair,
-                  rules:[{
-                    required:true,type:'number','message':'请填写原厂保修费用！'
-                  }]
                 })(
                   <InputNumber min={0}/>
                 )}
@@ -428,9 +401,6 @@ class RegistrationForm52 extends React.Component {
                 >
                 {getFieldDecorator('thirdPartyRepair',{ 
                   initialValue:data.thirdPartyRepair,
-                  rules:[{
-                    required:true,type:'number','message':'请填写第三方维修费用！'
-                  }]
                 })(
                   <InputNumber min={0}/>
                 )}
@@ -449,9 +419,6 @@ class RegistrationForm52 extends React.Component {
                 )}>
                 {getFieldDecorator('type', {
                   initialValue: data.type,
-                  rules:[{
-                    required:true,'message':'请选择自修的医疗设备类型！'
-                  }]
                 })(
                   <Checkbox.Group>
                     <Row style={{marginTop:10}}> 
@@ -534,9 +501,6 @@ class RegistrationForm52 extends React.Component {
           label="已开展的维修技术管理">
             {getFieldDecorator('repair', {
               initialValue:data.repair,
-              rules:[{
-                required:true,'message':'请选择已开展的维修技术管理！'
-              }]
             })(
               <Checkbox.Group>
                 
