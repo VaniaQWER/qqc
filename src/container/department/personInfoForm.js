@@ -8,7 +8,6 @@ import { fetchData } from 'utils/tools';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 const Option = Select.Option;
-const { MonthPicker } = DatePicker;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
@@ -99,9 +98,9 @@ class PersonInfoForm extends PureComponent {
         >
           {form.getFieldDecorator('birthday-' + i, {
             // rules: [{ required: true, message: '请输入出生年月' }],
-            initialValue: initialValue[`birthday-${i}`] ? moment(initialValue[`birthday-${i}`], 'YYYY-MM') : null
+            initialValue: initialValue[`birthday-${i}`] ? moment(initialValue[`birthday-${i}`], 'YYYY-MM-DD') : null
           })(
-            <DatePicker format="YYYY-MM" />
+            <DatePicker format="YYYY-MM-DD" />
           )}
         </FormItem> 
       </Col>,
@@ -126,9 +125,7 @@ class PersonInfoForm extends PureComponent {
             // rules: [{ required: true, message: '请输入入职（本部门）年月' }],
             initialValue: initialValue[`entryDate-${i}`] ? moment(initialValue[`entryDate-${i}`], 'YYYY-MM') : null
           })(
-            <MonthPicker
-              format="YYYY-MM"
-            />
+            <DatePicker format={'YYYY-MM'}/>
           )}
         </FormItem> 
       </Col>,
@@ -225,7 +222,7 @@ class PersonInfoForm extends PureComponent {
           label='专业背景(可多选)'
         >
           {form.getFieldDecorator('zy-' + i, {
-            rules: [{ required: true, message: '专业背景' }],
+            // rules: [{ required: true, message: '专业背景' }],
             initialValue: initialValue[`zy-${i}`]
           })(
             <Checkbox.Group>
