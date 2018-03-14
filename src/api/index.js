@@ -52,6 +52,8 @@ export default {
   //问卷调查内容
   REPORT_PCS_JSON: `/address`,//获取省市区联动json
 
+  //问卷调查修改密码
+  CHANGEPwd:`/user/modifyUserPwd`,
 
   //问卷调查01
   QUERY_UserInfo:`/investigation/getInvestigationUser`,//查询

@@ -3,7 +3,6 @@ import { Form, Button ,Row ,Input ,message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
 import querystring from 'querystring';
-import { isAbsolute } from 'path';
 const FormItem = Form.Item;
 
 class EditPwdFormWrapper extends Component {
@@ -20,7 +19,7 @@ class EditPwdFormWrapper extends Component {
 								//这里的values是json数据。
 								
 								fetchData({
-									url: api.ADD_Hospital,
+									url: api.CHANGEPwd,
 									body: querystring.stringify(values),
 									success: data => {
 											if (data.status) {
@@ -38,7 +37,8 @@ class EditPwdFormWrapper extends Component {
 			}
 			compareToFirstPassword = (rule, value, callback) => {
 				const form = this.props.form;
-				if (value && value !== form.getFieldValue('password')) {
+				debugger
+				if (value && value !== form.getFieldValue('newPwd')) {
 					callback('填写的新密码需要保持一致!');
 				} else {
 					callback();
@@ -62,7 +62,7 @@ class EditPwdFormWrapper extends Component {
 							<FormItem
 									label="新密码"
 								>
-									{getFieldDecorator('password', {
+									{getFieldDecorator('newPwd', {
 										rules: [{
 											required: true, message: '请输入密码！',
 										}, {
@@ -75,7 +75,7 @@ class EditPwdFormWrapper extends Component {
 							<FormItem
 								label="重复密码"
 							>
-								{getFieldDecorator('confirm', {
+								{getFieldDecorator('repeatNewPwd', {
 									rules: [{
 										required: true, message: '请再次输入新密码！',
 									}, {
