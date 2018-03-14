@@ -80,7 +80,6 @@ class PersonInfoForm extends PureComponent {
           label='性别'
         >
           {form.getFieldDecorator('gender-' + i, {
-            rules: [{ required: true, message: '请输入性别' }],
             initialValue: initialValue[`gender-${i}`]
           })(
             <Select style={{width:'100%'}}>
@@ -96,7 +95,6 @@ class PersonInfoForm extends PureComponent {
           label='出生年月'
         >
           {form.getFieldDecorator('birthday-' + i, {
-            rules: [{ required: true, message: '请输入出生年月' }],
             initialValue: initialValue[`birthday-${i}`]
           })(
             <DatePicker format="YYYY-MM" />
@@ -109,7 +107,6 @@ class PersonInfoForm extends PureComponent {
           label='政治面貌'
         >
           {form.getFieldDecorator('politicalStatus-' + i, {
-            rules: [{ required: true, message: '请输入政治面貌' }],
             initialValue: initialValue[`politicalStatus-${i}`]
           })(
             <Input/>
@@ -122,7 +119,6 @@ class PersonInfoForm extends PureComponent {
           label='入职（本部门）年月'
         >
           {form.getFieldDecorator('entryDate-' + i, {
-            rules: [{ required: true, message: '请输入入职（本部门）年月' }],
             initialValue: initialValue[`entryDate-${i}`]
           })(
             <MonthPicker
@@ -137,7 +133,6 @@ class PersonInfoForm extends PureComponent {
           label='学历'
         >
           {form.getFieldDecorator('highestEducation-' + i, {
-            rules: [{ required: true, message: '学历' }],
             initialValue: initialValue[`highestEducation-${i}`]
           })(
             <Select style={{width:'100%'}}>
@@ -156,7 +151,6 @@ class PersonInfoForm extends PureComponent {
           label='最高学历毕业院校'
         >
           {form.getFieldDecorator('highestEducationSchool-' + i, {
-            rules: [{ required: true, message: '毕业院校' }],
             initialValue: initialValue[`highestEducationSchool-${i}`]
           })(
             <Input/>
@@ -169,7 +163,6 @@ class PersonInfoForm extends PureComponent {
           label='职称'
         >
           {form.getFieldDecorator('technicalTitlesB-' + i, {
-            rules: [{ required: true, message: '职称' }],
             initialValue: initialValue[`technicalTitlesB-${i}`]
           })(
             <RadioGroup>
@@ -188,7 +181,6 @@ class PersonInfoForm extends PureComponent {
           label='职称获取途径(可多选)'
         >
           {form.getFieldDecorator('technicalSource-' + i, {
-            rules: [{ required: true, message: '职称获取途径' }],
             initialValue: initialValue[`technicalSource-${i}`]
           })(
             <Checkbox.Group>
@@ -199,7 +191,6 @@ class PersonInfoForm extends PureComponent {
               <Col span={4}><Checkbox value={'99'}>其他</Checkbox></Col>
               <Col span={6}>
                 {form.getFieldDecorator('technicalSourceOther-' + i, {
-                  // rules: [{ required: true, message: '职称获取途径' }],
                   initialValue: initialValue[`technicalSourceOther-${i}`]
                   })(<Input placeholder='请输入'/>
                 )}
@@ -214,7 +205,6 @@ class PersonInfoForm extends PureComponent {
           label='医院是否认可和聘任以上职称'
         >
           {form.getFieldDecorator('approvalFlag-' + i, {
-            rules: [{ required: true, message: '医院是否认可和聘任以上职称' }],
             initialValue: initialValue[`approvalFlag-${i}`]
           })(
             <RadioGroup>
@@ -230,7 +220,6 @@ class PersonInfoForm extends PureComponent {
           label='专业背景(可多选)'
         >
           {form.getFieldDecorator('majorName-' + i, {
-            rules: [{ required: true, message: '专业背景' }],
             initialValue: initialValue[`majorName-${i}`]
           })(
             <Checkbox.Group>
@@ -256,7 +245,6 @@ class PersonInfoForm extends PureComponent {
           label='岗位类型(可多选)'
         >
           {form.getFieldDecorator('postType-' + i, {
-            rules: [{ required: true, message: '岗位类型' }],
             initialValue: initialValue[`postType-${i}`]
           })(
             <Checkbox.Group>
@@ -270,7 +258,6 @@ class PersonInfoForm extends PureComponent {
                 <Col span={4}><Checkbox value={'99'}>其他</Checkbox></Col>
 
                 {form.getFieldDecorator('postTypeOther-' + i, {
-                  // rules: [{ required: true, message: '职称获取途径' }],
                   initialValue: initialValue[`postTypeOther-${i}`]
                   })(<Col span={6}><Input placeholder='请输入'/></Col>
                 )}
@@ -286,7 +273,6 @@ class PersonInfoForm extends PureComponent {
           label='近3年以第一作者、通讯作者发表论文数量（具有ISSN和CN刊号的国内外期刊:'
         >
           {form.getFieldDecorator('publishThesis-' + i, {
-            rules: [{ required: true, message: '不能为空' }],
             initialValue: initialValue[`publishThesis-${i}`]
           })(
             <Input style={{width: 100}}  addonAfter={<span>篇</span>}/>

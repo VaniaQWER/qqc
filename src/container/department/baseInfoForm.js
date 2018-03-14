@@ -67,7 +67,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={3} style={{marginTop: 16}}>
         <FormItem {...formItemLayoutForMore} label={'部门医学工程业务管理范围(多选)'}>
           {form.getFieldDecorator('workScope-'+i, {
-            rules: [{ required: true, message: '请选择部门医学工程业务管理范围' }],
             initialValue: initialValue['workScope-'+i]
           })(
             <Checkbox.Group>
@@ -79,7 +78,6 @@ class BaseInfoForm extends PureComponent {
                 <Col span={8}><Checkbox value="05">医疗器械质量安全管理</Checkbox></Col>
                 <Col span={6}><Checkbox value="99">其他</Checkbox></Col>
                 {form.getFieldDecorator('workScopeOther-'+i, {
-                  // rules: [{ required: true, message: '请输入部门名称' }],
                   initialValue: 12345
                 })(
                   <Col span={2} pull={3}>
@@ -95,7 +93,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={4}>
         <FormItem {...formItemLayout} label='部门行政级别'>
           {form.getFieldDecorator('deptTypeName-'+i, {
-            rules: [{ required: true, message: '部门行政级别' }],
             initialValue: initialValue['deptTypeName-'+i]
           })(
             <RadioGroup style={{width: 500}}>
@@ -109,7 +106,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={5}>
         <FormItem {...formItemLayout} label='部门职工总人数' style={{display: 'flex'}}>
           {form.getFieldDecorator('deptTotalStaff-'+i, {
-            rules: [{ required: true, message: '部门职工总人数' }],
             initialValue: initialValue['deptTotalStaff-'+i]
           })(
             <Input style={{width: 150}} addonAfter={<span>人</span>}/>
@@ -119,7 +115,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={6}>
         <FormItem {...formItemLayout} label='部门占地面积'>
           {form.getFieldDecorator('deptAcreage-'+i, {
-            rules: [{ required: true, message: '部门占地面积' }],
             initialValue: initialValue['deptAcreage-'+i]
           })(
             <Input style={{width: 150}} addonAfter={<span>平方米</span>}/>
@@ -129,7 +124,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={7}>
         <FormItem {...formItemLayout} label='部门归属'>
           {form.getFieldDecorator('deptBelong-'+i, {
-            rules: [{ required: true, message: '部门归属' }],
             initialValue: initialValue['deptBelong-'+i]
           })(
             <RadioGroup style={{width: 500}}>
@@ -138,7 +132,6 @@ class BaseInfoForm extends PureComponent {
               <Radio value={'2'}>行政</Radio>
               <Radio value={'3'}>其他 
               {form.getFieldDecorator('deptBelongOther-'+i, {
-                // rules: [{ required: true, message: '部门归属' }],
                 initialValue: initialValue['deptBelongOther-'+i]
               })(
                 <Input style={{ width: 100, marginLeft: 10 }}/>
@@ -151,7 +144,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={8}>
         <FormItem {...formItemLayout} label='负责人姓名'>
           {form.getFieldDecorator('leaderName-'+i, {
-            rules: [{ required: true, message: '负责人姓名' }],
             initialValue: initialValue['leaderName-'+i]
           })(
             <Input />
@@ -161,7 +153,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={9}>
         <FormItem {...formItemLayout} label='负责人职称'>
           {form.getFieldDecorator('leaderPost-'+i, {
-            rules: [{ required: true, message: '负责人职称' }],
             initialValue: initialValue['leaderPost-'+i]
           })(
             <RadioGroup style={{width: 500}}>
@@ -177,7 +168,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={99}>
         <FormItem {...formItemLayout} label='负责人学位'>
           {form.getFieldDecorator('leaderDegree-'+i, {
-            rules: [{ required: true, message: '负责人学位' }],
             initialValue: initialValue['leaderDegree-'+i]
           })(
             <RadioGroup style={{width: 500}} >
@@ -193,7 +183,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={88}>
         <FormItem {...formItemLayout} label='负责人专业'>
           {form.getFieldDecorator('leaderMajor-'+i, {
-            rules: [{ required: true, message: '负责人专业' }],
             initialValue: initialValue['leaderMajor-'+i]
           })(
             <RadioGroup style={{width: 500}}>
@@ -214,7 +203,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={10}>
         <FormItem {...formItemLayout} label='负责人年龄'>
           {form.getFieldDecorator('leaderAge-'+i, {
-            rules: [{ required: true, message: '负责人年龄' }],
             initialValue: initialValue['leaderAge-'+i]
           })(
             <RadioGroup style={{width: 500}}>
@@ -229,7 +217,6 @@ class BaseInfoForm extends PureComponent {
       <Col span={24} key={11}>
         <FormItem {...formItemLayout} label='负责人在本部门任职年限'>
           {form.getFieldDecorator('leaderAgeLimit-'+i, {
-            rules: [{ required: true, message: '负责人在本部门任职年限' }],
             initialValue: initialValue['leaderAgeLimit-'+i]
           })(
             <Input style={{width: 100}} addonAfter={<span>年</span>} />
@@ -333,7 +320,6 @@ class BaseInfoForm extends PureComponent {
               <Col span={24}>
                 <FormItem>
                   {form.getFieldDecorator('buildFlag', {
-                    rules: [{ required: true, message: '请选择, 不能为空' }],
                     initialValue: initialValue.buildFlag
                   })(
                     <RadioGroup>

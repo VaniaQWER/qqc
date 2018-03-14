@@ -11825,11 +11825,6 @@ class RegistrationForm extends React.Component {
             >
             {getFieldDecorator('address', {
               initialValue: data.address,
-              rules: [
-                {
-                  required: true, message: '请选择省市区（县）！',
-                }
-            ],
             })(
               <Cascader  options={options} onChange={this.onChangeEvent.bind(this)} />
             )}
@@ -11840,7 +11835,6 @@ class RegistrationForm extends React.Component {
           >
             {getFieldDecorator('userName', {
               initialValue: data.userName,
-              rules: [{ required: true, message: '请填写填表人姓名！', whitespace: true }],
             })(
               <Input />
             )}
@@ -11851,7 +11845,6 @@ class RegistrationForm extends React.Component {
           >
             {getFieldDecorator('deptName', {
               initialValue: data.deptName,
-              rules: [{ required: true, message: '请填写科室！', whitespace: true }],
             })(
               <Input />
             )}
@@ -11862,7 +11855,6 @@ class RegistrationForm extends React.Component {
           >
             {getFieldDecorator('postName', {
               initialValue: data.postName,
-              rules: [{ required: true, message: '请填写职务！', whitespace: true }],
             })(
               <Input />
             )}
@@ -11874,7 +11866,6 @@ class RegistrationForm extends React.Component {
           >
             {getFieldDecorator('landlineTelephone', {
               initialValue: data.landlineTelephone,
-              rules: [{ required: true, message: '请填写座机！', whitespace: true }],
             })(
               <Input />
             )}
@@ -11886,11 +11877,8 @@ class RegistrationForm extends React.Component {
           >
             {getFieldDecorator('mobilePhone', {
               initialValue: data.mobilePhone,
-              rules: [
-              { required: true, message: '请填写手机！' , whitespace: true},
-              ],
             })(
-              <Input  style={{ width: '100%' }} />
+              <Input style={{ width: '100%' }} />
             )}
           </FormItem>
           <FormItem
@@ -11899,9 +11887,6 @@ class RegistrationForm extends React.Component {
           >
             {getFieldDecorator('email', {
               initialValue: data.email,
-              rules: [{
-                required: true, message: '请填写邮箱！', whitespace: true
-              }],
             })(
               <Input />
             )}
