@@ -34,7 +34,6 @@ class RegistrationForm62 extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         //这里的values是json数据。
         let a = _.forIn(values, (value,key)=>{
           if(values[key]){
@@ -59,11 +58,7 @@ class RegistrationForm62 extends React.Component {
       }
     });
   }
-  componentDidMount = () => {
-    // console.log(this.props.formInfo)
-    // const { formInfo } = this.state ; 
-    // this.props.form.setFieldsValue(formInfo)
-  }
+  
   componentWillReceiveProps = nextProps => {
     this.setState({
       data: nextProps.formInfo

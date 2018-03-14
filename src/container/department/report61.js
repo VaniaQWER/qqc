@@ -69,7 +69,6 @@ class RegistrationForm61 extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         //这里的values是json数据。
         let arr = _.cloneDeep(values);
         let a = _.forIn(arr, (value,key)=>{
@@ -87,7 +86,6 @@ class RegistrationForm61 extends React.Component {
             if (data.status) {
               message.success('操作成功')
             } else {
-              console.log(a)
               message.error(data.msg);
             }
           }
@@ -96,12 +94,6 @@ class RegistrationForm61 extends React.Component {
     });
   }
 
-  componentDidMount = () => {
-    // console.log('子组件componentDidMount')
-    // console.log(formInfo)
-    // const { formInfo } = this.state ;
-    // this.props.form.setFieldsValue(formInfo)
-  }
   componentWillReceiveProps = nextProps => {
     this.setState({
       data: nextProps.formInfo

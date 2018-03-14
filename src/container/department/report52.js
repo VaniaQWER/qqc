@@ -59,49 +59,11 @@ class RegistrationForm52 extends React.Component {
     secondCheck:false,
     data:{}
   };
-  //联动状态
-  handleAChange = (e) => {
-    //此处更改的内容为e.target.value
-    let toggle = false;
-    if(e.target.value==="01"){
-      toggle=true;
-    }else{
-      toggle=false;
-    }
-
-    this.setState({
-      firstCheck:toggle,
-    }, () => {
-      this.props.form.validateFields(['yijichangdimiaji'], { force: true });
-      this.props.form.validateFields(['yijiguanlirenyuangeshu'], { force: true });
-    });
-  }
-  handleBChange = (e) =>{
-    let toggle = false;
-    if(e.target.value==="01B"){
-      toggle=true;
-    }else{
-      toggle=false;
-    }
-
-    this.setState({
-      secondCheck:toggle,
-    }, () => {
-      this.props.form.validateFields(['erjikufangmianji'], { force: true });
-    });
-  }
-  //全选
-  onCheckAllChange = (e) =>{
-    // e.target.checked 
   
-    this.props.form.validateFields(['xueguan11'], { checked: true });
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         //这里的values是json数据。
         values.investigationGuid = Guid;
         values.investigationSuppliesGuid = SuppliesGuid;
@@ -252,7 +214,7 @@ class RegistrationForm52 extends React.Component {
             {getFieldDecorator('storageFlag1', {
               initialValue:data.storageFlag1,
             })(
-              <RadioGroup onChange={this.handleAChange}>
+              <RadioGroup>
                 <Radio value={'01'}>有</Radio>
                 <Radio value={'00'}>无</Radio>
               </RadioGroup>
@@ -346,8 +308,7 @@ class RegistrationForm52 extends React.Component {
               })(
                 <Checkbox.Group>
                   <Row> 
-                      <Checkbox value={'01'}
-                      onChange={this.onCheckAllChange}>
+                      <Checkbox value={'01'}>
                         血管介入类（ &nbsp;
                           <Checkbox value={'01'} >心脏介入类</Checkbox>、
                           <Checkbox value={'02'} >周围血管介入类</Checkbox>

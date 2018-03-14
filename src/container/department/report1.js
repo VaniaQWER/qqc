@@ -11739,17 +11739,13 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         //这里的values是json数据。
-
         values.investigationGuid = Guid||'';
         values.investigationUserGuid = UserGuid||'';
         values.tfProvince = values.address[0] || '';
         values.tfCity = values.address[1] || '';
         values.tfDistrict = values.address[2] || '';
         delete values['address']
-
-        console.log('处理之后的：', values)
         fetchData({
           url: api.ADD_UserInfo,
           body: querystring.stringify(values),
@@ -11772,9 +11768,6 @@ class RegistrationForm extends React.Component {
   handleConfirmBlur = (e) => {
     const value = e.target.value;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  }
-  onChangeEvent = (value) =>{
-    console.log(value)
   }
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -11824,9 +11817,9 @@ class RegistrationForm extends React.Component {
               label="请选择省市区（县）"
             >
             {getFieldDecorator('address', {
-              initialValue: data.address,
+              initialValue: data.address || ['湖北', '武汉'],
             })(
-              <Cascader  options={options} onChange={this.onChangeEvent.bind(this)} />
+              <Cascader  options={options} />
             )}
           </FormItem>
           <FormItem
@@ -11903,9 +11896,7 @@ class RegistrationForm extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
 
-
 class Report1 extends Component {
-
 
     constructor(props){
       super(props)
@@ -11915,13 +11906,12 @@ class Report1 extends Component {
     }
 
     componentWillMount(){
-
       //此处应该发出用户信息的请求，获取之前该表格内容回填
       let that = this;
       fetchData({
         url: api.QUERY_UserInfo,
-        body: JSON.stringify({}),//querystring.stringify(postData),
-        type: 'application/',
+        body: JSON.stringify({}),
+        type: 'application/json',
         success: data => {
           if (data.status) {
             //回填数据操作
@@ -11951,7 +11941,7 @@ class Report1 extends Component {
     }
     render(){
       return(
-        <WrappedRegistrationForm formInfo={this.state.formInfo} ></WrappedRegistrationForm>
+        <WrappedRegistrationForm formInfo={this.state.formInfo}></WrappedRegistrationForm>
       )
     }
 }

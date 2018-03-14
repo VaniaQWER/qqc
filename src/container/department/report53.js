@@ -56,7 +56,6 @@ class RegistrationForm52 extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         //这里的values是json数据。
          values.investigationGuid  =  Guid;
          values.investigationRepairGuid  =  RepairGuid;
