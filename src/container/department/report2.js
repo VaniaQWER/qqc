@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import ReportOtherForm from 'container/department/reportOtherForm';
-import { Form , Input , Button , Radio , InputNumber , message} from 'antd';
+import { Form , Checkbox , Input , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
 import querystring from 'querystring';
@@ -147,16 +147,16 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医院类型"
         >
-          {getFieldDecorator('hospitalType',{
-            initialValue:data.hospitalType,
+          {getFieldDecorator('type',{
+            initialValue:data.type,
           })(
-            <RadioGroup>
-              <Radio value="8">综合性医院</Radio>
-              <Radio value="6">专科医院</Radio>
-              <Radio value="2">中医院</Radio>
-              <Radio value="4">中西医结合医院</Radio>
-              <Radio value="99">其他</Radio>
-            </RadioGroup>
+            <Checkbox.Group style={{marginTop:8}}>
+              <Checkbox value="8">综合性医院</Checkbox>
+              <Checkbox value="6">专科医院</Checkbox>
+              <Checkbox value="2">中医院</Checkbox>
+              <Checkbox value="4">中西医结合医院</Checkbox>
+              <Checkbox value="99">其他</Checkbox>
+            </Checkbox.Group>
           )}
         </FormItem>
 
@@ -164,16 +164,16 @@ class RegistrationForm2 extends React.Component {
           {...formItemLayout}
           label="医院性质"
         >
-          {getFieldDecorator('hospitalProperty',{
-            initialValue:data.hospitalProperty,
+          {getFieldDecorator('property',{
+            initialValue:data.property,
           })(
-            <RadioGroup>
-              <Radio value="01">公立医院</Radio>
-              <Radio value="02">非公立医院</Radio>
-              <Radio value="03">教学医院</Radio>
-              <Radio value="04">非教学医院</Radio>
-              <Radio value="99">其他</Radio>
-            </RadioGroup>
+            <Checkbox.Group style={{marginTop:8}}>
+              <Checkbox value="01">公立医院</Checkbox>
+              <Checkbox value="02">非公立医院</Checkbox>
+              <Checkbox value="03">教学医院</Checkbox>
+              <Checkbox value="04">非教学医院</Checkbox>
+              <Checkbox value="99">其他</Checkbox>
+            </Checkbox.Group>
           )}
         </FormItem>
 
@@ -258,8 +258,6 @@ class Report2 extends Component {
     }
 
     componentWillMount(){
-
-      
       //此处应该发出用户信息的请求，获取之前该表格内容回填
       let that = this ; 
       fetchData({
@@ -296,4 +294,4 @@ class Report2 extends Component {
     }
 }
 
-export default Report2;
+export default  Report2;

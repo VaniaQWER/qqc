@@ -204,14 +204,14 @@ class RegistrationForm52 extends React.Component {
       <FormItem
       {...formItemLayout}
         label="人员岗位职责划分">
-          {getFieldDecorator('postDuty', {
-            initialValue:data.postDuty,
+          {getFieldDecorator('duty', {
+            initialValue:data.duty,
           })(
-            <RadioGroup>
-                <Radio value={'01'} >按临床科室区域划分</Radio>
-                <Radio value={'02'} >按设备类型划分</Radio>
-                <Radio value={'03'} >无明确划分</Radio>
-            </RadioGroup>
+            <Checkbox.Group style={{marginTop:8}}>
+                <Checkbox value={'01'} >按临床科室区域划分</Checkbox>
+                <Checkbox value={'02'} >按设备类型划分</Checkbox>
+                <Checkbox value={'03'} >无明确划分</Checkbox>
+            </Checkbox.Group>
           )}
         </FormItem>
 
@@ -347,7 +347,7 @@ class RegistrationForm52 extends React.Component {
                   {...formItemLayout}
                   label="场地面积"
                 >
-                  {getFieldDecorator('attachmentStorageAcreage', { initialValue: data.attachmentStorageAcreage })(
+                  {getFieldDecorator('emergencyStorageAcreage', { initialValue: data.emergencyStorageAcreage })(
                     <InputNumber min={0}/>
                   )}
                   <span className="ant-form-text">平方米</span>

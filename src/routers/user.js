@@ -23,6 +23,14 @@ export default {
       }
     }, 
     {
+      path: '/user/editPassword',//修改密码
+      getComponent: (nextState, cb) => {
+        require.ensure([], (require) => {
+          cb(null, require('component/user/editPwd').default)
+        }, 'userAdd')
+      }
+    }, 
+    {
       path: '/user/org/add',//添加机构
       getComponent: (nextState, cb) => {
         require.ensure([], (require) => {

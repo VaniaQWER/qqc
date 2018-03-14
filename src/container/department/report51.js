@@ -62,6 +62,11 @@ class RegistrationForm51 extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         //这里的values是json数据。
+        for(let item in values ){
+          if(!values[item]){
+            delete values[item]
+          }
+        }
         values.investigationGuid = Guid;
         values.investigationEquipmentGuid = EquipmentGuid;
         fetchData({

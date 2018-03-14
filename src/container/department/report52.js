@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form  , Tooltip ,Icon ,  Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
+import {Form ,Tooltip ,Icon ,  Row , Col , Checkbox , Button , Radio , InputNumber , message} from 'antd';
 import api from 'api';
 import { fetchData } from 'utils/tools';
 import querystring from 'querystring';
@@ -55,9 +55,7 @@ let SuppliesGuid = '';
 class RegistrationForm52 extends React.Component {
   state = {
     confirmDirty: false,
-    firstCheck:false,
-    secondCheck:false,
-    data:{}
+    data:{},
   };
   
   handleSubmit = (e) => {
@@ -67,6 +65,11 @@ class RegistrationForm52 extends React.Component {
         //这里的values是json数据。
         values.investigationGuid = Guid;
         values.investigationSuppliesGuid = SuppliesGuid;
+        for(let item in values ){
+          if(!values[item]){
+            delete values[item]
+          }
+        }
         fetchData({
           url: api.ADD_Supplies,
           body: querystring.stringify(values),
@@ -83,7 +86,7 @@ class RegistrationForm52 extends React.Component {
   }
   componentWillReceiveProps = (nextProps) =>{
     this.setState({
-      data:nextProps.formInfo
+      data:nextProps.formInfo,
     })
   }
   handleConfirmBlur = (e) => {
@@ -92,7 +95,7 @@ class RegistrationForm52 extends React.Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { data } = this.state; 
+    const { data } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -308,24 +311,22 @@ class RegistrationForm52 extends React.Component {
               })(
                 <Checkbox.Group>
                   <Row> 
-                      <Checkbox value={'01'}>
+                      
                         血管介入类（ &nbsp;
                           <Checkbox value={'01'} >心脏介入类</Checkbox>、
                           <Checkbox value={'02'} >周围血管介入类</Checkbox>
                         &nbsp;）
-                      </Checkbox>
                   </Row> 
                   <Row> 
                   <Checkbox value={'03'} >非血管介入</Checkbox>
                   </Row> 
                   <Row> 
-                  <Checkbox value={'04'} >
-                        骨科植入（ &nbsp;
-                          <Checkbox value={'04'} >脊柱</Checkbox>、
-                          <Checkbox value={'05'} >关节</Checkbox>、
-                          <Checkbox value={'06'} >创伤</Checkbox>
-                        &nbsp;）
-                      </Checkbox>
+                  
+                    骨科植入（ &nbsp;
+                      <Checkbox value={'04'} >脊柱</Checkbox>、
+                      <Checkbox value={'05'} >关节</Checkbox>、
+                      <Checkbox value={'06'} >创伤</Checkbox>
+                    &nbsp;）
                 </Row>
                   <Row> 
                     <Col span={8}>
@@ -411,8 +412,6 @@ class RegistrationForm52 extends React.Component {
               </FormItem>
               </Col>
             </Row>
-            
-
         </Row>
         
         <FormItem
